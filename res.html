@@ -1,0 +1,204 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+        #loadingBar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width: 100%;
+            height: 2500px;
+            background-color:rgba(200,200,200,0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:20px;
+            height:20px;
+            margin:auto auto auto auto;
+            border-radius:11px;
+            border:2px solid rgba(30,30,30,0.05);
+            background: rgb(0, 173, 246); /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+        }
+
+        #border {
+            position:absolute;
+            top:10px;
+            left:10px;
+            width:500px;
+            height:23px;
+            margin:auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+            border-radius:10px;
+        }
+
+        #text {
+            position:absolute;
+            top:8px;
+            left:530px;
+            width:30px;
+            height:50px;
+            margin:auto auto auto auto;
+            font-size:22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position:relative;
+            top:400px;
+            width:600px;
+            height:44px;
+            margin:auto auto auto auto;
+            border:8px solid rgba(0,0,0,0.1);
+            background: rgb(252,252,252); /* Old browsers */
+            background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+            border-radius:72px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+<div id="loadingBar">
+    <div class="outerBorder">
+        <div id="text">0%</div>
+        <div id="border">
+            <div id="bar"></div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "royalblue", "id": "RetrieveCommunityArticles", "label": "RetrieveCommunityArticles", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "Stream#R0", "label": "Stream#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "lightsalmon", "id": "CommunityArticle#R0", "label": "CommunityArticle#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "lightsalmon", "id": "Content#R0", "label": "Content#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "RetrieveContentsIdFromSlug", "label": "RetrieveContentsIdFromSlug", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "User#R0", "label": "User#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "lightsalmon", "id": "Content#R1", "label": "Content#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveSkillLevels", "label": "retrieveSkillLevels", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "SkillLevel#R0", "label": "SkillLevel#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveStudyTags", "label": "retrieveStudyTags", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "StudyTag#R0", "label": "StudyTag#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "deleteEducation", "label": "deleteEducation", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "Education#R0", "label": "Education#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "registerToCareerDay", "label": "registerToCareerDay", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "CareerDayRegistration#R0", "label": "CareerDayRegistration#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "CareerDay#R0", "label": "CareerDay#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "updateOrderEducation", "label": "updateOrderEducation", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "ChangePassword", "label": "ChangePassword", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "User#R1", "label": "User#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "ForgotPassword", "label": "ForgotPassword", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "navy", "id": "Login", "label": "Login", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "ResetPassword", "label": "ResetPassword", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "deleteUser", "label": "deleteUser", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "createExperience", "label": "createExperience", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "Experience#R0", "label": "Experience#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "deleteExperience", "label": "deleteExperience", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "updateExperience", "label": "updateExperience", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "updateExperienceOrder", "label": "updateExperienceOrder", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "navy", "id": "applyJobOffer", "label": "applyJobOffer", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "Education#R1", "label": "Education#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "Application#R0", "label": "Application#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "JobOffer#R0", "label": "JobOffer#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "createEducation", "label": "createEducation", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "startApply", "label": "startApply", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "navy", "id": "eventCheckIn", "label": "eventCheckIn", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "CheckIn#R0", "label": "CheckIn#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "Event#R0", "label": "Event#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "updateEducation", "label": "updateEducation", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "retrieveInstitutes", "label": "retrieveInstitutes", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "Institute#R0", "label": "Institute#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "lightsalmon", "id": "City#R0", "label": "City#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "Country#R0", "label": "Country#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveQualifications", "label": "retrieveQualifications", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "Qualification#R0", "label": "Qualification#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveMarks", "label": "retrieveMarks", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "Mark#R0", "label": "Mark#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "navy", "id": "retrieveActivities", "label": "retrieveActivities", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "Type#R0", "label": "Type#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "City#R1", "label": "City#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "lightsalmon", "id": "User#R2", "label": "User#R2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "Content#R2", "label": "Content#R2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "lightsalmon", "id": "Application#R1", "label": "Application#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "lightsalmon", "id": "JobOffer#R1", "label": "JobOffer#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "lightsalmon", "id": "CheckIn#R1", "label": "CheckIn#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "lightsalmon", "id": "Event#R1", "label": "Event#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "WebinarParticipation#R0", "label": "WebinarParticipation#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "Webinar#R0", "label": "Webinar#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveCompanies", "label": "retrieveCompanies", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "Profile#R0", "label": "Profile#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "Industry#R0", "label": "Industry#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveEmployerInfo", "label": "retrieveEmployerInfo", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "Education#R2", "label": "Education#R2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveEmployerJobOffers", "label": "retrieveEmployerJobOffers", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "Stream#R1", "label": "Stream#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveEmployerPosts", "label": "retrieveEmployerPosts", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "Post#R0", "label": "Post#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveEmployerWebinars", "label": "retrieveEmployerWebinars", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "retrieveJobOfferDetail", "label": "retrieveJobOfferDetail", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "Sector#R0", "label": "Sector#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrievePostDetail", "label": "retrievePostDetail", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "retrieveStreamBySlug", "label": "retrieveStreamBySlug", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "CommunityArticle#R1", "label": "CommunityArticle#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveStreamDetail", "label": "retrieveStreamDetail", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "retrieveStreamsHome", "label": "retrieveStreamsHome", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "retrieveWebinarDetail", "label": "retrieveWebinarDetail", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "updateProfile", "label": "updateProfile", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "updateUserProfile", "label": "updateUserProfile", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "navy", "id": "AppleV1", "label": "AppleV1", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "Apple#R0", "label": "Apple#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "User#R3", "label": "User#R3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "Education#R3", "label": "Education#R3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "Institute#R1", "label": "Institute#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "StudyTag#R1", "label": "StudyTag#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "navy", "id": "Facebook", "label": "Facebook", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "FacebookEntity#R0", "label": "FacebookEntity#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "navy", "id": "Google", "label": "Google", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "GoogleEntity#R0", "label": "GoogleEntity#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "navy", "id": "Signup", "label": "Signup", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "employerRetrieveCurriculum", "label": "employerRetrieveCurriculum", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "Language#R0", "label": "Language#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "LanguageLevel#R0", "label": "LanguageLevel#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "UserHasLanguage#R0", "label": "UserHasLanguage#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "Skill#R0", "label": "Skill#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "SkillLevel#R1", "label": "SkillLevel#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "id": "UserHasSkill#R0", "label": "UserHasSkill#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "employerRetrieveUserInfo", "label": "employerRetrieveUserInfo", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "participateWebinar", "label": "participateWebinar", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "WebinarParticipation#R1", "label": "WebinarParticipation#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "lightsalmon", "id": "Webinar#R1", "label": "Webinar#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveCurrentUniversityInfo", "label": "retrieveCurrentUniversityInfo", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "retrieveCurriculum", "label": "retrieveCurriculum", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "retrieveWebinarParticipation", "label": "retrieveWebinarParticipation", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "usersMe", "label": "usersMe", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "webinarOffline", "label": "webinarOffline", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "webinarRegistration", "label": "webinarRegistration", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "updateSkillOrder", "label": "updateSkillOrder", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "UserHasSkill#R1", "label": "UserHasSkill#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveSkills", "label": "retrieveSkills", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "Skill#R1", "label": "Skill#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "createSkill", "label": "createSkill", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "SkillLevel#R2", "label": "SkillLevel#R2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "deleteSkill", "label": "deleteSkill", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "updateContacts", "label": "updateContacts", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "white", "id": "User#R4", "label": "User#R4", "mass": 1.5, "shape": "diamond", "size": 8}, {"color": "navy", "id": "uploadCV", "label": "uploadCV", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "CheckIn#R2", "label": "CheckIn#R2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "uploadStory", "label": "uploadStory", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "Application#R2", "label": "Application#R2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "lightsalmon", "id": "JobOffer#R2", "label": "JobOffer#R2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveEventDetail", "label": "retrieveEventDetail", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "Event#R2", "label": "Event#R2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveStoryVideo", "label": "retrieveStoryVideo", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "EmployerHasOperator#R0", "label": "EmployerHasOperator#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "deleteInterview", "label": "deleteInterview", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "red", "id": "Interview#R0", "label": "Interview#R0", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "deleteStory", "label": "deleteStory", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "scheduleInterview", "label": "scheduleInterview", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "navy", "id": "retrieveApplication", "label": "retrieveApplication", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "retrieveLanguageLevels", "label": "retrieveLanguageLevels", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "LanguageLevel#R1", "label": "LanguageLevel#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "retrieveLanguages", "label": "retrieveLanguages", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "Language#R1", "label": "Language#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "createLanguage", "label": "createLanguage", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "lightsalmon", "id": "UserHasLanguage#R1", "label": "UserHasLanguage#R1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "royalblue", "id": "deleteLanguage", "label": "deleteLanguage", "mass": 1.5, "shape": "dot", "size": 8}, {"color": "royalblue", "id": "updateLanguageOrder", "label": "updateLanguageOrder", "mass": 1.5, "shape": "dot", "size": 8}]);
+        edges = new vis.DataSet([{"from": "RetrieveCommunityArticles", "to": "Stream#R0"}, {"from": "RetrieveCommunityArticles", "to": "CommunityArticle#R0"}, {"from": "RetrieveCommunityArticles", "to": "Content#R0"}, {"from": "RetrieveContentsIdFromSlug", "to": "User#R0"}, {"from": "RetrieveContentsIdFromSlug", "to": "Content#R1"}, {"from": "retrieveSkillLevels", "to": "SkillLevel#R0"}, {"from": "retrieveStudyTags", "to": "StudyTag#R0"}, {"from": "deleteEducation", "to": "Education#R0"}, {"from": "registerToCareerDay", "to": "CareerDayRegistration#R0"}, {"from": "registerToCareerDay", "to": "Education#R0"}, {"from": "registerToCareerDay", "to": "CareerDay#R0"}, {"from": "updateOrderEducation", "to": "Education#R0"}, {"from": "ChangePassword", "to": "User#R1"}, {"from": "ForgotPassword", "to": "User#R1"}, {"from": "Login", "to": "User#R1"}, {"from": "ResetPassword", "to": "User#R1"}, {"from": "deleteUser", "to": "User#R1"}, {"from": "createExperience", "to": "Experience#R0"}, {"from": "deleteExperience", "to": "Experience#R0"}, {"from": "updateExperience", "to": "Experience#R0"}, {"from": "updateExperienceOrder", "to": "Experience#R0"}, {"from": "applyJobOffer", "to": "Education#R1"}, {"from": "applyJobOffer", "to": "Application#R0"}, {"from": "applyJobOffer", "to": "JobOffer#R0"}, {"from": "createEducation", "to": "Education#R1"}, {"from": "startApply", "to": "Application#R0"}, {"from": "startApply", "to": "JobOffer#R0"}, {"from": "eventCheckIn", "to": "Education#R1"}, {"from": "eventCheckIn", "to": "CheckIn#R0"}, {"from": "eventCheckIn", "to": "Event#R0"}, {"from": "updateEducation", "to": "Education#R1"}, {"from": "retrieveInstitutes", "to": "Institute#R0"}, {"from": "retrieveInstitutes", "to": "City#R0"}, {"from": "retrieveInstitutes", "to": "Country#R0"}, {"from": "retrieveQualifications", "to": "Qualification#R0"}, {"from": "retrieveQualifications", "to": "Institute#R0"}, {"from": "retrieveMarks", "to": "Qualification#R0"}, {"from": "retrieveMarks", "to": "Mark#R0"}, {"from": "retrieveActivities", "to": "Type#R0"}, {"from": "retrieveActivities", "to": "City#R1"}, {"from": "retrieveActivities", "to": "User#R2"}, {"from": "retrieveActivities", "to": "Content#R2"}, {"from": "retrieveActivities", "to": "Application#R1"}, {"from": "retrieveActivities", "to": "JobOffer#R1"}, {"from": "retrieveActivities", "to": "CheckIn#R1"}, {"from": "retrieveActivities", "to": "Event#R1"}, {"from": "retrieveActivities", "to": "WebinarParticipation#R0"}, {"from": "retrieveActivities", "to": "Webinar#R0"}, {"from": "retrieveCompanies", "to": "User#R2"}, {"from": "retrieveCompanies", "to": "Profile#R0"}, {"from": "retrieveCompanies", "to": "Industry#R0"}, {"from": "retrieveEmployerInfo", "to": "User#R2"}, {"from": "retrieveEmployerInfo", "to": "Education#R2"}, {"from": "retrieveEmployerInfo", "to": "Profile#R0"}, {"from": "retrieveEmployerJobOffers", "to": "Type#R0"}, {"from": "retrieveEmployerJobOffers", "to": "City#R1"}, {"from": "retrieveEmployerJobOffers", "to": "Profile#R0"}, {"from": "retrieveEmployerJobOffers", "to": "User#R2"}, {"from": "retrieveEmployerJobOffers", "to": "Stream#R1"}, {"from": "retrieveEmployerJobOffers", "to": "JobOffer#R1"}, {"from": "retrieveEmployerPosts", "to": "Profile#R0"}, {"from": "retrieveEmployerPosts", "to": "Post#R0"}, {"from": "retrieveEmployerPosts", "to": "User#R2"}, {"from": "retrieveEmployerPosts", "to": "Content#R2"}, {"from": "retrieveEmployerPosts", "to": "Stream#R1"}, {"from": "retrieveEmployerWebinars", "to": "Profile#R0"}, {"from": "retrieveEmployerWebinars", "to": "User#R2"}, {"from": "retrieveEmployerWebinars", "to": "Content#R2"}, {"from": "retrieveEmployerWebinars", "to": "Stream#R1"}, {"from": "retrieveEmployerWebinars", "to": "Webinar#R0"}, {"from": "retrieveJobOfferDetail", "to": "Type#R0"}, {"from": "retrieveJobOfferDetail", "to": "City#R1"}, {"from": "retrieveJobOfferDetail", "to": "Industry#R0"}, {"from": "retrieveJobOfferDetail", "to": "Sector#R0"}, {"from": "retrieveJobOfferDetail", "to": "User#R2"}, {"from": "retrieveJobOfferDetail", "to": "JobOffer#R1"}, {"from": "retrievePostDetail", "to": "Type#R0"}, {"from": "retrievePostDetail", "to": "City#R1"}, {"from": "retrievePostDetail", "to": "Post#R0"}, {"from": "retrievePostDetail", "to": "Content#R2"}, {"from": "retrievePostDetail", "to": "Stream#R1"}, {"from": "retrievePostDetail", "to": "JobOffer#R1"}, {"from": "retrieveStreamBySlug", "to": "Type#R0"}, {"from": "retrieveStreamBySlug", "to": "City#R1"}, {"from": "retrieveStreamBySlug", "to": "Post#R0"}, {"from": "retrieveStreamBySlug", "to": "CommunityArticle#R1"}, {"from": "retrieveStreamBySlug", "to": "Content#R2"}, {"from": "retrieveStreamBySlug", "to": "Stream#R1"}, {"from": "retrieveStreamBySlug", "to": "JobOffer#R1"}, {"from": "retrieveStreamBySlug", "to": "Webinar#R0"}, {"from": "retrieveStreamDetail", "to": "Type#R0"}, {"from": "retrieveStreamDetail", "to": "City#R1"}, {"from": "retrieveStreamDetail", "to": "Post#R0"}, {"from": "retrieveStreamDetail", "to": "CommunityArticle#R1"}, {"from": "retrieveStreamDetail", "to": "Content#R2"}, {"from": "retrieveStreamDetail", "to": "Stream#R1"}, {"from": "retrieveStreamDetail", "to": "JobOffer#R1"}, {"from": "retrieveStreamDetail", "to": "Webinar#R0"}, {"from": "retrieveStreamsHome", "to": "Type#R0"}, {"from": "retrieveStreamsHome", "to": "City#R1"}, {"from": "retrieveStreamsHome", "to": "Post#R0"}, {"from": "retrieveStreamsHome", "to": "CommunityArticle#R1"}, {"from": "retrieveStreamsHome", "to": "Content#R2"}, {"from": "retrieveStreamsHome", "to": "Stream#R1"}, {"from": "retrieveStreamsHome", "to": "JobOffer#R1"}, {"from": "retrieveStreamsHome", "to": "Webinar#R0"}, {"from": "retrieveWebinarDetail", "to": "User#R2"}, {"from": "retrieveWebinarDetail", "to": "Webinar#R0"}, {"from": "retrieveWebinarDetail", "to": "Content#R2"}, {"from": "updateProfile", "to": "User#R2"}, {"from": "updateUserProfile", "to": "User#R2"}, {"from": "AppleV1", "to": "Apple#R0"}, {"from": "AppleV1", "to": "User#R3"}, {"from": "AppleV1", "to": "Education#R3"}, {"from": "AppleV1", "to": "Institute#R1"}, {"from": "AppleV1", "to": "StudyTag#R1"}, {"from": "Facebook", "to": "User#R3"}, {"from": "Facebook", "to": "Education#R3"}, {"from": "Facebook", "to": "Institute#R1"}, {"from": "Facebook", "to": "StudyTag#R1"}, {"from": "Facebook", "to": "FacebookEntity#R0"}, {"from": "Google", "to": "User#R3"}, {"from": "Google", "to": "Education#R3"}, {"from": "Google", "to": "Institute#R1"}, {"from": "Google", "to": "StudyTag#R1"}, {"from": "Google", "to": "GoogleEntity#R0"}, {"from": "Signup", "to": "User#R3"}, {"from": "Signup", "to": "Education#R3"}, {"from": "Signup", "to": "Institute#R1"}, {"from": "Signup", "to": "StudyTag#R1"}, {"from": "employerRetrieveCurriculum", "to": "User#R3"}, {"from": "employerRetrieveCurriculum", "to": "Education#R3"}, {"from": "employerRetrieveCurriculum", "to": "StudyTag#R1"}, {"from": "employerRetrieveCurriculum", "to": "Language#R0"}, {"from": "employerRetrieveCurriculum", "to": "LanguageLevel#R0"}, {"from": "employerRetrieveCurriculum", "to": "UserHasLanguage#R0"}, {"from": "employerRetrieveCurriculum", "to": "Skill#R0"}, {"from": "employerRetrieveCurriculum", "to": "SkillLevel#R1"}, {"from": "employerRetrieveCurriculum", "to": "UserHasSkill#R0"}, {"from": "employerRetrieveUserInfo", "to": "User#R3"}, {"from": "employerRetrieveUserInfo", "to": "Education#R3"}, {"from": "employerRetrieveUserInfo", "to": "StudyTag#R1"}, {"from": "employerRetrieveUserInfo", "to": "Language#R0"}, {"from": "employerRetrieveUserInfo", "to": "LanguageLevel#R0"}, {"from": "employerRetrieveUserInfo", "to": "UserHasLanguage#R0"}, {"from": "employerRetrieveUserInfo", "to": "Skill#R0"}, {"from": "employerRetrieveUserInfo", "to": "SkillLevel#R1"}, {"from": "employerRetrieveUserInfo", "to": "UserHasSkill#R0"}, {"from": "participateWebinar", "to": "Education#R3"}, {"from": "participateWebinar", "to": "WebinarParticipation#R1"}, {"from": "participateWebinar", "to": "Webinar#R1"}, {"from": "retrieveCurrentUniversityInfo", "to": "User#R3"}, {"from": "retrieveCurrentUniversityInfo", "to": "Education#R3"}, {"from": "retrieveCurrentUniversityInfo", "to": "Institute#R1"}, {"from": "retrieveCurrentUniversityInfo", "to": "StudyTag#R1"}, {"from": "retrieveCurriculum", "to": "User#R3"}, {"from": "retrieveCurriculum", "to": "Education#R3"}, {"from": "retrieveCurriculum", "to": "StudyTag#R1"}, {"from": "retrieveCurriculum", "to": "Language#R0"}, {"from": "retrieveCurriculum", "to": "LanguageLevel#R0"}, {"from": "retrieveCurriculum", "to": "UserHasLanguage#R0"}, {"from": "retrieveCurriculum", "to": "Skill#R0"}, {"from": "retrieveCurriculum", "to": "SkillLevel#R1"}, {"from": "retrieveCurriculum", "to": "UserHasSkill#R0"}, {"from": "retrieveWebinarParticipation", "to": "WebinarParticipation#R1"}, {"from": "retrieveWebinarParticipation", "to": "Webinar#R1"}, {"from": "usersMe", "to": "User#R3"}, {"from": "usersMe", "to": "Education#R3"}, {"from": "usersMe", "to": "StudyTag#R1"}, {"from": "usersMe", "to": "Language#R0"}, {"from": "usersMe", "to": "LanguageLevel#R0"}, {"from": "usersMe", "to": "UserHasLanguage#R0"}, {"from": "usersMe", "to": "Skill#R0"}, {"from": "usersMe", "to": "SkillLevel#R1"}, {"from": "usersMe", "to": "UserHasSkill#R0"}, {"from": "webinarOffline", "to": "Education#R3"}, {"from": "webinarOffline", "to": "WebinarParticipation#R1"}, {"from": "webinarOffline", "to": "Webinar#R1"}, {"from": "webinarRegistration", "to": "Education#R3"}, {"from": "webinarRegistration", "to": "WebinarParticipation#R1"}, {"from": "webinarRegistration", "to": "Webinar#R1"}, {"from": "updateSkillOrder", "to": "UserHasSkill#R1"}, {"from": "retrieveSkills", "to": "Skill#R1"}, {"from": "createSkill", "to": "SkillLevel#R2"}, {"from": "createSkill", "to": "UserHasSkill#R1"}, {"from": "createSkill", "to": "Skill#R1"}, {"from": "deleteSkill", "to": "UserHasSkill#R1"}, {"from": "updateContacts", "to": "User#R4"}, {"from": "uploadCV", "to": "User#R4"}, {"from": "uploadCV", "to": "CheckIn#R2"}, {"from": "uploadStory", "to": "Application#R2"}, {"from": "uploadStory", "to": "JobOffer#R2"}, {"from": "retrieveEventDetail", "to": "JobOffer#R2"}, {"from": "retrieveEventDetail", "to": "Event#R2"}, {"from": "retrieveStoryVideo", "to": "Application#R2"}, {"from": "retrieveStoryVideo", "to": "EmployerHasOperator#R0"}, {"from": "deleteInterview", "to": "Application#R2"}, {"from": "deleteInterview", "to": "Interview#R0"}, {"from": "deleteStory", "to": "Application#R2"}, {"from": "scheduleInterview", "to": "Application#R2"}, {"from": "scheduleInterview", "to": "Interview#R0"}, {"from": "scheduleInterview", "to": "JobOffer#R2"}, {"from": "retrieveApplication", "to": "Application#R2"}, {"from": "retrieveApplication", "to": "JobOffer#R2"}, {"from": "retrieveLanguageLevels", "to": "LanguageLevel#R1"}, {"from": "retrieveLanguages", "to": "Language#R1"}, {"from": "createLanguage", "to": "Language#R1"}, {"from": "createLanguage", "to": "LanguageLevel#R1"}, {"from": "createLanguage", "to": "UserHasLanguage#R1"}, {"from": "deleteLanguage", "to": "UserHasLanguage#R1"}, {"from": "updateLanguageOrder", "to": "UserHasLanguage#R1"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+        network.on("stabilizationProgress", function(params) {
+      		document.getElementById('loadingBar').removeAttribute("style");
+	        var maxWidth = 496;
+	        var minWidth = 20;
+	        var widthFactor = params.iterations/params.total;
+	        var width = Math.max(minWidth,maxWidth * widthFactor);
+
+	        document.getElementById('bar').style.width = width + 'px';
+	        document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+	    });
+	    network.once("stabilizationIterationsDone", function() {
+	        document.getElementById('text').innerHTML = '100%';
+	        document.getElementById('bar').style.width = '496px';
+	        document.getElementById('loadingBar').style.opacity = 0;
+	        // really clean the dom element
+	        setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+	    });
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

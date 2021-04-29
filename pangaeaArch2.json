@@ -1,0 +1,3536 @@
+{
+  "entities": [
+    {
+      "name": "Apple",
+      "table_name": "apples",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "iss",
+        "sub",
+        "aud",
+        "iat",
+        "exp",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "User",
+          "type": "composition"
+        }
+      ]
+    },
+    {
+      "name": "Application",
+      "table_name": "application",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "job_offers_id",
+        "users_id",
+        "score",
+        "employers_id",
+        "view",
+        "status",
+        "created_at",
+        "updated_at",
+        "university_name",
+        "university_tag",
+        "universities_id",
+        "course_name",
+        "courses_id",
+        "city_name",
+        "city_tag",
+        "cities_id",
+        "country_name",
+        "country_tag",
+        "countries_id",
+        "story_url",
+        "applied_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "JobOffer",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "User",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "CareerDay",
+      "table_name": "career_days",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "start_date",
+        "end_date",
+        "logo_medias_id",
+        "welcome_message",
+        "when_message",
+        "not_in_target_message",
+        "universities_id",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "Content",
+          "type": "composition"
+        },
+        {
+          "entity_name": "Media",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "Institute",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "CareerDayRegistration",
+      "table_name": "career_days_registrations",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "career_days_id",
+        "users_id",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "CareerDay",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "User",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "CheckIn",
+      "table_name": "check_ins",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "events_id",
+        "users_id",
+        "employers_id",
+        "view",
+        "users_status",
+        "university_name",
+        "university_tag",
+        "universities_id",
+        "city_name",
+        "city_tag",
+        "cities_id",
+        "country_name",
+        "country_tag",
+        "countries_id",
+        "course_name",
+        "courses_id",
+        "created_at",
+        "updated_at",
+        "cv",
+        "comments"
+      ],
+      "relations": [
+        {
+          "entity_name": "Event",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "User",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "City",
+      "table_name": "cities",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "name",
+        "tag",
+        "countries_id",
+        "lat",
+        "lng",
+        "population",
+        "view",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "Country",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "CommunityArticle",
+      "table_name": "community_articles",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "contents_id",
+        "streams_id",
+        "seo_title",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "Content",
+          "type": "composition"
+        },
+        {
+          "entity_name": "Stream",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "Content",
+      "table_name": "contents",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "title",
+        "text",
+        "tags",
+        "type",
+        "slug",
+        "media_sets_id",
+        "filter_definitions_id",
+        "sort_date",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "MediaSet",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "FilterDefinition",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "Country",
+      "table_name": "countries",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "name",
+        "tag",
+        "manage_graduation_mark",
+        "code",
+        "view",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "name": "Education",
+      "table_name": "educations",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "university_name",
+        "university_tag",
+        "universities_id",
+        "course_name",
+        "course_tag",
+        "courses_id",
+        "faculty_tag",
+        "qualification_name",
+        "qualifications_id",
+        "cities_id",
+        "city_name",
+        "city_tag",
+        "countries_id",
+        "country_name",
+        "country_tag",
+        "users_id",
+        "created_at",
+        "updated_at",
+        "study_tags_id",
+        "is_current",
+        "status",
+        "marks_id",
+        "mark",
+        "avg",
+        "finished_at",
+        "expected_finished_at",
+        "started_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "User",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "StudyTag",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "Qualification",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "Institute",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "Mark",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "EmployerHasOperator",
+      "table_name": "employer_has_operators",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "employers_id",
+        "users_id",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "User",
+          "type": "composition"
+        }
+      ]
+    },
+    {
+      "name": "Event",
+      "table_name": "events",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "title",
+        "description",
+        "welcome_message",
+        "slug",
+        "img",
+        "logo",
+        "employers_id",
+        "operators_id",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "User",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "Stream",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "Experience",
+      "table_name": "experiences",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "title",
+        "description",
+        "experience_types_id",
+        "users_id",
+        "view",
+        "started_at",
+        "finished_at",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "ExperienceType",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "User",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "ExperienceType",
+      "table_name": "experience_types",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "name_en",
+        "name_it",
+        "name_es",
+        "name_fr",
+        "view",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "name": "FacebookEntity",
+      "table_name": "facebooks",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "facebook_id",
+        "access_token",
+        "expiration_date",
+        "scopes",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "User",
+          "type": "composition"
+        }
+      ]
+    },
+    {
+      "name": "GoogleEntity",
+      "table_name": "googles",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "alg",
+        "at_hash",
+        "aud",
+        "azp",
+        "google",
+        "iss",
+        "kid",
+        "sub",
+        "typ",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "User",
+          "type": "composition"
+        }
+      ]
+    },
+    {
+      "name": "Industry",
+      "table_name": "industries",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "name_it",
+        "name_en",
+        "name_es",
+        "name_fr",
+        "view",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "name": "Institute",
+      "table_name": "institutes",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "name",
+        "view",
+        "tag",
+        "img",
+        "cities_id",
+        "estimated_target",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "City",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "Interview",
+      "table_name": "interviews",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "applications_id",
+        "operators_id",
+        "status",
+        "booking_id",
+        "url",
+        "samba_private_url",
+        "date"
+      ],
+      "relations": [
+        {
+          "entity_name": "Application",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "User",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "JobOffer",
+      "table_name": "job_offers",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "position",
+        "sectors_id",
+        "types_id",
+        "cities_id",
+        "industries_id",
+        "users_id",
+        "description",
+        "requirements",
+        "img",
+        "view",
+        "has_story",
+        "job_video",
+        "job_img",
+        "job_detail_img",
+        "job_video_thumbnail",
+        "locations_id",
+        "external_url",
+        "career_days_id",
+        "created_at",
+        "updated_at",
+        "status"
+      ],
+      "relations": [
+        {
+          "entity_name": "User",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "City",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "Type",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "Industry",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "Sector",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "Language",
+      "table_name": "languages",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "name_it",
+        "name_en",
+        "name_fr",
+        "name_es",
+        "view",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "name": "LanguageLevel",
+      "table_name": "language_levels",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "name_it",
+        "name_en",
+        "name_fr",
+        "name_es",
+        "view",
+        "value",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "name": "Post",
+      "table_name": "posts",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "slug",
+        "article_title",
+        "article_abstract",
+        "article_img",
+        "article_video",
+        "article_video_thumbnail",
+        "published_at",
+        "type",
+        "status",
+        "users_id",
+        "campaigns_id",
+        "view",
+        "sponsored",
+        "created_at",
+        "updated_at",
+        "streams_id",
+        "contents_id"
+      ],
+      "relations": [
+        {
+          "entity_name": "Content",
+          "type": "composition"
+        },
+        {
+          "entity_name": "User",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "Stream",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "table_name": "profiles",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "country",
+        "home_page",
+        "claim",
+        "description",
+        "lifestyle",
+        "cover_img",
+        "cover_video",
+        "employer_data",
+        "work_with_us_data",
+        "work_with_us_data_override",
+        "posts_threshold",
+        "users_id",
+        "industries_id",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "User",
+          "type": "composition"
+        },
+        {
+          "entity_name": "Industry",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "Qualification",
+      "table_name": "qualifications",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "name",
+        "graduation_mark_min",
+        "graduation_mark_max",
+        "exams_mark_min",
+        "exams_mark_max",
+        "is_post_graduate",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "name": "Sector",
+      "table_name": "sectors",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "name_en",
+        "name_it",
+        "name_es",
+        "name_fr",
+        "view",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "name": "Skill",
+      "table_name": "skills",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "name_it",
+        "name_en",
+        "name_fr",
+        "name_es",
+        "view",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "name": "SkillLevel",
+      "table_name": "skill_levels",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "name_it",
+        "name_en",
+        "name_fr",
+        "name_es",
+        "view",
+        "value",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "name": "Stream",
+      "table_name": "streams",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "slug",
+        "description",
+        "locale",
+        "title",
+        "stream_type",
+        "stream_private",
+        "stream_career_day",
+        "priority",
+        "order",
+        "institutes_id",
+        "faculty_tag",
+        "course_tag",
+        "stream_course",
+        "cities_id",
+        "sectors_id",
+        "countries_id",
+        "tags",
+        "filter_definitions_id"
+      ],
+      "relations": [
+        {
+          "entity_name": "Institute",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "Industry",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "Sector",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "Country",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "City",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "FilterDefinition",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "StudyTag",
+      "table_name": "study_tags",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "tag",
+        "name_en",
+        "name_it",
+        "name_es",
+        "name_fr",
+        "created_at",
+        "updated_at",
+        "macro_study_tags_id"
+      ],
+      "relations": [
+        {
+          "entity_name": "MacroStudyTag",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "Type",
+      "table_name": "types",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "name_it",
+        "name_en",
+        "name_es",
+        "name_fr",
+        "view",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "name": "User",
+      "table_name": "users",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "role",
+        "name",
+        "surname",
+        "email",
+        "password",
+        "contact_phone",
+        "contact_email",
+        "contact_address",
+        "revoked_tokens",
+        "img",
+        "location",
+        "birthdate",
+        "language",
+        "view",
+        "slug",
+        "status",
+        "nationality",
+        "courses_id",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "Industry",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "UserHasLanguage",
+      "table_name": "user_has_languages",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "languages_id",
+        "users_id",
+        "language_levels_id",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "User",
+          "type": "composition"
+        },
+        {
+          "entity_name": "Language",
+          "type": "composition"
+        },
+        {
+          "entity_name": "LanguageLevel",
+          "type": "composition"
+        }
+      ]
+    },
+    {
+      "name": "UserHasSkill",
+      "table_name": "user_has_skills",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "skills_id",
+        "users_id",
+        "skill_levels_id",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "User",
+          "type": "composition"
+        },
+        {
+          "entity_name": "Skill",
+          "type": "composition"
+        },
+        {
+          "entity_name": "SkillLevel",
+          "type": "composition"
+        }
+      ]
+    },
+    {
+      "name": "Mark",
+      "table_name": "marks",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "name",
+        "value",
+        "qualifications_id",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "Qualification",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "Webinar",
+      "table_name": "webinars",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "contents_id",
+        "duration",
+        "employers_id",
+        "sectors_id",
+        "samba_sessions_id",
+        "video_medias_id",
+        "image_medias_id",
+        "recording_media_sets_id",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "Content",
+          "type": "composition"
+        },
+        {
+          "entity_name": "Sector",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "MediaSet",
+          "type": "aggregation"
+        },
+        {
+          "entity_name": "User",
+          "type": "aggregation"
+        }
+      ]
+    },
+    {
+      "name": "WebinarParticipation",
+      "table_name": "webinar_participation",
+      "replication_weight": 1,
+      "columns": [
+        "id",
+        "webinars_id",
+        "users_id",
+        "employers_id",
+        "viewed",
+        "state",
+        "downloaded",
+        "samba_private_url",
+        "university_name",
+        "university_tag",
+        "universities_id",
+        "city_name",
+        "city_tag",
+        "cities_id",
+        "country_name",
+        "country_tag",
+        "countries_id",
+        "courses_id",
+        "study_tags_id",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        {
+          "entity_name": "Webinar",
+          "type": "composition"
+        },
+        {
+          "entity_name": "User",
+          "type": "composition"
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "name": "AppleV1",
+      "consistency": "S",
+      "frequency": 5,
+      "forced_entity": "Apple",
+      "database_access": [
+        {
+          "entity_name": "Apple",
+          "read_attributes": [
+            "id"
+          ],
+          "write_attributes": [
+            "id",
+            "iss",
+            "sub",
+            "aud",
+            "iat",
+            "exp",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "email"
+          ],
+          "write_attributes": [
+            "id",
+            "name",
+            "surname",
+            "email",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "write_attributes": [
+            "id",
+            "universities_id",
+            "study_tags_id",
+            "university_name",
+            "university_tag",
+            "status",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "Institute",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "StudyTag",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ChangePassword",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "write_attributes": [
+            "id",
+            "password"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Facebook",
+      "consistency": "S",
+      "frequency": 6,
+      "forced_entity": "Facebook",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "email"
+          ],
+          "write_attributes": [
+            "id",
+            "name",
+            "surname",
+            "email",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "FacebookEntity",
+          "read_attributes": [
+            "id"
+          ],
+          "write_attributes": [
+            "id",
+            "facebook_id",
+            "access_token",
+            "expiration_date",
+            "scopes",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "write_attributes": [
+            "id",
+            "universities_id",
+            "study_tags_id",
+            "university_name",
+            "university_tag",
+            "status",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "Institute",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "StudyTag",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ForgotPassword",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "email"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Google",
+      "consistency": "S",
+      "frequency": 6,
+      "forced_entity": "Google",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "email"
+          ],
+          "write_attributes": [
+            "id",
+            "name",
+            "surname",
+            "email",
+            "created_at"
+          ]
+        },
+        {
+          "entity_name": "GoogleEntity",
+          "read_attributes": [
+            "id"
+          ],
+          "write_attributes": [
+            "id",
+            "alg",
+            "at_hash",
+            "aud",
+            "azp",
+            "google",
+            "iss",
+            "kid",
+            "sub",
+            "typ",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "write_attributes": [
+            "id",
+            "universities_id",
+            "study_tags_id",
+            "university_name",
+            "university_tag",
+            "status",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "Institute",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "StudyTag",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Login",
+      "consistency": "S",
+      "frequency": 6,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id",
+            "email",
+            "password"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Logout",
+      "consistency": "S",
+      "frequency": 4,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "write_attributes": [
+            "revoked_tokens"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ResetPassword",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "write_attributes": [
+            "password",
+            "updated_at"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RetrieveCommunityArticles",
+      "consistency": "N",
+      "frequency": 4,
+      "forced_entity": "CommunityArticle",
+      "database_access": [
+        {
+          "entity_name": "CommunityArticle",
+          "read_attributes": [
+            "id",
+            "contents_id",
+            "streams_id",
+            "seo_title",
+            "status",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "Content",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Stream",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RetrieveContentsIdFromSlug",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "Content",
+      "database_access": [
+        {
+          "entity_name": "Content",
+          "read_attributes": [
+            "slug"
+          ]
+        },
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "slug"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Signup",
+      "consistency": "S",
+      "frequency": 4,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "email"
+          ],
+          "write_attributes": [
+            "id",
+            "name",
+            "surname",
+            "email"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "write_attributes": [
+            "id",
+            "universities_id",
+            "study_tags_id",
+            "university_name",
+            "university_tag",
+            "status",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "Institute",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "StudyTag",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "applyJobOffer",
+      "consistency": "S",
+      "frequency": 9,
+      "forced_entity": "Application",
+      "database_access": [
+        {
+          "entity_name": "Application",
+          "write_attributes": [
+            "id",
+            "job_offers_id",
+            "users_id",
+            "score",
+            "employers_id",
+            "view",
+            "status",
+            "created_at",
+            "updated_at",
+            "university_name",
+            "university_tag",
+            "universities_id",
+            "course_name",
+            "courses_id",
+            "city_name",
+            "city_tag",
+            "cities_id",
+            "country_name",
+            "country_tag",
+            "countries_id",
+            "story_url",
+            "applied_at"
+          ]
+        },
+        {
+          "entity_name": "JobOffer",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "read_attributes": [
+            "id",
+            "university_name",
+            "university_tag",
+            "universities_id",
+            "city_name",
+            "city_tag",
+            "cities_id",
+            "country_name",
+            "country_tag",
+            "countries_id",
+            "course_name"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "createEducation",
+      "consistency": "N",
+      "frequency": 4,
+      "forced_entity": "Education",
+      "database_access": [
+        {
+          "entity_name": "Education",
+          "write_attributes": [
+            "id",
+            "university_name",
+            "university_tag",
+            "universities_id",
+            "course_name",
+            "course_tag",
+            "courses_id",
+            "faculty_tag",
+            "qualification_name",
+            "qualifications_id",
+            "cities_id",
+            "city_name",
+            "city_tag",
+            "countries_id",
+            "country_name",
+            "country_tag",
+            "users_id",
+            "created_at",
+            "updated_at",
+            "study_tags_id",
+            "is_current",
+            "status",
+            "marks_id",
+            "avg",
+            "finished_at",
+            "expected_finished_at",
+            "started_at"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "createExperience",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "Experience",
+      "database_access": [
+        {
+          "entity_name": "Experience",
+          "write_attributes": [
+            "id",
+            "title",
+            "description",
+            "experience_types_id",
+            "users_id",
+            "view",
+            "started_at",
+            "finished_at",
+            "created_at",
+            "updated_at"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "createLanguage",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "Language",
+      "database_access": [
+        {
+          "entity_name": "Language",
+          "write_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "LanguageLevel",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "UserHasLanguage",
+          "write_attributes": [
+            "id",
+            "languages_id",
+            "language_levels_id",
+            "users_id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "createSkill",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "Skill",
+      "database_access": [
+        {
+          "entity_name": "Skill",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "SkillLevel",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "UserHasSkill",
+          "write_attributes": [
+            "id",
+            "skills_id",
+            "users_id",
+            "skill_levels_id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "deleteEducation",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "Education",
+      "database_access": [
+        {
+          "entity_name": "Education",
+          "write_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "deleteExperience",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "Experience",
+      "database_access": [
+        {
+          "entity_name": "Experience",
+          "write_attributes": [
+            "id",
+            "users_id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "deleteInterview",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "Interview",
+      "database_access": [
+        {
+          "entity_name": "Interview",
+          "write_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Application",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "deleteLanguage",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "Language",
+      "database_access": [
+        {
+          "entity_name": "UserHasLanguage",
+          "write_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "deleteSkill",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "Skill",
+      "database_access": [
+        {
+          "entity_name": "UserHasSkill",
+          "write_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "deleteStory",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "Application",
+      "database_access": [
+        {
+          "entity_name": "Application",
+          "write_attributes": [
+            "story_url"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "deleteUser",
+      "consistency": "N",
+      "frequency": 1,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "write_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "employerRetrieveCurriculum",
+      "consistency": "N",
+      "frequency": 7,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id",
+            "name",
+            "surname",
+            "email",
+            "contact_address",
+            "contact_phone",
+            "birthdate"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "read_attributes": [
+            "id",
+            "university_name",
+            "universities_id",
+            "study_tags_id",
+            "mark",
+            "avg",
+            "started_at",
+            "finished_at",
+            "status",
+            "users_id"
+          ]
+        },
+        {
+          "entity_name": "StudyTag",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Skill",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "Language",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "UserHasSkill",
+          "read_attributes": [
+            "id",
+            "skill_levels_id",
+            "skills_id"
+          ]
+        },
+        {
+          "entity_name": "UserHasLanguage",
+          "read_attributes": [
+            "id",
+            "language_levels_id",
+            "languages_id"
+          ]
+        },
+        {
+          "entity_name": "LanguageLevel",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "SkillLevel",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "employerRetrieveUserInfo",
+      "consistency": "N",
+      "frequency": 6,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "read_attributes": [
+            "id",
+            "university_name",
+            "universities_id",
+            "study_tags_id",
+            "mark",
+            "avg",
+            "started_at",
+            "finished_at",
+            "status",
+            "users_id"
+          ]
+        },
+        {
+          "entity_name": "StudyTag",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Skill",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "Language",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "UserHasSkill",
+          "read_attributes": [
+            "id",
+            "skill_levels_id",
+            "skills_id"
+          ]
+        },
+        {
+          "entity_name": "UserHasLanguage",
+          "read_attributes": [
+            "id",
+            "language_levels_id",
+            "languages_id"
+          ]
+        },
+        {
+          "entity_name": "LanguageLevel",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "SkillLevel",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "eventCheckIn",
+      "consistency": "S",
+      "frequency": 7,
+      "forced_entity": "CheckIn",
+      "database_access": [
+        {
+          "entity_name": "CheckIn",
+          "write_attributes": [
+            "id",
+            "events_id",
+            "users_id",
+            "employers_id",
+            "view",
+            "users_status",
+            "university_name",
+            "university_tag",
+            "universities_id",
+            "city_name",
+            "city_tag",
+            "cities_id",
+            "country_name",
+            "country_tag",
+            "countries_id",
+            "course_name",
+            "courses_id",
+            "created_at",
+            "updated_at",
+            "cv",
+            "comments"
+          ]
+        },
+        {
+          "entity_name": "Event",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "read_attributes": [
+            "id",
+            "university_name",
+            "university_tag",
+            "universities_id",
+            "city_name",
+            "city_tag",
+            "cities_id",
+            "country_name",
+            "country_tag",
+            "countries_id",
+            "course_name"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "participateWebinar",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "WebinarParticipation",
+      "database_access": [
+        {
+          "entity_name": "WebinarParticipation",
+          "write_attributes": [
+            "id",
+            "webinars_id",
+            "users_id",
+            "employers_id",
+            "viewed",
+            "state",
+            "downloaded",
+            "samba_private_url",
+            "university_name",
+            "university_tag",
+            "universities_id",
+            "city_name",
+            "city_tag",
+            "cities_id",
+            "country_name",
+            "country_tag",
+            "countries_id",
+            "courses_id",
+            "study_tags_id",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "read_attributes": [
+            "id",
+            "university_name",
+            "universities_id",
+            "study_tags_id",
+            "mark",
+            "avg",
+            "started_at",
+            "finished_at",
+            "status",
+            "users_id"
+          ]
+        },
+        {
+          "entity_name": "Webinar",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "registerToCareerDay",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "CareerDay",
+      "database_access": [
+        {
+          "entity_name": "CareerDay",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "CareerDayRegistration",
+          "write_attributes": [
+            "id",
+            "career_days_id",
+            "users_id",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveActivities",
+      "consistency": "S",
+      "frequency": 4,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Application",
+          "read_attributes": [
+            "id",
+            "users_id"
+          ]
+        },
+        {
+          "entity_name": "JobOffer",
+          "read_attributes": [
+            "id",
+            "position",
+            "job_img",
+            "types_id",
+            "cities_id"
+          ]
+        },
+        {
+          "entity_name": "Content",
+          "read_attributes": [
+            "id",
+            "title"
+          ]
+        },
+        {
+          "entity_name": "Type",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "City",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "WebinarParticipation",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "CheckIn",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Webinar",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Event",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveApplication",
+      "consistency": "S",
+      "frequency": 6,
+      "forced_entity": "Application",
+      "database_access": [
+        {
+          "entity_name": "JobOffer",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Application",
+          "read_attributes": [
+            "id",
+            "status",
+            "users_id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveCompanies",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id",
+            "name",
+            "surname",
+            "img",
+            "slug"
+          ]
+        },
+        {
+          "entity_name": "Profile",
+          "read_attributes": [
+            "id",
+            "industries_id"
+          ]
+        },
+        {
+          "entity_name": "Industry",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveCurrentUniversityInfo",
+      "consistency": "N",
+      "frequency": 10,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id",
+            "courses_id"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "read_attributes": [
+            "id",
+            "university_name",
+            "study_tags_id"
+          ]
+        },
+        {
+          "entity_name": "Institute",
+          "read_attributes": [
+            "id",
+            "name"
+          ]
+        },
+        {
+          "entity_name": "StudyTag",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveCurriculum",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id",
+            "name",
+            "surname",
+            "img",
+            "email",
+            "contact_address",
+            "contact_phone"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "read_attributes": [
+            "id",
+            "university_name",
+            "universities_id",
+            "study_tags_id",
+            "mark",
+            "avg",
+            "started_at",
+            "finished_at",
+            "status",
+            "users_id"
+          ]
+        },
+        {
+          "entity_name": "StudyTag",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Skill",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "Language",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "UserHasSkill",
+          "read_attributes": [
+            "id",
+            "skill_levels_id",
+            "skills_id"
+          ]
+        },
+        {
+          "entity_name": "UserHasLanguage",
+          "read_attributes": [
+            "id",
+            "language_levels_id",
+            "languages_id"
+          ]
+        },
+        {
+          "entity_name": "LanguageLevel",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "SkillLevel",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveEmployerInfo",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "name",
+            "id",
+            "img"
+          ]
+        },
+        {
+          "entity_name": "Profile",
+          "read_attributes": [
+            "id",
+            "work_with_us_data",
+            "home_page",
+            "claim",
+            "description",
+            "cover_img",
+            "cover_video",
+            "employer_data",
+            "posts_threshold",
+            "users_id",
+            "country"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "read_attributes": [
+            "id",
+            "faculty_tag"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveEmployerJobOffers",
+      "consistency": "N",
+      "frequency": 8,
+      "forced_entity": "JobOffer",
+      "database_access": [
+        {
+          "entity_name": "JobOffer",
+          "read_attributes": [
+            "id",
+            "position",
+            "job_detail_img",
+            "job_img",
+            "cities_id",
+            "types_id"
+          ]
+        },
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Profile",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Stream",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "City",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Type",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveEmployerPosts",
+      "consistency": "N",
+      "frequency": 8,
+      "forced_entity": "Post",
+      "database_access": [
+        {
+          "entity_name": "Post",
+          "read_attributes": [
+            "id",
+            "article_title",
+            "article_abstract",
+            "article_img",
+            "users_id",
+            "streams_id",
+            "contents_id"
+          ]
+        },
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Profile",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Stream",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Content",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveEmployerWebinars",
+      "consistency": "N",
+      "frequency": 8,
+      "forced_entity": "Webinar",
+      "database_access": [
+        {
+          "entity_name": "Webinar",
+          "read_attributes": [
+            "id",
+            "contents_id",
+            "duration",
+            "employers_id"
+          ]
+        },
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Profile",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Stream",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Content",
+          "read_attributes": [
+            "title",
+            "slug"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveEventDetail",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "Event",
+      "database_access": [
+        {
+          "entity_name": "Event",
+          "read_attributes": [
+            "id",
+            "title",
+            "description",
+            "welcome_message",
+            "slug",
+            "img",
+            "logo",
+            "employers_id",
+            "operators_id",
+            "status",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "JobOffer",
+          "read_attributes": [
+            "id",
+            "status"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveExperienceTypes",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "ExperienceType",
+      "database_access": [
+        {
+          "entity_name": "ExperienceType",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveInstitutes",
+      "consistency": "N",
+      "frequency": 8,
+      "forced_entity": "Institute",
+      "database_access": [
+        {
+          "entity_name": "Institute",
+          "read_attributes": [
+            "id",
+            "name",
+            "tag",
+            "cities_id"
+          ]
+        },
+        {
+          "entity_name": "City",
+          "read_attributes": [
+            "id",
+            "name",
+            "countries_id"
+          ]
+        },
+        {
+          "entity_name": "Country",
+          "read_attributes": [
+            "id",
+            "name"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveJobOfferDetail",
+      "consistency": "N",
+      "frequency": 8,
+      "forced_entity": "JobOffer",
+      "database_access": [
+        {
+          "entity_name": "JobOffer",
+          "read_attributes": [
+            "id",
+            "position",
+            "sectors_id",
+            "types_id",
+            "cities_id",
+            "industries_id",
+            "users_id",
+            "description",
+            "requirements",
+            "img",
+            "view",
+            "has_story",
+            "job_video",
+            "job_img",
+            "job_detail_img",
+            "job_video_thumbnail",
+            "locations_id",
+            "external_url",
+            "career_days_id",
+            "created_at",
+            "updated_at",
+            "status"
+          ]
+        },
+        {
+          "entity_name": "City",
+          "read_attributes": [
+            "id",
+            "name"
+          ]
+        },
+        {
+          "entity_name": "Sector",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "Industry",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "Type",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id",
+            "name",
+            "img"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveLanguageLevels",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "LanguageLevel",
+      "database_access": [
+        {
+          "entity_name": "LanguageLevel",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveLanguages",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "Language",
+      "database_access": [
+        {
+          "entity_name": "Language",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrievePostDetail",
+      "consistency": "N",
+      "frequency": 6,
+      "forced_entity": "Post",
+      "database_access": [
+        {
+          "entity_name": "Post",
+          "read_attributes": [
+            "id",
+            "slug",
+            "article_title",
+            "article_abstract",
+            "article_img",
+            "article_video",
+            "article_video_thumbnail",
+            "published_at",
+            "type",
+            "status",
+            "users_id",
+            "campaigns_id",
+            "view",
+            "sponsored",
+            "created_at",
+            "updated_at",
+            "streams_id",
+            "contents_id"
+          ]
+        },
+        {
+          "entity_name": "JobOffer",
+          "read_attributes": [
+            "id",
+            "position",
+            "types_id",
+            "cities_id",
+            "job_img",
+            "users_id"
+          ]
+        },
+        {
+          "entity_name": "City",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Type",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Stream",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Content",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveQualifications",
+      "consistency": "N",
+      "frequency": 8,
+      "forced_entity": "Qualification",
+      "database_access": [
+        {
+          "entity_name": "Qualification",
+          "read_attributes": [
+            "id",
+            "name",
+            "is_post_graduate"
+          ]
+        },
+        {
+          "entity_name": "Institute",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveSkillLevels",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "SkillLevel",
+      "database_access": [
+        {
+          "entity_name": "SkillLevel",
+          "read_attributes": [
+            "name_it",
+            "name_en"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveSkills",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "Skill",
+      "database_access": [
+        {
+          "entity_name": "Skill",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveStoryVideo",
+      "consistency": "N",
+      "frequency": 2,
+      "forced_entity": "Application",
+      "database_access": [
+        {
+          "entity_name": "Application",
+          "read_attributes": [
+            "id",
+            "story_url",
+            "users_id"
+          ]
+        },
+        {
+          "entity_name": "EmployerHasOperator",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveStreamBySlug",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "Stream",
+      "database_access": [
+        {
+          "entity_name": "Stream",
+          "read_attributes": [
+            "id",
+            "slug",
+            "description",
+            "locale",
+            "title",
+            "stream_type",
+            "stream_private",
+            "stream_career_day",
+            "priority",
+            "order",
+            "institutes_id",
+            "faculty_tag",
+            "course_tag",
+            "stream_course",
+            "cities_id",
+            "sectors_id",
+            "countries_id",
+            "tags",
+            "filter_definitions_id"
+          ]
+        },
+        {
+          "entity_name": "JobOffer",
+          "read_attributes": [
+            "id",
+            "position",
+            "job_img",
+            "types_id",
+            "cities_id"
+          ]
+        },
+        {
+          "entity_name": "City",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Type",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Content",
+          "read_attributes": [
+            "id",
+            "title"
+          ]
+        },
+        {
+          "entity_name": "Post",
+          "read_attributes": [
+            "id",
+            "article_title"
+          ]
+        },
+        {
+          "entity_name": "Webinar",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "CommunityArticle",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveStreamDetail",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "Stream",
+      "database_access": [
+        {
+          "entity_name": "Stream",
+          "read_attributes": [
+            "id",
+            "slug",
+            "description",
+            "locale",
+            "title",
+            "stream_type",
+            "stream_private",
+            "stream_career_day",
+            "priority",
+            "order",
+            "institutes_id",
+            "faculty_tag",
+            "course_tag",
+            "stream_course",
+            "cities_id",
+            "sectors_id",
+            "countries_id",
+            "tags",
+            "filter_definitions_id"
+          ]
+        },
+        {
+          "entity_name": "JobOffer",
+          "read_attributes": [
+            "id",
+            "position",
+            "job_img",
+            "types_id",
+            "cities_id"
+          ]
+        },
+        {
+          "entity_name": "City",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Type",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Content",
+          "read_attributes": [
+            "id",
+            "title"
+          ]
+        },
+        {
+          "entity_name": "Post",
+          "read_attributes": [
+            "id",
+            "article_title"
+          ]
+        },
+        {
+          "entity_name": "Webinar",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "CommunityArticle",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveStreamsHome",
+      "consistency": "N",
+      "frequency": 10,
+      "forced_entity": "Stream",
+      "database_access": [
+        {
+          "entity_name": "Stream",
+          "read_attributes": [
+            "id",
+            "slug",
+            "description",
+            "locale",
+            "title",
+            "stream_type",
+            "stream_private",
+            "stream_career_day",
+            "priority",
+            "order",
+            "institutes_id",
+            "faculty_tag",
+            "course_tag",
+            "stream_course",
+            "cities_id",
+            "sectors_id",
+            "countries_id",
+            "tags",
+            "filter_definitions_id"
+          ]
+        },
+        {
+          "entity_name": "JobOffer",
+          "read_attributes": [
+            "id",
+            "position",
+            "job_img",
+            "types_id",
+            "cities_id"
+          ]
+        },
+        {
+          "entity_name": "City",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Type",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Content",
+          "read_attributes": [
+            "id",
+            "title"
+          ]
+        },
+        {
+          "entity_name": "Post",
+          "read_attributes": [
+            "id",
+            "article_title"
+          ]
+        },
+        {
+          "entity_name": "Webinar",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "CommunityArticle",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveStudyTags",
+      "consistency": "N",
+      "frequency": 8,
+      "forced_entity": "StudyTag",
+      "database_access": [
+        {
+          "entity_name": "StudyTag",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en",
+            "tag"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveMarks",
+      "consistency": "N",
+      "frequency": 8,
+      "forced_entity": "Mark",
+      "database_access": [
+        {
+          "entity_name": "Mark",
+          "read_attributes": [
+            "id",
+            "name",
+            "value",
+            "qualifications_id"
+          ]
+        },
+        {
+          "entity_name": "Qualification",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveWebinarDetail",
+      "consistency": "N",
+      "frequency": 6,
+      "forced_entity": "Webinar",
+      "database_access": [
+        {
+          "entity_name": "Webinar",
+          "read_attributes": [
+            "id",
+            "contents_id",
+            "duration",
+            "employers_id",
+            "sectors_id",
+            "samba_sessions_id",
+            "video_medias_id",
+            "image_medias_id",
+            "recording_media_sets_id",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "Content",
+          "read_attributes": [
+            "id",
+            "title",
+            "text",
+            "tags",
+            "type",
+            "slug",
+            "media_sets_id",
+            "filter_definitions_id",
+            "sort_date",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id",
+            "name",
+            "img"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "retrieveWebinarParticipation",
+      "consistency": "N",
+      "frequency": 6,
+      "forced_entity": "WebinarParticipation",
+      "database_access": [
+        {
+          "entity_name": "WebinarParticipation",
+          "read_attributes": [
+            "id",
+            "webinars_id",
+            "users_id",
+            "employers_id",
+            "state"
+          ]
+        },
+        {
+          "entity_name": "Webinar",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "scheduleInterview",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "Interview",
+      "database_access": [
+        {
+          "entity_name": "Interview",
+          "write_attributes": [
+            "id",
+            "applications_id",
+            "operators_id",
+            "status",
+            "booking_id",
+            "url",
+            "samba_private_url",
+            "date"
+          ]
+        },
+        {
+          "entity_name": "JobOffer",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Application",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "startApply",
+      "consistency": "N",
+      "frequency": 8,
+      "forced_entity": "Application",
+      "database_access": [
+        {
+          "entity_name": "Application",
+          "write_attributes": [
+            "id",
+            "job_offers_id",
+            "users_id",
+            "score",
+            "employers_id",
+            "view",
+            "status",
+            "created_at",
+            "updated_at",
+            "university_name",
+            "university_tag",
+            "universities_id",
+            "course_name",
+            "courses_id",
+            "city_name",
+            "city_tag",
+            "cities_id",
+            "country_name",
+            "country_tag",
+            "countries_id",
+            "story_url",
+            "applied_at"
+          ]
+        },
+        {
+          "entity_name": "JobOffer",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "updateContacts",
+      "consistency": "N",
+      "frequency": 2,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "write_attributes": [
+            "id",
+            "contact_address",
+            "contact_phone",
+            "contact_email",
+            "birthdate"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "updateEducation",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "Education",
+      "database_access": [
+        {
+          "entity_name": "Education",
+          "write_attributes": [
+            "university_name",
+            "university_tag",
+            "universities_id",
+            "course_name",
+            "course_tag",
+            "courses_id",
+            "faculty_tag",
+            "qualification_name",
+            "qualifications_id",
+            "cities_id",
+            "city_name",
+            "city_tag",
+            "countries_id",
+            "country_name",
+            "country_tag",
+            "users_id",
+            "updated_at",
+            "study_tags_id",
+            "is_current",
+            "status",
+            "marks_id",
+            "avg",
+            "finished_at",
+            "expected_finished_at",
+            "started_at"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "updateExperience",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "Experience",
+      "database_access": [
+        {
+          "entity_name": "Experience",
+          "write_attributes": [
+            "id",
+            "title",
+            "description",
+            "experience_types_id",
+            "users_id",
+            "view",
+            "started_at",
+            "finished_at",
+            "updated_at"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "updateExperienceOrder",
+      "consistency": "N",
+      "frequency": 2,
+      "forced_entity": "Experience",
+      "database_access": [
+        {
+          "entity_name": "Experience",
+          "write_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "updateLanguageOrder",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "Language",
+      "database_access": [
+        {
+          "entity_name": "UserHasLanguage",
+          "write_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "updateOrderEducation",
+      "consistency": "N",
+      "frequency": 2,
+      "forced_entity": "Education",
+      "database_access": [
+        {
+          "entity_name": "Education",
+          "write_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "updateProfile",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id"
+          ],
+          "write_attributes": [
+            "name",
+            "surname",
+            "img"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "updateSkillOrder",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "Skill",
+      "database_access": [
+        {
+          "entity_name": "UserHasSkill",
+          "write_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "updateUserProfile",
+      "consistency": "N",
+      "frequency": 2,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "write_attributes": [
+            "id",
+            "name",
+            "surname",
+            "img"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "uploadCV",
+      "consistency": "S",
+      "frequency": 3,
+      "forced_entity": "Event",
+      "database_access": [
+        {
+          "entity_name": "CheckIn",
+          "read_attributes": [
+            "id",
+            "users_id"
+          ],
+          "write_attributes": [
+            "cv"
+          ]
+        },
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "uploadStory",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "Application",
+      "database_access": [
+        {
+          "entity_name": "Application",
+          "write_attributes": [
+            "story_url"
+          ]
+        },
+        {
+          "entity_name": "JobOffer",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "usersMe",
+      "consistency": "N",
+      "frequency": 10,
+      "forced_entity": "User",
+      "database_access": [
+        {
+          "entity_name": "User",
+          "read_attributes": [
+            "id",
+            "name",
+            "surname",
+            "img",
+            "email",
+            "contact_address",
+            "contact_phone"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "read_attributes": [
+            "id",
+            "university_name",
+            "universities_id",
+            "study_tags_id",
+            "mark",
+            "avg",
+            "started_at",
+            "finished_at",
+            "status",
+            "users_id"
+          ]
+        },
+        {
+          "entity_name": "StudyTag",
+          "read_attributes": [
+            "id"
+          ]
+        },
+        {
+          "entity_name": "Skill",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "Language",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "UserHasSkill",
+          "read_attributes": [
+            "id",
+            "skill_levels_id",
+            "skills_id"
+          ]
+        },
+        {
+          "entity_name": "UserHasLanguage",
+          "read_attributes": [
+            "id",
+            "language_levels_id",
+            "languages_id"
+          ]
+        },
+        {
+          "entity_name": "LanguageLevel",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        },
+        {
+          "entity_name": "SkillLevel",
+          "read_attributes": [
+            "id",
+            "name_it",
+            "name_en"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "webinarOffline",
+      "consistency": "N",
+      "frequency": 3,
+      "forced_entity": "WebinarParticipation",
+      "database_access": [
+        {
+          "entity_name": "WebinarParticipation",
+          "write_attributes": [
+            "id",
+            "webinars_id",
+            "users_id",
+            "employers_id",
+            "viewed",
+            "state",
+            "downloaded",
+            "samba_private_url",
+            "university_name",
+            "university_tag",
+            "universities_id",
+            "city_name",
+            "city_tag",
+            "cities_id",
+            "country_name",
+            "country_tag",
+            "countries_id",
+            "courses_id",
+            "study_tags_id",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "read_attributes": [
+            "id",
+            "university_name",
+            "universities_id",
+            "study_tags_id",
+            "mark",
+            "avg",
+            "started_at",
+            "finished_at",
+            "status",
+            "users_id"
+          ]
+        },
+        {
+          "entity_name": "Webinar",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "webinarRegistration",
+      "consistency": "N",
+      "frequency": 5,
+      "forced_entity": "WebinarParticipation",
+      "database_access": [
+        {
+          "entity_name": "WebinarParticipation",
+          "write_attributes": [
+            "id",
+            "webinars_id",
+            "users_id",
+            "employers_id",
+            "viewed",
+            "state",
+            "downloaded",
+            "samba_private_url",
+            "university_name",
+            "university_tag",
+            "universities_id",
+            "city_name",
+            "city_tag",
+            "cities_id",
+            "country_name",
+            "country_tag",
+            "countries_id",
+            "courses_id",
+            "study_tags_id",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "entity_name": "Education",
+          "read_attributes": [
+            "id",
+            "university_name",
+            "universities_id",
+            "study_tags_id",
+            "mark",
+            "avg",
+            "started_at",
+            "finished_at",
+            "status",
+            "users_id"
+          ]
+        },
+        {
+          "entity_name": "Webinar",
+          "read_attributes": [
+            "id"
+          ]
+        }
+      ]
+    }
+  ]
+}
