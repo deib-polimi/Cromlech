@@ -149,6 +149,7 @@ def parse_arch_json(json_filename):
         graph.update({new_op.get_index(): list(set(graph.get(new_op.get_index())))})
     compute_consistency_lists()
 
+
 def parse_arch_yaml(yaml_filename):
     with open(yaml_filename, 'r') as stream:
         try:
@@ -204,6 +205,7 @@ def parse_arch_yaml(yaml_filename):
             print(exc)
     compute_consistency_lists()
 
+
 op_num = len(graph)
 
 
@@ -243,9 +245,9 @@ def get_connected_components(gr):
     return g.findConnectedComponents()
 
 
-# Computes distance between two microservices, by comparing each couple of operations from the two using their accessed
-# columns as sets in a Jaccard distance, and then getting the median between all couples
-def compute_distance(ms1, ms2):
+# Computes similarity between two microservices, by comparing each couple of operations from the two using their accessed
+# columns as sets in a Jaccard similarity, and then getting the median between all couples
+def compute_similarity(ms1, ms2):
     cols1 = []
     for m in ms1:
         cols1 += op_reads.get(m) + op_writes.get(m)
@@ -275,8 +277,8 @@ def compute_distance(ms1, ms2):
     return np.median(scores)
 
 
-# Computes Jaccard distance between two microservices, using as sets all the accessed columns by the microservices' operations
-def compute_ms_distance(ms1, ms2):
+# Computes Jaccard similarity between two microservices, using as sets all the accessed columns by the microservices' operations
+def compute_ms_similarity(ms1, ms2):
     total1 = []
     for o in ms1:
         reads = op_reads.get(o)
@@ -294,7 +296,7 @@ def compute_ms_distance(ms1, ms2):
     return float(intersection) / union
 
 
-# Computes intraservice cohesion as the mean of all Jaccard distances between each operation and the rest of the operations
+# Computes intraservice cohesion as the mean of all Jaccard similaritys between each operation and the rest of the operations
 # in the microservice
 def compute_intraservice_cohesion(ms):
     final_scores = []
@@ -306,19 +308,19 @@ def compute_intraservice_cohesion(ms):
         for o in m:
             temp = copy.deepcopy(m)
             temp.remove(o)
-            scores.append(compute_ms_distance([o], temp))
+            scores.append(compute_ms_similarity([o], temp))
         final_scores.append(np.mean(scores))
     return np.mean(final_scores)
 
 
-# Computes coupling score as the mean of Jaccard distances between each couple of microservices
+# Computes coupling score as the mean of Jaccard similarities between each couple of microservices
 def compute_coupling_score(ms):
     already_visited = copy.deepcopy(ms)
     scores = []
     for m in ms:
         for m2 in already_visited:
             if m != m2:
-                scores.append(compute_ms_distance(m, m2))
+                scores.append(compute_ms_similarity(m, m2))
         already_visited.remove(m)
     return np.mean(scores)
 
@@ -404,7 +406,7 @@ def format_and_draw(microservices, op_num, html_filename, chr=None):
 
 # Removes all columns which only create noise (as they are only accessed by a single operation) and returns
 # the list of operations which have no accessed columns, which can then be trimmed from the architecture
-def get_removable_columns():
+def noise_removal():
     all_columns = []
     to_remove = []
     for op in graph:
@@ -423,10 +425,10 @@ def get_removable_columns():
     return to_remove
 
 
-# Computes the first instance of distance matrix between all the operations
-def compute_initial_distance_matrix():
+# Computes the first instance of similarity matrix between all the operations
+def compute_initial_similarity_matrix():
     already_computed = [g for g in graph]
-    distance_matrix = {}
+    similarity_matrix = {}
     service_indices = {}
     i = 0
     for o1 in graph:
@@ -435,16 +437,16 @@ def compute_initial_distance_matrix():
                 continue
             else:
                 service_indices.update({i: ([o1], [o2])})
-                distance_matrix.update({i: compute_ms_distance([o1], [o2])})
+                similarity_matrix.update({i: compute_ms_similarity([o1], [o2])})
                 i += 1
         already_computed.remove(o1)
-    return distance_matrix, service_indices
+    return similarity_matrix, service_indices
 
 
-# Recomputes the distance matrix after a cluster merging
-def recompute_distance_matrix(microservices):
+# Recomputes the similarity matrix after a cluster merging
+def recompute_similarity_matrix(microservices):
     already_computed = copy.deepcopy(microservices)
-    distance_matrix = {}
+    similarity_matrix = {}
     service_indices = {}
     i = 0
     for o1 in microservices:
@@ -453,10 +455,10 @@ def recompute_distance_matrix(microservices):
                 continue
             else:
                 service_indices.update({i: (o1, o2)})
-                distance_matrix.update({i: compute_ms_distance(o1, o2)})
+                similarity_matrix.update({i: compute_ms_similarity(o1, o2)})
                 i += 1
         already_computed.remove(o1)
-    return distance_matrix, service_indices
+    return similarity_matrix, service_indices
 
 
 # Elects the primary replicas as the replicas in the microservice where they're accessed the most frequently by high
@@ -520,9 +522,8 @@ def list_secondary_replicas(microservices):
                     i += 1
 
 
-# If the replica is not written in its microservice, or accessed by at least an operation with high consistency,
-# then it's an unexpensive replica and can be replicated without cost, so it doesn't need to be considered in the
-# genetic algorithm
+# If the replica is only read by low consistency ops in its microservice, then it's an unexpensive replica and can be
+# replicated without cost, so it doesn't need to be considered in the genetic algorithm
 def trim_unexpensive_replicas(microservices):
     to_remove = []
     for s in secondary_replicas_indices:
@@ -643,15 +644,14 @@ def crossover(mother, father, mutchance):
         i += 1
     return son
 
-if __name__ == '__main__':
-    #parse_arch_json('pangaeaArch.json')
-    parse_arch_yaml('pangeaArch2.yaml')
 
+if __name__ == '__main__':
+    # parse_arch_json('pangaeaArch.json')
+    parse_arch_yaml('pangeaArch2.yaml')
     op_num = len(graph)
 
-    to_remove = get_removable_columns()
+    to_remove = noise_removal()
     graph_copy = Graph()
-
 
     # Trims the useless operations from the architecture
     for t in to_remove:
@@ -661,24 +661,24 @@ if __name__ == '__main__':
         op_reads.pop(t)
         op_writes.pop(t)
 
-    distance_matrix, service_indices = compute_initial_distance_matrix()
+    similarity_matrix, service_indices = compute_initial_similarity_matrix()
     microservices = [[g] for g in graph]
-    print(distance_matrix)
+    print(similarity_matrix)
     while len(microservices) > 15:
-        candidate_index = max(distance_matrix, key=distance_matrix.get)
-        if distance_matrix.get(candidate_index) <= 0:
+        candidate_index = max(similarity_matrix, key=similarity_matrix.get)
+        if similarity_matrix.get(candidate_index) <= 0:
             break
         candidate = service_indices.get(candidate_index)
         print(str(candidate) + " are the candidates to be joined, with score " + str(
-            distance_matrix.get(candidate_index)))
+            similarity_matrix.get(candidate_index)))
         new_m = []
         for c in candidate:
             for c2 in c:
                 new_m.append(c2)
             microservices.remove(c)
         microservices.append(new_m)
-        distance_matrix, service_indices = recompute_distance_matrix(microservices)
-        print(distance_matrix)
+        similarity_matrix, service_indices = recompute_similarity_matrix(microservices)
+        print(similarity_matrix)
         print(len(microservices))
         print(microservices)
         print("COUPLING SCORE " + str(compute_coupling_score(microservices)))
