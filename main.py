@@ -245,7 +245,7 @@ def get_connected_components(gr):
     return g.findConnectedComponents()
 
 
-# Computes similarity between two microservices, by comparing each couple of operations from the two using their accessed
+# Computes similarity between two microservices, by comparing each pair of operations from the two using their accessed
 # columns as sets in a Jaccard similarity, and then getting the median between all couples
 def compute_similarity(ms1, ms2):
     cols1 = []
@@ -313,7 +313,7 @@ def compute_intraservice_cohesion(ms):
     return np.mean(final_scores)
 
 
-# Computes coupling score as the mean of Jaccard similarities between each couple of microservices
+# Computes coupling score as the mean of Jaccard similarities between each pair of microservices
 def compute_coupling_score(ms):
     already_visited = copy.deepcopy(ms)
     scores = []
@@ -415,7 +415,6 @@ def noise_removal():
         related_columns = op_reads.get(op) + op_writes.get(op)
         for c in related_columns:
             if all_columns.count(c) == 1:
-                print("Removing " + c + " of operation " + nodes_dict.get(op).get_name())
                 if c in op_reads.get(op):
                     op_reads.get(op).remove(c)
                 if c in op_writes.get(op):
@@ -655,78 +654,223 @@ if __name__ == '__main__':
 
     # Trims the useless operations from the architecture
     for t in to_remove:
-        print("Removing operation " + nodes_dict.get(t).get_name())
         graph.pop(t)
         nodes_dict.pop(t)
         op_reads.pop(t)
         op_writes.pop(t)
 
-    similarity_matrix, service_indices = compute_initial_similarity_matrix()
-    microservices = [[g] for g in graph]
-    print(similarity_matrix)
-    while len(microservices) > 15:
-        candidate_index = max(similarity_matrix, key=similarity_matrix.get)
-        if similarity_matrix.get(candidate_index) <= 0:
-            break
-        candidate = service_indices.get(candidate_index)
-        print(str(candidate) + " are the candidates to be joined, with score " + str(
-            similarity_matrix.get(candidate_index)))
-        new_m = []
-        for c in candidate:
-            for c2 in c:
-                new_m.append(c2)
-            microservices.remove(c)
-        microservices.append(new_m)
-        similarity_matrix, service_indices = recompute_similarity_matrix(microservices)
-        print(similarity_matrix)
-        print(len(microservices))
-        print(microservices)
-        print("COUPLING SCORE " + str(compute_coupling_score(microservices)))
-        print("INTRA-SERVICE COHESION SCORE " + str(compute_intraservice_cohesion(microservices)))
-        print("CC RATIO " + str(compute_coupling_score(microservices) / compute_intraservice_cohesion(microservices)))
+    model = 2
+    if model == 2:
+        # Lists the high consistency write operations
+        hc_writes = []
+        for o in op_writes:
+            if nodes_dict.get(o).get_consistency() == 'S':
+                hc_writes.append(o)
+        # Lists the columns which are written
+        written_columns = []
+        for o in hc_writes:
+                for x in op_writes.get(o):
+                    written_columns.append(x)
+        written_columns = list(set(written_columns))
 
-    cc_ratio = compute_coupling_score(microservices) / compute_intraservice_cohesion(microservices)
+        # Creates the "writing" services
+        starting_services = []
+        for c in written_columns:
+            this_col = []
+            for o in hc_writes:
+                if c in op_writes.get(o):
+                    this_col.append(o)
+            already_added = False
+            for s in starting_services:
+                if this_col == s:
+                    already_added = True
+            if not already_added:
+                starting_services.append(this_col)
+        for o in hc_writes:
+            indices = []
+            for s in starting_services:
+                if o in s:
+                    indices.append(starting_services.index(s))
+            new_s = []
+            indices = list(set(indices))
+            for i in indices:
+                new_s += starting_services[i]
+            new_s = list(set(new_s))
+            list.sort(indices, reverse=True)
+            for i in indices:
+                starting_services.remove(starting_services[i])
+            starting_services.append(new_s)
+        to_remove = []
+        writing_services = []
+        for s in starting_services:
+            if s:
+                writing_services.append(starting_services[starting_services.index(s)])
 
-    services = []
-    for m in microservices:
-        new_s = []
-        for o in m:
-            new_s += [o] + graph.get(o)
-        new_s = list(set(new_s))
-        services.append(new_s)
+        # Associates each written column with its writing service
+        col_ws = {}
+        for w in written_columns:
+            for s in writing_services:
+                for s2 in s:
+                    if w in op_writes.get(s2):
+                        col_ws.update({w: writing_services.index(s)})
+                        break
+        print(col_ws)
+        print(writing_services)
+        services = []
+        for m in writing_services:
+            new_s = []
+            for o in m:
+                new_s += [o] + graph.get(o)
+            new_s = list(set(new_s))
+            services.append(new_s)
 
-    elect_primary_replicas(services)
-    list_secondary_replicas(services)
-    trim_unexpensive_replicas(services)
+        elect_primary_replicas(services)
+        list_secondary_replicas(services)
+        format_and_draw(services, op_num, 'suga.html')
+        exit(-1)
 
-    generation = []
-    for i in range(0, 20):
-        chromosome = []
-        for s in secondary_replicas_indices:
-            choice = random.choice([0, 1])
-            chromosome.append(choice)
-        generation.append(chromosome)
 
-    for i in range(0, 100):
-        fitness_chr_tuples = []
-        for g in generation:
-            fitness_chr_tuples.append((g, evaluate_fitness(microservices, g)))
-        fitness_chr_tuples.sort(key=operator.itemgetter(1))
-        print(fitness_chr_tuples)
-        new_gen = []
-        new_gen.append(fitness_chr_tuples[0][0])
-        new_gen.append(fitness_chr_tuples[1][0])
-        for i in range(0, 18):
-            m, f = roulette_wheel_selection(fitness_chr_tuples)
-            new_gen.append(crossover(m, f, 5))
-        generation = new_gen
 
-    print("FINAL SCORE = ", end='')
-    print(evaluate_fitness(microservices, new_gen[0]) * cc_ratio)
 
-    for x in secondary_replicas_indices:
-        if secondary_replicas_indices.get(x) == 7:
-            print(nodes_dict.get(x[0]).get_name())
-            print([x for x in services[x[1]]])
+    if model == 0:
+        similarity_matrix, service_indices = compute_initial_similarity_matrix()
+        microservices = [[g] for g in graph]
+        while len(microservices) > 15:
+            candidate_index = max(similarity_matrix, key=similarity_matrix.get)
+            if similarity_matrix.get(candidate_index) <= 0:
+                break
+            candidate = service_indices.get(candidate_index)
+            print(str(candidate) + " are the candidates to be joined, with score " + str(
+                similarity_matrix.get(candidate_index)))
+            new_m = []
+            for c in candidate:
+                for c2 in c:
+                    new_m.append(c2)
+                microservices.remove(c)
+            microservices.append(new_m)
+            similarity_matrix, service_indices = recompute_similarity_matrix(microservices)
+            print(similarity_matrix)
+            print(len(microservices))
+            print(microservices)
+            print("COUPLING SCORE " + str(compute_coupling_score(microservices)))
+            print("INTRA-SERVICE COHESION SCORE " + str(compute_intraservice_cohesion(microservices)))
+            print("CC RATIO " + str(compute_coupling_score(microservices) / compute_intraservice_cohesion(microservices)))
 
-    format_and_draw(services, op_num, "res.html", chr=new_gen[0])
+
+        cc_ratio = compute_coupling_score(microservices) / compute_intraservice_cohesion(microservices)
+
+        services = []
+        for m in microservices:
+            new_s = []
+            for o in m:
+                new_s += [o] + graph.get(o)
+            new_s = list(set(new_s))
+            services.append(new_s)
+
+        elect_primary_replicas(services)
+        list_secondary_replicas(services)
+        trim_unexpensive_replicas(services)
+
+        generation = []
+        for i in range(0, 20):
+            chromosome = []
+            for s in secondary_replicas_indices:
+                choice = random.choice([0, 1])
+                chromosome.append(choice)
+            generation.append(chromosome)
+
+        for i in range(0, 100):
+            fitness_chr_tuples = []
+            for g in generation:
+                fitness_chr_tuples.append((g, evaluate_fitness(microservices, g)))
+            fitness_chr_tuples.sort(key=operator.itemgetter(1))
+            print(fitness_chr_tuples)
+            new_gen = []
+            new_gen.append(fitness_chr_tuples[0][0])
+            new_gen.append(fitness_chr_tuples[1][0])
+            for i in range(0, 18):
+                m, f = roulette_wheel_selection(fitness_chr_tuples)
+                new_gen.append(crossover(m, f, 5))
+            generation = new_gen
+
+        print("FINAL SCORE = ", end='')
+        print(evaluate_fitness(microservices, new_gen[0]) * cc_ratio)
+
+        for x in secondary_replicas_indices:
+            if secondary_replicas_indices.get(x) == 7:
+                print(nodes_dict.get(x[0]).get_name())
+                print([x for x in services[x[1]]])
+
+        format_and_draw(services, op_num, "res.html", chr=new_gen[0])
+
+    if model == 3:
+        similarity_matrix, service_indices = compute_initial_similarity_matrix()
+        microservices = [[g] for g in graph]
+        while True:
+            candidate_index = max(similarity_matrix, key=similarity_matrix.get)
+            if similarity_matrix.get(candidate_index) != 1:
+                break
+            candidate = service_indices.get(candidate_index)
+            print(str(candidate) + " are the candidates to be joined, with score " + str(
+                similarity_matrix.get(candidate_index)))
+            new_m = []
+            for c in candidate:
+                for c2 in c:
+                    new_m.append(c2)
+                microservices.remove(c)
+            microservices.append(new_m)
+            similarity_matrix, service_indices = recompute_similarity_matrix(microservices)
+            print(similarity_matrix)
+            print(len(microservices))
+            print(microservices)
+            print("COUPLING SCORE " + str(compute_coupling_score(microservices)))
+            print("INTRA-SERVICE COHESION SCORE " + str(compute_intraservice_cohesion(microservices)))
+            print(
+                "CC RATIO " + str(compute_coupling_score(microservices) / compute_intraservice_cohesion(microservices)))
+
+        cc_ratio = compute_coupling_score(microservices) / compute_intraservice_cohesion(microservices)
+
+        services = []
+        for m in microservices:
+            new_s = []
+            for o in m:
+                new_s += [o] + graph.get(o)
+            new_s = list(set(new_s))
+            services.append(new_s)
+
+        elect_primary_replicas(services)
+        list_secondary_replicas(services)
+        trim_unexpensive_replicas(services)
+
+        generation = []
+        for i in range(0, 20):
+            chromosome = []
+            for s in secondary_replicas_indices:
+                choice = random.choice([0, 1])
+                chromosome.append(choice)
+            generation.append(chromosome)
+
+        for i in range(0, 100):
+            fitness_chr_tuples = []
+            for g in generation:
+                fitness_chr_tuples.append((g, evaluate_fitness(microservices, g)))
+            fitness_chr_tuples.sort(key=operator.itemgetter(1))
+            print(fitness_chr_tuples)
+            new_gen = []
+            new_gen.append(fitness_chr_tuples[0][0])
+            new_gen.append(fitness_chr_tuples[1][0])
+            for i in range(0, 18):
+                m, f = roulette_wheel_selection(fitness_chr_tuples)
+                new_gen.append(crossover(m, f, 5))
+            generation = new_gen
+
+        print("FINAL SCORE = ", end='')
+        print(evaluate_fitness(microservices, new_gen[0]) * cc_ratio)
+
+        for x in secondary_replicas_indices:
+            if secondary_replicas_indices.get(x) == 7:
+                print(nodes_dict.get(x[0]).get_name())
+                print([x for x in services[x[1]]])
+
+        format_and_draw(services, op_num, "res.html", chr=new_gen[0])
+        print(len(services))
