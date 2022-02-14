@@ -1,6 +1,10 @@
 import json
 import copy
+<<<<<<< Updated upstream:main.py
 import operator
+=======
+from Cromlech import abstractSolverFinalLinear
+>>>>>>> Stashed changes:preprocessing.py
 import yaml
 from pyvis.network import Network
 from apgl.graph import SparseGraph
@@ -234,6 +238,146 @@ def draw_graph_verbose(gr, html_filename):
     net.show(html_filename)
 
 
+<<<<<<< Updated upstream:main.py
+=======
+# Draws the graph showing the forced operations relationships
+def draw_forcedops(html_filename):
+    net = Network(height='2500px', width='100%', bgcolor="#dddddd")
+    for g in graph:
+        net.add_node(nodes_dict.get(g).get_name(), size=8, color='royalblue', mass=1.5)
+    for f in forced_operations:
+        for o in forced_operations.get(f):
+            net.add_edge(nodes_dict.get(f).get_name(), nodes_dict.get(o).get_name())
+    net.show(html_filename)
+
+
+# Turns the microservice architecure in a format drawable with pyvis
+def format_and_draw(microservices, html_filename):
+    net = Network(height='2500px', width='100%', bgcolor="#dddddd")
+    i = 0
+    for m in microservices:
+        ops = [x for x in m if x < op_num]
+        attrs = [x for x in m if x >= op_num]
+        for o in ops:
+            if nodes_dict.get(o).get_consistency() == 'H':
+                if op_writes.get(o):
+                    net.add_node(nodes_dict.get(o).get_name(), size=8, color='black', mass=1.5)
+                else:
+                    net.add_node(nodes_dict.get(o).get_name(), size=8, color='navy', mass=1.5)
+            else:
+                net.add_node(nodes_dict.get(o).get_name(), size=8, color='royalblue', mass=1.5)
+        for a in attrs:
+            net.add_node(attributes_iton.get(a) + '@' + str(i), size=8, color='seagreen', shape='square', mass=1.5)
+        for o in ops:
+            accesses = op_reads.get(o) + op_writes.get(o)
+            accesses_i = []
+            for a in accesses:
+                accesses_i.append(attributes_ntoi.get(a))
+            for a in accesses_i:
+                if a in attrs:
+                    net.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i))
+        i += 1
+    net.show(html_filename)
+
+# Turns the microservice architecure in a format drawable with pyvis
+def format_and_draw_complete(microservices, html_filename):
+    net = Network(height='2500px', width='100%', bgcolor="#dddddd")
+    i = 0
+    for m in microservices:
+        net_single = Network(height='2500px', width='100%', bgcolor="#dddddd")
+        ops = [x for x in m if x < op_num]
+        attrs = [x for x in m if x >= op_num]
+        for o in ops:
+            if nodes_dict.get(o).get_consistency() == 'H':
+                if op_writes.get(o):
+                    net.add_node(nodes_dict.get(o).get_name(), size=8, color='black', mass=1.5)
+                    net_single.add_node(nodes_dict.get(o).get_name(), size=8, color='black', mass=1.5)
+                else:
+                    net.add_node(nodes_dict.get(o).get_name(), size=8, color='navy', mass=1.5)
+                    net_single.add_node(nodes_dict.get(o).get_name(), size=8, color='navy', mass=1.5)
+            else:
+                net.add_node(nodes_dict.get(o).get_name(), size=8, color='royalblue', mass=1.5)
+                net_single.add_node(nodes_dict.get(o).get_name(), size=8, color='royalblue', mass=1.5)
+        for a in attrs:
+            net.add_node(attributes_iton.get(a) + '@' + str(i), size=8, color='darkgreen', shape='square', mass=1.5)
+            net_single.add_node(attributes_iton.get(a) + '@' + str(i), size=8, color='darkgreen', shape='square', mass=1.5)
+        for o in ops:
+            accesses = op_reads.get(o) + op_writes.get(o)
+            accesses_i = []
+            for a in accesses:
+                accesses_i.append(attributes_ntoi.get(a))
+            for a in accesses_i:
+                if a in attrs:
+                    net.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i))
+                    net_single.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i))
+        net_single.show("Service " + str(i) + ".html")
+        i += 1
+    net.show(html_filename)
+
+def format_and_draw_final(microservices, html_filename):
+    net = Network(height='2500px', width='100%', bgcolor="#dddddd")
+    i = 0
+    for m in microservices:
+        net_single = Network(height='2500px', width='100%', bgcolor="#dddddd")
+        ops = [x for x in m if isinstance(x, int)]
+        attrs = [x for x in m if isinstance(x, str)]
+        for o in ops:
+            if nodes_dict.get(o).get_consistency() == 'H':
+                if op_writes.get(o):
+                    net.add_node(nodes_dict.get(o).get_name(), size=8 + nodes_dict.get(o).get_frequency()*1.2, color='navy', mass=1.5, group=i)
+                    net_single.add_node(nodes_dict.get(o).get_name(), size=8 + nodes_dict.get(o).get_frequency()*1.2, color='navy', mass=1.5, group=i)
+                else:
+                    net.add_node(nodes_dict.get(o).get_name(), size=8 + nodes_dict.get(o).get_frequency() * 1.2,
+                                 color='mediumseagreen', mass=1.5, group=i)
+                    net_single.add_node(nodes_dict.get(o).get_name(), size=8 + nodes_dict.get(o).get_frequency() * 1.2,
+                                        color='mediumseagreen', mass=1.5, group=i)
+            else:
+                if op_writes.get(o):
+                    net.add_node(nodes_dict.get(o).get_name(), size=8 + nodes_dict.get(o).get_frequency()*1.2, color='dodgerblue', mass=1.5, group=i)
+                    net_single.add_node(nodes_dict.get(o).get_name(), size=8 + nodes_dict.get(o).get_frequency()*1.2, color='dodgerblue', mass=1.5, group=i)
+                else:
+                    net.add_node(nodes_dict.get(o).get_name(), size=8 + nodes_dict.get(o).get_frequency()*1.2,
+                                 color='mediumseagreen', mass=1.5, group=i)
+                    net_single.add_node(nodes_dict.get(o).get_name(), size=8 + nodes_dict.get(o).get_frequency()*1.2,
+                                        color='mediumseagreen', mass=1.5, group=i)
+        attr_count = {}
+        for a in attrs:
+            attr_id = attributes_iton.get(int(a[:len(a) - 1]))
+            count = 0
+            for m2 in microservices:
+                attr_int = [int(x[:len(x)-1]) for x in m2 if isinstance(x, str)]
+                if attributes_ntoi.get(attr_id) in attr_int:
+                    count += 1
+            attr_count.update({int(a[:len(a) - 1]): count })
+            repl_status = a[len(a) - 1]
+            if repl_status == 'N':
+                net.add_node(attr_id + '@' + str(i) + '/'   + str(count), size=8, color='yellow', shape='square', mass=1.5, group=i)
+                net_single.add_node(attr_id + '@' + str(i)  + '/' + str(count), size=8, color='yellow', shape='square', mass=1.5, group=i)
+            if repl_status == 'R':
+                net.add_node(attr_id + '@' + str(i) + '/'   + str(count) , size=8, color='orange', shape='square', mass=1.5, group=i)
+                net_single.add_node(attr_id + '@' + str(i)  + '/' + str(count), size=8, color='orange', shape='square', mass=1.5, group=i)
+            if repl_status == 'P':
+                net.add_node(attr_id + '@' + str(i) + '/'   + str(count), size=8, color='red', shape='square', mass=1.5, group=i)
+                net_single.add_node(attr_id + '@' + str(i)  + '/' + str(count), size=8, color='red', shape='square', mass=1.5, group=i)
+        for o in ops:
+            accesses = op_reads.get(o) + op_writes.get(o)
+            accesses_i = []
+            attrs_num = []
+            for a in accesses:
+                accesses_i.append(attributes_ntoi.get(a))
+            for a in attrs:
+                attrs_num.append(int(a[:len(a) - 1]))
+            for a in accesses_i:
+                if a in attrs_num:
+                    net.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i) + '/' + str(attr_count.get(a)) )
+                    net_single.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i) + '/' + str(attr_count.get(a)) )
+        net_single.show("Service " + str(i) + ".html")
+        i += 1
+
+    net.show(html_filename)
+
+
+>>>>>>> Stashed changes:preprocessing.py
 # Returns connected components of graph
 def get_connected_components(gr):
     size = len(gr.get_nodes_dict())
@@ -245,6 +389,7 @@ def get_connected_components(gr):
     return g.findConnectedComponents()
 
 
+<<<<<<< Updated upstream:main.py
 # Computes similarity between two microservices, by comparing each pair of operations from the two using their accessed
 # columns as sets in a Jaccard similarity, and then getting the median between all couples
 def compute_similarity(ms1, ms2):
@@ -402,7 +547,138 @@ def format_and_draw(microservices, op_num, html_filename, chr=None):
                 net.add_node(e, size=8, color='lightsalmon', shape='square', mass=1.5)
             net.add_edge(n, e)
     net.show(html_filename)
+=======
+def compute_communication_cost(microservices):
+    w_op = 0
+    location_dict = {}
+    op_scores = {}
+    for g in graph:
+        for m in microservices:
+            if g in m:
+                location_dict.update({g: microservices.index(m)})
+    for a in primary_replicas_locations:
+        if not static_status.get(a):
+            m_index = 0
+            for m in microservices:
+                if m_index == primary_replicas_locations.get(a):
+                    m_index += 1
+                    continue
+                for o in m:
+                    if o in attr_written_by.get(a):
+                        w_op += nodes_dict.get(o).get_frequency()
+                        ent_name = attributes_iton.get(a).split('.')[0]
+                        if op_scores.get(ent_name):
+                            op_scores.update({ent_name: op_scores.get(ent_name) + nodes_dict.get(o).get_frequency()})
+                        else:
+                            op_scores.update({ent_name: nodes_dict.get(o).get_frequency()})
+                m_index += 1
+    r_op = 0
+    repl = 0
+    caches = {}
+    for a in attributes:
+        ent_name = attributes_iton.get(a).split('.')[0]
+        m_index = -1
+        for m in microservices:
+            m_index += 1
+            if a in m and not primary_replicas_locations.get(a) == m_index:
+                read_in_same = 0
+                total_write = 0
+                for o in m:
+                    if o < 10000 and attributes_iton.get(a) in op_reads.get(o):
+                        read_in_same += nodes_dict.get(o).get_frequency()
+                for m2 in microservices:
+                    for o in m2:
+                        if o < 10000 and attributes_iton.get(a) in op_writes.get(o):
+                            total_write += nodes_dict.get(o).get_frequency()
+                if read_in_same >= total_write:
+                    repl += total_write
+                    caches.update({(a, m_index): True})
+                    if op_scores.get(ent_name):
+                        op_scores.update(
+                            {ent_name: op_scores.get(ent_name) + total_write})
+                    else:
+                        op_scores.update({ent_name: total_write})
+                else:
+                    r_op += read_in_same
+                    caches.update({(a, m_index): False})
+                    if op_scores.get(ent_name):
+                        op_scores.update(
+                            {ent_name: op_scores.get(ent_name) + read_in_same})
+                    else:
+                        op_scores.update({ent_name: read_in_same})
+            else:
+                continue
 
+    repl2 = 0
+    for a in attributes:
+        replica_num = 1
+        total_write = 0
+        m_index = -1
+        for m in microservices:
+            m_index += 1
+            if a in m and caches.get((a, m_index)):
+                replica_num += 1
+            for o in m:
+                if o < 10000 and attributes_iton.get(a) in op_writes.get(o):
+                    total_write += nodes_dict.get(o).get_frequency()
+        if replica_num > 1:
+            repl2 += total_write * (replica_num - 1)
+            ent_name = attributes_iton.get(a).split('.')[0]
+            if op_scores.get(ent_name):
+                op_scores.update({ent_name: op_scores.get(ent_name) + total_write * (replica_num - 1)})
+            else:
+                op_scores.update({ent_name: total_write * (replica_num - 1)})
+    print("ROP " + str(r_op))
+    print("REPL " + str(repl) + " - " + str(repl2))
+    print("WOP " + str(w_op))
+    """
+    print(op_scores)
+    mpl.rcParams.update({'font.size': 7})
+    x = dict(sorted(op_scores.items(), key=lambda item: item[1], reverse=True))
+    mpl.bar(x.keys(), x.values())
+    mpl.show()
+    """
+    return w_op + r_op + repl
+
+def post_processing_communication_cost(result):
+    repl = 0
+    for a in attributes:
+        repl_num = 0
+        total_write = 0
+        for m in result:
+            attr_int = [int(x[:len(x)-1]) for x in m if isinstance(x, str)]
+            if a in attr_int and (str(a) + 'R') in m:
+                repl_num += 1
+        for o in graph:
+            if o < op_num:
+                if attributes_iton.get(a) in op_writes.get(o):
+                    total_write += nodes_dict.get(o).get_frequency()
+        repl += total_write * repl_num
+>>>>>>> Stashed changes:preprocessing.py
+
+    rop = 0
+    for a in attributes:
+        for m in result:
+            attr_int = [int(x[:len(x)-1]) for x in m if isinstance(x, str)]
+            ops = [x for x in m if isinstance(x, int)]
+            if a in attr_int and (str(a) + 'N') in m:
+                for o in ops:
+                    if attributes_iton.get(a) in op_reads.get(o):
+                        rop += nodes_dict.get(o).get_frequency()
+
+    wop = 0
+    for a in attributes:
+        for m in result:
+            attr_int = [int(x[:len(x)-1]) for x in m if isinstance(x, str)]
+            ops = [x for x in m if isinstance(x, int)]
+            if a in attr_int and (str(a) + 'P') not in m:
+                for o in ops:
+                    if attributes_iton.get(a) in op_writes.get(o):
+                        wop += nodes_dict.get(o).get_frequency()
+    print("POST PROCESSING:")
+    print("WOP " + str(wop))
+    print("ROP " + str(rop))
+    print("REPL " + str(repl))
 
 # Removes all columns which only create noise (as they are only accessed by a single operation) and returns
 # the list of operations which have no accessed columns, which can then be trimmed from the architecture
@@ -490,6 +766,7 @@ def elect_primary_replicas(microservices):
             primary_replicas_locations.update({e: op_index})
             primary_replicas_microservices.update({e: replica_locations.get(e)[index_of_primary]})
         else:
+<<<<<<< Updated upstream:main.py
             total_count = []
             i = 0
             for l in replica_locations.get(e):
@@ -512,6 +789,12 @@ def elect_primary_replicas(microservices):
 # Creates the dictionary mapping each secondary replica to a position in a chromosome
 def list_secondary_replicas(microservices):
     i = 0
+=======
+            elect_s(a, microservices)
+    return
+
+def elect_s(attribute, microservices):
+>>>>>>> Stashed changes:preprocessing.py
     for m in microservices:
         m_index = microservices.index(m)
         for n in m:
@@ -555,6 +838,7 @@ def compute_repl_costs(replica, microservices, chromosome):
             write_frequency += nodes_dict.get(o).get_frequency()
     if write_frequency == 0:
         return 0
+<<<<<<< Updated upstream:main.py
     num_hc_microservices = 0
     for l in replica_locations.get(replica[0]):
         index_in_chromosome = secondary_replicas_indices.get((replica[0], l))
@@ -606,6 +890,185 @@ def evaluate_fitness(microservices, chromosome):
     for s in secondary_replicas_indices:
         if chromosome[i]:
             cost = compute_repl_costs(s, microservices, chromosome)
+=======
+    else:
+        return match.size / min(len(name1), len(name2))
+
+def compute_semantic_score(services):
+    sim = []
+    for s in services:
+        ops = [x for x in s if x < op_num]
+        similarities = []
+        for o in ops:
+            for o2 in ops:
+                similarities.append(semantic_overlap(o, o2))
+        sim.append(round((sum(similarities) * len(ops)) / (op_num * len(similarities)), 4))
+    print(sim)
+    return sum(sim)
+
+def compute_op_similarity(o1, o2):
+    if o1 == o2:
+        return 1
+    set_o = set_overlap(o1, o2)
+    if set_o == 1:
+        semantic_penalty = 1
+        name1 = cleaned_names.get(o1)
+        name2 = cleaned_names.get(o2)
+        seqMatch = SequenceMatcher(None, name1, name2)
+        match = seqMatch.find_longest_match(0, len(name1), 0, len(name2))
+        if match.size < 4:
+            semantic_penalty = 0.9 #OCCHIO
+        return set_o * semantic_penalty
+    return set_o
+
+
+def compute_total_coupling(services):
+    sim = []
+    suca = 0
+    for s in services:
+        ops = [x for x in s if x < op_num]
+        similarities = []
+        for o in ops:
+            for o2 in ops:
+                similarities.append(compute_op_similarity(o, o2))
+        sim.append(round((sum(similarities) * len(ops)) / (op_num * len(similarities)), 4))
+        print(len(ops))
+        suca += len(ops)
+    print(sim)
+    print(op_num)
+    print(suca)
+    return sum(sim)
+
+def write_dat_file(num_services):
+    read_dependencies = {}
+    write_dependencies = {}
+    access_dependencies = {}
+    for g in graph:
+        reads = [attributes_ntoi.get(a) for a in op_reads.get(g)]
+        writes = [attributes_ntoi.get(a) for a in op_writes.get(g)]
+        for a in attributes:
+            access_dependencies.update({(g, a - 100000): 1})
+            if a in reads:
+                read_dependencies.update({(g, a - 100000): 1})
+            else:
+                read_dependencies.update({(g, a - 100000): 0})
+            if a in writes:
+                write_dependencies.update({(g, a - 100000): 1})
+            else:
+                write_dependencies.update({(g, a - 100000): 0})
+            if a not in reads and a not in writes:
+                access_dependencies.update({(g, a - 100000): 0})
+
+    print("Producing .dat file with " +str(num_services) + " services...")
+    data = open('data.dat', 'w')
+    data.write("data;\n\n")
+    data.write("set MICROSERVICES := ")
+    for n in range(0, num_services):
+        data.write("M" + str(n) + " ")
+    data.write(";\n\n")
+    data.write("set OPERATIONS := ")
+    for n in range(0, op_num):
+        data.write("O" + str(n) + " ")
+    data.write(";\n\n")
+    data.write("set ENTITIES := ")
+    for n in range(0, len(attributes)):
+        data.write("E" + str(n) + " ")
+    data.write(";\n\n")
+    data.write("param frequencies:\n    ")
+    for n in range(0, op_num):
+        data.write("O" + str(n) + " ")
+    data.write(":=")
+    data.write("\nF   ")
+    for n in range(0, op_num):
+        spaces = " "
+        for l in range(0, len(str(n)) + 1 - len(str(nodes_dict.get(n).get_frequency()))):
+            spaces += " "
+        data.write(str(nodes_dict.get(n).get_frequency()) + spaces)
+    data.write(";\n\n")
+    data.write("param acc:\n    ")
+    for n in range(0, len(attributes)):
+        data.write("E" + str(n) + " ")
+    data.write(":=")
+    for n in range(0, op_num):
+        spaces = " "
+        for l in range(0, 2 - len(str(n))):
+            spaces += " "
+        data.write("\nO" + str(n) + spaces)
+        for a in range(0, len(attributes)):
+            spaces = " "
+            for l in range(0, len(str(a))):
+                spaces += " "
+            if access_dependencies.get((n, a)) == 1:
+                data.write(str(1) + spaces)
+            else:
+                data.write(str(0) + spaces)
+    data.write(";\n\n")
+    data.write("param accr:\n    ")
+    for n in range(0, len(attributes)):
+        data.write("E" + str(n) + " ")
+    data.write(":=")
+    for n in range(0, op_num):
+        spaces = " "
+        for l in range(0, 2 - len(str(n))):
+            spaces += " "
+        data.write("\nO" + str(n) + spaces)
+        for a in range(0, len(attributes)):
+            spaces = " "
+            for l in range(0, len(str(a))):
+                spaces += " "
+            if read_dependencies.get((n, a)) == 1:
+                data.write(str(1) + spaces)
+            else:
+                data.write(str(0) + spaces)
+    data.write(";\n\n")
+    data.write("param accrw:\n    ")
+    for n in range(0, len(attributes)):
+        data.write("E" + str(n) + " ")
+    data.write(":=")
+    for n in range(0, op_num):
+        spaces = " "
+        for l in range(0, 2 - len(str(n))):
+            spaces += " "
+        data.write("\nO" + str(n) + spaces)
+        for a in range(0, len(attributes)):
+            spaces = " "
+            for l in range(0, len(str(a))):
+                spaces += " "
+            if write_dependencies.get((n, a)) == 1:
+                data.write(str(1) + spaces)
+            else:
+                data.write(str(0) + spaces)
+    data.write(";\n\n")
+    data.write("param coloc:\n    ")
+    for n in range(0, op_num):
+        data.write("O" + str(n) + " ")
+    data.write(":=")
+    for n in range(0, op_num):
+        spaces = " "
+        for l in range(0, 2 - len(str(n))):
+            spaces += " "
+        data.write("\nO" + str(n) + spaces)
+        for a in range(0, op_num):
+            spaces = " "
+            for l in range(0, len(str(a))):
+                spaces += " "
+            if bound_ops.get((n, a)) == 1:
+                data.write(str(1) + spaces)
+            else:
+                data.write(str(0) + spaces)
+    data.write(";\n\n")
+    data.write("param tr:\n    ")
+    for o in range(0, op_num):
+        data.write("O" + str(o) + " ")
+    data.write(":=")
+    data.write("\nT   ")
+    for o in range(0, op_num):
+        spaces = " "
+        for l in range(0, len(str(o))):
+            spaces += " "
+        if nodes_dict.get(o).get_consistency() == 'H':
+            data.write(str(1) + spaces)
+>>>>>>> Stashed changes:preprocessing.py
         else:
             cost = compute_comm_cost(s, microservices, chromosome)
         fitness += cost
@@ -645,12 +1108,114 @@ def crossover(mother, father, mutchance):
 
 
 if __name__ == '__main__':
+<<<<<<< Updated upstream:main.py
     # parse_arch_json('pangaeaArch.json')
     parse_arch_yaml('pangeaArch2.yaml')
     op_num = len(graph)
 
     to_remove = noise_removal()
     graph_copy = Graph()
+=======
+    parse_arch_yaml('trainticket.yaml')
+    print("Preprocessing...")
+    to_remove = noise_removal()
+    graph_copy = Graph()
+    op_num = len(graph)
+    trim_operations(to_remove)
+    op_num = len(graph)
+    attributes = build_attr_relationships()
+    build_hcw_relationships()
+    clean_names()
+    services = force_operations()
+    bound_ops = {}
+    for s in services:
+        for o1 in s:
+            for o2 in graph:
+                if o2 in s:
+                    #######
+                    bound_ops.update({(o1, o2): 1})
+                else:
+                    bound_ops.update({(o1, o2): 0})
+
+    for l in services:
+        attrs = []
+        for s in l:
+            attrs += op_writes.get(s) + op_reads.get(s)
+        attrs = list(set(attrs))
+        for a in attrs:
+            services[services.index(l)].append(attributes_ntoi.get(a))
+
+    identify_static_attributes()
+    identify_hc_readonly_attributes()
+    elect_primary_replicas(services)
+
+    for g in graph:
+        if g < op_num:
+            print(str(g) + " " + nodes_dict.get(g).get_name())
+    min_decoupling_bound = compute_total_coupling([[o for o in graph]])
+    max_decoupling_bound = compute_total_coupling(services)
+    max_com_cost = compute_communication_cost(services)
+    """
+    sc = [
+        ["createNewPriceConfig", "findPriceConfigById", "findByRouteIdAndTrainType", "findAllPriceConfig", "deletePriceConfig", "updatePriceConfig"],
+        ["cancelOrderbyUser", "ticketExecute", "ticketCollect", "getSoldTickets", "createOrder", "cancelOrder", "deleteOrder", "updateOrder", "modifyOrderStatus", "getOrderPrice", "payOrder", "initOrder", "checkOrderValidity", "preserve", "rebook", "distributeSeat", "getLeftTicketOfInterval", "checkSecurityConfig", "getTickets"],
+        ["queryForTravel", "getCheapestTravelResult", "getQuickestTravelResult", "getMinStopTravelResult", "createTrip", "getRouteByTripId", "getTrainTypeByTripId", "retrieveTrip", "updateTrip", "deleteTrip"],
+        ["getAllAssuranceTypes", "getAllAssurances", "findAssuranceById", "findAssuranceByOrderId", "createAssurance", "deleteAssuranceById", "deleteAssuranceByOrderId", "modifyAssurance"],
+        ["saveUser", "getAllUser", "findByUserId", "findByUsername", "updateUser"],
+        ["deleteUserById"],
+        ["createConfig", "updateConfig", "queryConfig", "deleteConfig", "queryAllConfigs"],
+        ["findAllSecurityConfig", "addNewSecurityConfig", "deleteSecurityConfig"],
+        ["modifySecurityConfig"],
+        ["getPriceByWeightAndRegion", "queryConsignPrice", "createAndModifyPrice", "getConsignPrice", "insertConsignRecord", "updateConsignRecord", "queryConsignByAccountId", "queryConsignByOrderId", "queryConsignByConsignee"],
+        ["addVoucher", "queryVoucher"],
+        ["createFoodOrdersInBatch", "createFoodOrder", "deleteFoodOrder", "findFoodOrderByOrderId", "findAllFoodOrders", "updateFoodOrder"],
+        ["getAllOffices", "getSpecificOffice", "addOffice", "deleteOffice", "updateOffice"],
+        ["queryForStationId", "createStation", "existStation", "updateStation", "deleteStation", "queryStations", "queryStationById"] ,
+        ["calculateRefund", "pay", "createPaymentAccount", "addMoney", "queryPaymentAccount", "queryPayments", "drawBack", "payDifference", "queryMoney", "payDifferenceRebook"],
+        ["initPayment"],
+        ["findContactsById", "findContactsByAccountId", "createContact", "deleteContact", "modifyContact", "getAllContacts"],
+        ["createTrainFood", "listTrainFood", "listTrainFoodByTripIds"],
+        ["createFoodStore", "listFoodStores", "listFoodStoredByStationId", "getAllFoods"],
+        ["searchCheapestRouteResult", "searchMinStopRouteResult", "searchQuickestRouteResult", "createAndModifyRoute", "getRouteById", "getRouteByStartAndTerminal", "createTrain", "retrieveTrain", "queryTrains", "updateTrain", "deleteTrain", "getAllRoutes"],
+        ["processDelivery"]
+    ]
+    for s in sc:
+        print(str(s).replace("'", '').replace('[', '').replace(']', ';'))
+    exit(-1)
+    manual = []
+    for s in sc:
+        serv = []
+        for o in s:
+            found = False
+            for n in nodes_dict:
+                if nodes_dict.get(n).get_name() == o:
+                    serv.append(n)
+                    found = True
+            if not found:
+                print("Not found " + o)
+        manual.append(serv)
+        print(len(serv))
+
+    for o in range(0, len(graph)):
+        count = 0
+        for s in manual:
+            count += s.count(o)
+        if count == 0:
+            print(str(o) + " not found " + "(" + nodes_dict.get(o).get_name() + ")")
+        if count > 1:
+            print(str(o) + " duplicate " + "(" + nodes_dict.get(o).get_name() + ")")
+    to_remove = []
+    for n in manual:
+        rem = []
+        for y in n:
+            if isinstance(y, str):
+                rem.append(y)
+        to_remove.append(rem)
+    i = 0
+    for n in manual:
+        for t in to_remove[i]:
+            n.remove(t)
+>>>>>>> Stashed changes:preprocessing.py
 
     # Trims the useless operations from the architecture
     for t in to_remove:
@@ -659,6 +1224,7 @@ if __name__ == '__main__':
         op_reads.pop(t)
         op_writes.pop(t)
 
+<<<<<<< Updated upstream:main.py
     model = 2
     if model == 2:
         # Lists the high consistency write operations
@@ -874,3 +1440,109 @@ if __name__ == '__main__':
 
         format_and_draw(services, op_num, "res.html", chr=new_gen[0])
         print(len(services))
+=======
+    manual_final = []
+    for micro in manual:
+        accesses = []
+        for n in micro:
+            accesses_temp = []
+            accesses_temp += op_reads.get(n) + op_writes.get(n)
+            for a in accesses_temp:
+                accesses.append(attributes_ntoi.get(a))
+        manual_final.append(micro + list(set(accesses)))
+    elect_primary_replicas(manual_final)
+    cached_a = {}
+    uncached_a = {}
+    tot_rop = 0
+    for a in attributes:
+        c_a = []
+        u_a = []
+        for micro in manual_final:
+            if a in micro and primary_replicas_locations.get(a) != manual_final.index(micro):
+                read_in_same = 0
+                write_in_others = 0
+                for o in micro:
+                    if o < 10000 and attributes_iton.get(a) in op_reads.get(o):
+                        read_in_same += nodes_dict.get(o).get_frequency()
+                for micro2 in manual_final:
+                    for o in micro2:
+                        if o < 10000 and attributes_iton.get(a) in op_writes.get(o):
+                            write_in_others += nodes_dict.get(o).get_frequency()
+                if read_in_same <= write_in_others:
+                    tot_rop += read_in_same
+                    u_a.append(manual_final.index(micro))
+                else:
+                    tot_rop += write_in_others
+                    c_a.append(manual_final.index(micro))
+        cached_a.update({a: c_a})
+        uncached_a.update({a: u_a})
+    right_format = []
+    for micro in manual:
+        new_serv = [] + micro
+        for a in attributes:
+            if manual.index(micro) in cached_a.get(a):
+                new_serv.append(str(a) + 'R')
+            if manual.index(micro) in uncached_a.get(a):
+                new_serv.append(str(a) + 'N')
+            if manual.index(micro) == primary_replicas_locations.get(a):
+                new_serv.append(str(a) + 'P')
+        right_format.append(new_serv)
+    print(right_format)
+    print(manual)
+    format_and_draw_final(right_format, "formatted_manual.html")
+    print(compute_total_coupling(manual))
+    print(compute_communication_cost(manual_final)/max_com_cost)
+    exit(-1)
+    """
+    print(len(attributes))
+    write_dat_file(4)
+
+    """
+    manual = [[67, 52, 41, 24, 48, 68, 8, 46, 36, 7, 26, 25, 34, 35, 51, 47, 64], [29, 21, 32, 3, 4, 9, 55, 61, 0, 5, 1, 2, 6, 63],
+              [45, 53, 33, 54, 38, 10, 17, 65, 28, 17, 27, 20], [15, 16, 60, 49, 66, 39, 37, 31, 62, 12, 18, 13, 59, 42, 40, 14, 19, 57, 43, 44, 56, 30, 50, 11, 22, 23, 58]]
+    manual_final = []
+    for m in manual:
+        accesses = []
+        for n in m:
+            accesses_temp = []
+            accesses_temp += op_reads.get(n) + op_writes.get(n)
+            for a in accesses_temp:
+                accesses.append(attributes_ntoi.get(a))
+        manual_final.append(m + list(set(accesses)))
+    format_and_draw_complete(manual_final, "manual.html")
+    elect_primary_replicas(manual_final)
+    print(compute_communication_cost(manual_final))
+    print(compute_total_coupling(manual_final))
+    """
+    """
+
+    print(max_com_cost)
+
+    op = 0.2
+    coup = 0.8
+    while coup < 1.001:
+        opt_result = abstractSolver.optimizer(op_num, max_com_cost, min_decoupling_bound, max_decoupling_bound,
+                                          op, coup)
+        op -= 0.05
+        coup += 0.05
+    """
+    alpha = 0.0
+    while alpha <= 1:
+        opt_result = abstractSolverFinalLinear.optimizer(op_num, max_com_cost, alpha)
+        alpha += 0.1
+
+    opt_result_only_nums = []
+    for m in opt_result:
+        ops = [x for x in m if isinstance(x, int)]
+        attrs = [x for x in m if isinstance(x, str)]
+        attrs_num = [int(x[:len(x) - 1]) for x in attrs]
+        opt_result_only_nums.append(ops + attrs_num)
+
+    print(opt_result_only_nums)
+    print(compute_total_coupling(opt_result_only_nums))
+    elect_primary_replicas(opt_result_only_nums)
+    print(compute_communication_cost(opt_result_only_nums))
+    print(compute_communication_cost(opt_result_only_nums) / max_com_cost)
+    print(post_processing_communication_cost(opt_result))
+    format_and_draw_final(opt_result, "test.html")
+>>>>>>> Stashed changes:preprocessing.py
