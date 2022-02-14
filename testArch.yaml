@@ -1,0 +1,165 @@
+operations:
+  - name: Login
+    consistency: L
+    frequency: 6
+    forced_operations:
+      -
+    database_access:
+      - entity_name: User
+        read_attributes:
+          - id
+          - email
+          - password
+  - name: SignUp
+    consistency: L
+    frequency: 2
+    forced_operations:
+      -
+    database_access:
+        - entity_name: User
+          write_attributes:
+            - email
+            - id
+            - password
+  - name: AddPaymentMethod
+    consistency: H
+    frequency: 3
+    forced_operations:
+      -
+    database_access:
+      - entity_name: User
+        read_attributes:
+          - card_id
+      - entity_name: Payment
+        write_attributes:
+            - card_id
+            - number
+            - owner_id
+  - name: AddHotel
+    consistency: L
+    frequency: 1
+    forced_operations:
+      - RemoveHotel
+    database_access:
+      - entity_name: Hotel
+        write_attributes:
+            - hotel_id
+            - owner_id
+            - address
+            - postal_code
+            - description
+  - name: RemovePaymentMethod
+    consistency: L
+    frequency: 2
+    forced_operations:
+      -
+    database_access:
+      - entity_name: User
+        read_attributes:
+          - card_id
+      - entity_name: Payment
+        write_attributes:
+          - card_id
+          - number
+          - owner_id
+  - name: RemoveHotel
+    consistency: L
+    frequency: 1
+    forced_operations:
+      - AddHotel
+    database_access:
+      - entity_name: Hotel
+        write_attributes:
+           - hotel_id
+           - owner_id
+           - address
+           - postal_code
+           - description
+  - name: AddRoom
+    consistency: L
+    frequency: 3
+    forced_operations:
+      -
+    database_access:
+      - entity_name: Room
+        write_attributes:
+            - room_id
+            - hotel_id
+            - type
+            - booked
+            - cost
+      - entity_name: Hotel
+        read_attributes:
+            - hotel_id
+  - name: BookRoom
+    consistency: H
+    frequency: 5
+    forced_operations:
+      -
+    database_access:
+      - entity_name: User
+        read_attributes:
+          - id
+          - email
+          - card_id
+      - entity_name: Payment
+        read_attributes:
+          - card_id
+          - number
+      - entity_name: Room
+        read_attributes:
+          - room_id
+          - hotel_id
+        write_attributes:
+          - booked
+  - name: FreeRoom
+    consistency: H
+    frequency: 5
+    forced_operations:
+      - BookRoom
+    database_access:
+      - entity_name: Room
+        read_attributes:
+          - room_id
+          - hotel_id
+        write_attributes:
+          - booked
+  - name: DeleteBooking
+    consistency: L
+    frequency: 2
+    forced_operations:
+      -
+    database_access:
+      - entity_name: Payment
+        read_attributes:
+          - card_id
+          - number
+      - entity_name: Room
+        read_attributes:
+          - room_id
+          - hotel_id
+        write_attributes:
+          - booked
+  - name: GetAvailableRooms
+    consistency: H
+    frequency: 8
+    forced_operations:
+      -
+    database_access:
+      - entity_name: Room
+        read_attributes:
+          - room_id
+          - hotel_id
+          - booked
+  - name: GetHotelsList
+    consistency: L
+    frequency: 8
+    forced_operations:
+      -
+    database_access:
+      - entity_name: Hotel
+        read_attributes:
+          - hotel_id
+          - address
+          - postal_code
+          - description

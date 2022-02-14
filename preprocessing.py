@@ -1,15 +1,9 @@
-import json
 import copy
-<<<<<<< Updated upstream:main.py
-import operator
-=======
 from Cromlech import abstractSolverFinalLinear
->>>>>>> Stashed changes:preprocessing.py
 import yaml
 from pyvis.network import Network
 from apgl.graph import SparseGraph
-import numpy as np
-import random
+from difflib import SequenceMatcher
 
 # Graph is the starting graph of the architecture, keys are operations and values are entities
 graph = {}
@@ -19,24 +13,42 @@ nodes_dict = {}
 edges_from_e_to_o = {}
 # Contains the edges as keys and the type of relationship as values
 relationship_dict = {}
-# Dictionary which contains the entities id as key and their required consistency as value
-ent_consistencies = {}
 # Number of replicas
 num_replicas = 0
 # Associations between operations and the columns they read
 op_reads = {}
 # Associations between operations and the columns they write
 op_writes = {}
-# Associations between replica identifiers and the indices of the microservices they can be found in
-replica_locations = {}
-# The location of the primary replica for each entity, to be assigned after the clustering. The location is represented by the id of an operation in the same microservices
-# since operations uniquely identify microservices
+# Associations between forced operations
+forced_operations = {}
+# Associations between each attribute index and its name
+attributes_iton = {}
+# Associations between each attribute name and its index
+attributes_ntoi = {}
+# The location of the primary replica for each attribute, represented by the index of the microservice
 primary_replicas_locations = {}
-
-primary_replicas_microservices = {}
-# The associations between secondary replicas (represented by their id and their microservice) and their indices in the chromosomes of the GA
-secondary_replicas_indices = {}
-
+# Static attributes are attributes which are not written by any operation, and thus do not have a primary replica and do not count in the operative costs
+# Association between the index of an attribute and a boolean saying if it is static
+static_status = {}
+# High consistency write attributes are attributes which are  written by high consistency operations
+# Association between the index of an attribute and a boolean saying if it is hc write
+hc_write_status = {}
+# High consistency read-only attributes are attributes which are read but not written by high consistency operations
+# Association between the index of an attribute and a boolean saying if it is hc readonly
+hc_readonly_status = {}
+# Number of operations
+op_num = -1
+# List of all attributes indexes
+attributes = []
+# Associates each attribute to the ops which read it
+attr_read_by = {}
+# Associates each attribute to the ops which write it
+attr_written_by = {}
+# Words which are not counted in the LCS algorithm
+banned_words = ['get', 'put', 'delete', 'read', 'write', 'retrieve', 'create', 'remove', 'save', 'query',
+                'add', 'all', 'upload', 'insert', 'update', 'change', 'modify', 'by', 'fetch', 'from', 'find']
+# name of operations cleaned of banned_words
+cleaned_names = {}
 
 class Graph:
     def __init__(self):
@@ -91,7 +103,6 @@ class Entity:
     def __init__(self, name, index):
         self.__name = name
         self.__index = index
-        self.__required_consistency = ''
 
     def get_name(self):
         return self.__name
@@ -103,65 +114,18 @@ class Entity:
         return self.__index
 
 
-def parse_arch_json(json_filename):
-    with open(json_filename) as f:
-        data = json.load(f)
-    ent = data['entities']
-    op = data['operations']
-    entities = []
-    # Index of the last created node
-    last_index = len(op)
-    for e in ent:
-        new_ent = Entity(e['name'], last_index)
-        entities.append(new_ent)
-        nodes_dict.update({last_index: new_ent})
-        edges_from_e_to_o.update({new_ent.get_index(): []})
-        last_index += 1
-    last_index = 0
-    for o in op:
-        new_op = Operation(o['name'], last_index, int(o['frequency']), o['consistency'])
-        last_index += 1
-        nodes_dict.update({new_op.get_index(): new_op})
-        graph.update({new_op.get_index(): []})
-        op_reads.update({new_op.get_index(): []})
-        op_writes.update({new_op.get_index(): []})
-        for e in o['database_access']:
-            try:
-                if e['read_attributes']:
-                    for entity in entities:
-                        if entity.get_name() == e['entity_name']:
-                            relationship_dict.update({(new_op.get_index(), entity.get_index()): 'R'})
-                            graph.get(new_op.get_index()).append(entity.get_index())
-                            if new_op.get_index() not in edges_from_e_to_o.get(entity.get_index()):
-                                edges_from_e_to_o.get(entity.get_index()).append(new_op.get_index())
-                    for a in e['read_attributes']:
-                        op_reads.get(new_op.get_index()).append(e['entity_name'] + '.' + a)
-            except KeyError:
-                pass
-            try:
-                if e['write_attributes']:
-                    for entity in entities:
-                        if entity.get_name() == e['entity_name']:
-                            relationship_dict.update({(new_op.get_index(), entity.get_index()): 'W'})
-                            graph.get(new_op.get_index()).append(entity.get_index())
-                            if new_op.get_index() not in edges_from_e_to_o.get(entity.get_index()):
-                                edges_from_e_to_o.get(entity.get_index()).append(new_op.get_index())
-                    for a in e['write_attributes']:
-                        op_writes.get(new_op.get_index()).append(e['entity_name'] + '.' + a)
-            except KeyError:
-                pass
-        graph.update({new_op.get_index(): list(set(graph.get(new_op.get_index())))})
-    compute_consistency_lists()
-
-
 def parse_arch_yaml(yaml_filename):
     with open(yaml_filename, 'r') as stream:
         try:
+            op_names = []
             data = yaml.safe_load(stream)
             op_index = 0
             ent_index = len(data['operations'])
             entities = []
             for o in data['operations']:
+                if o['name'] in op_names:
+                    raise Exception("There are two operations named " + o['name'])
+                op_names.append(o['name'])
                 new_op = Operation(o['name'], op_index, int(o['frequency']), o['consistency'])
                 nodes_dict.update({op_index: new_op})
                 graph.update({op_index: []})
@@ -187,7 +151,11 @@ def parse_arch_yaml(yaml_filename):
                                     if new_op.get_index() not in edges_from_e_to_o.get(entity.get_index()):
                                         edges_from_e_to_o.get(entity.get_index()).append(new_op.get_index())
                             for a in e['read_attributes']:
-                                op_reads.get(new_op.get_index()).append(e['entity_name'] + '.' + a)
+                                if e['entity_name'] + '.' + a not in op_writes.get(new_op.get_index()):
+                                    op_reads.get(new_op.get_index()).append(e['entity_name'] + '.' + a)
+                                else:
+                                    raise Exception("Attribute " + e['entity_name'] + '.' + a + " of operation " + new_op.get_name() +
+                                                    " is both read and written. This is not allowed.")
                     except KeyError:
                         pass
                     try:
@@ -199,31 +167,32 @@ def parse_arch_yaml(yaml_filename):
                                     if new_op.get_index() not in edges_from_e_to_o.get(entity.get_index()):
                                         edges_from_e_to_o.get(entity.get_index()).append(new_op.get_index())
                             for a in e['write_attributes']:
-                                op_writes.get(new_op.get_index()).append(e['entity_name'] + '.' + a)
-
+                                if e['entity_name'] + '.' + a not in op_reads.get(new_op.get_index()):
+                                    op_writes.get(new_op.get_index()).append(e['entity_name'] + '.' + a)
+                                else:
+                                    raise Exception("Attribute " + e['entity_name'] + '.' + a + " of operation " + new_op.get_name() +
+                                                    " is both read and written. This is not allowed.")
                     except KeyError:
                         pass
                 graph.update({op_index: list(set(graph.get(new_op.get_index())))})
                 op_index += 1
+            for o in data['operations']:
+                fops = []
+                for f in o['forced_operations']:
+                    association = False
+                    for n in nodes_dict:
+                        if nodes_dict.get(n).get_name() == o['name'] and n < ent_index:
+                            break
+                    for n2 in nodes_dict:
+                        if nodes_dict.get(n2).get_name() == f and n2 < ent_index:
+                            fops.append(n2)
+                            association = True
+                    if not association and f:
+                        raise Exception("No operation named " + f + ' exists, it cannot be forced along ' + o['name'])
+                    forced_operations.update({n: fops})
+            print([e.get_name() for e in entities])
         except yaml.YAMLError as exc:
             print(exc)
-    compute_consistency_lists()
-
-
-op_num = len(graph)
-
-
-# Computes the dictionary which associates each entity to its required consistency
-def compute_consistency_lists():
-    for e in edges_from_e_to_o:
-        relationships = edges_from_e_to_o.get(e)
-        for r in relationships:
-            operation = nodes_dict.get(r)
-            if operation.get_consistency() == 'S':
-                ent_consistencies.update({e: 'S'})
-                break
-            else:
-                ent_consistencies.update({e: 'N'})
 
 
 # Draws the graph with names instead of ids
@@ -233,13 +202,11 @@ def draw_graph_verbose(gr, html_filename):
     for n in gr.get_graph():
         net.add_node(gr.get_nodes_dict().get(n).get_name(), size=8, color='blue')
         for e in gr.get_graph().get(n):
-            net.add_node(gr.get_nodes_dict().get(e).get_name(), size=8, color='red')
+            net.add_node(gr.get_nodes_dict().get(e).get_name(), size=8, color='seagreen')
             net.add_edge(gr.get_nodes_dict().get(n).get_name(), gr.get_nodes_dict().get(e).get_name())
     net.show(html_filename)
 
 
-<<<<<<< Updated upstream:main.py
-=======
 # Draws the graph showing the forced operations relationships
 def draw_forcedops(html_filename):
     net = Network(height='2500px', width='100%', bgcolor="#dddddd")
@@ -377,7 +344,6 @@ def format_and_draw_final(microservices, html_filename):
     net.show(html_filename)
 
 
->>>>>>> Stashed changes:preprocessing.py
 # Returns connected components of graph
 def get_connected_components(gr):
     size = len(gr.get_nodes_dict())
@@ -389,165 +355,6 @@ def get_connected_components(gr):
     return g.findConnectedComponents()
 
 
-<<<<<<< Updated upstream:main.py
-# Computes similarity between two microservices, by comparing each pair of operations from the two using their accessed
-# columns as sets in a Jaccard similarity, and then getting the median between all couples
-def compute_similarity(ms1, ms2):
-    cols1 = []
-    for m in ms1:
-        cols1 += op_reads.get(m) + op_writes.get(m)
-    cols2 = []
-    for m in ms2:
-        cols2 += op_reads.get(m) + op_writes.get(m)
-    if len(list(set(cols1).intersection(cols2))) == 0:
-        return 0
-    ops = ms1 + ms2
-    not_yet_computed = copy.deepcopy(ops)
-    scores = []
-    for o1 in ops:
-        reads1 = op_reads.get(o1)
-        writes1 = op_writes.get(o1)
-        total1 = list(set(reads1 + writes1))
-        for o2 in not_yet_computed:
-            if o1 == o2:
-                continue
-            else:
-                reads2 = op_reads.get(o2)
-                writes2 = op_writes.get(o2)
-                total2 = list(set(reads2 + writes2))
-                intersection = len(list(set(total1).intersection(total2)))
-                union = (len(total1) + len(total2)) - intersection
-                scores.append(float(intersection) / union)
-        not_yet_computed.remove(o1)
-    return np.median(scores)
-
-
-# Computes Jaccard similarity between two microservices, using as sets all the accessed columns by the microservices' operations
-def compute_ms_similarity(ms1, ms2):
-    total1 = []
-    for o in ms1:
-        reads = op_reads.get(o)
-        writes = op_writes.get(o)
-        total1 += reads + writes
-    total2 = []
-    for o in ms2:
-        reads = op_reads.get(o)
-        writes = op_writes.get(o)
-        total2 += reads + writes
-    total1 = list(set(total1))
-    total2 = list(set(total2))
-    intersection = len(list(set(total1).intersection(total2)))
-    union = (len(total1) + len(total2)) - intersection
-    return float(intersection) / union
-
-
-# Computes intraservice cohesion as the mean of all Jaccard similaritys between each operation and the rest of the operations
-# in the microservice
-def compute_intraservice_cohesion(ms):
-    final_scores = []
-    for m in ms:
-        if len(m) < 2:
-            final_scores.append(1)
-            continue
-        scores = []
-        for o in m:
-            temp = copy.deepcopy(m)
-            temp.remove(o)
-            scores.append(compute_ms_similarity([o], temp))
-        final_scores.append(np.mean(scores))
-    return np.mean(final_scores)
-
-
-# Computes coupling score as the mean of Jaccard similarities between each pair of microservices
-def compute_coupling_score(ms):
-    already_visited = copy.deepcopy(ms)
-    scores = []
-    for m in ms:
-        for m2 in already_visited:
-            if m != m2:
-                scores.append(compute_ms_similarity(m, m2))
-        already_visited.remove(m)
-    return np.mean(scores)
-
-
-# Turns the microservice architecure in a format drawable with pyvis (NEEDS REFACTORING)
-def format_and_draw(microservices, op_num, html_filename, chr=None):
-    names_ents = []
-    name_ops = []
-    indices_ops = []
-    for l in microservices:
-        names_ents.append([nodes_dict.get(x).get_name() for x in l if x >= op_num])
-        name_ops.append([nodes_dict.get(x).get_name() for x in l if x < op_num])
-        indices_ops.append([x for x in l if x < op_num])
-    names_set = []
-    for l in names_ents:
-        for n in l:
-            if n not in names_set:
-                names_set.append(n)
-    total_replicas = 0
-    for n in names_set:
-        count = 0
-        for l in names_ents:
-            i = 0
-            for i in range(0, len(l)):
-                if l[i] == n:
-                    l[i] += '#R' + str(count)
-                    count += 1
-        total_replicas += count
-    print("TOTAL REPLICAS " + str(total_replicas - len(ent_consistencies)))
-    print("REPLICATION FACTOR " + str((total_replicas - len(ent_consistencies)) / len(ent_consistencies)))
-    i = 0
-    primary_replicas = []
-    for p in primary_replicas_locations:
-        op_index = primary_replicas_locations.get(p)
-        m_index = -1
-        for m in microservices:
-            if op_index in m:
-                m_index = microservices.index(m)
-                break
-        for e in names_ents[m_index]:
-            if nodes_dict.get(p).get_name() == e.split('#')[0]:
-                primary_replicas.append(e)
-                break
-    new_dict = {}
-    for i in range(0, len(name_ops)):
-        for j in range(0, len(name_ops[i])):
-            edges = graph.get(indices_ops[i][j])
-            new_dict.update({name_ops[i][j]: []})
-            for e in edges:
-                name = nodes_dict.get(e).get_name()
-                names_in_microservices = names_ents[i]
-                for n in names_in_microservices:
-                    if n.split('#')[0] == name:
-                        new_dict.get(name_ops[i][j]).append(n)
-    net = Network(height='2500px', width='100%', bgcolor="#dddddd")
-    absent = []
-    if chr:
-        for p in secondary_replicas_indices:
-            if not chr[secondary_replicas_indices.get(p)]:
-                ops_in_same_m = [o for o in microservices[p[1]] if o < op_num]
-                for o in ops_in_same_m:
-                    for e in new_dict.get(nodes_dict.get(o).get_name()):
-                        if nodes_dict.get(p[0]).get_name() == e.split("#")[0]:
-                            absent.append(e)
-                            break
-    for n in new_dict:
-        for n2 in nodes_dict:
-            if nodes_dict.get(n2).get_name() == n:
-                if nodes_dict.get(n2).get_consistency() == 'S':
-                    net.add_node(n, size=8, color='navy', mass=1.5)
-                else:
-                    net.add_node(n, size=8, color='royalblue', mass=1.5)
-        for e in new_dict.get(n):
-            if e in primary_replicas:
-                net.add_node(e, size=8, color='red', shape='square', mass=1.5)
-            elif e in absent:
-                net.add_node(e, size=8, color='white', shape='diamond', mass=1.5)
-            else:
-                net.add_node(e, size=8, color='lightsalmon', shape='square', mass=1.5)
-            net.add_edge(n, e)
-    net.show(html_filename)
-=======
 def compute_communication_cost(microservices):
     w_op = 0
     location_dict = {}
@@ -631,13 +438,6 @@ def compute_communication_cost(microservices):
     print("ROP " + str(r_op))
     print("REPL " + str(repl) + " - " + str(repl2))
     print("WOP " + str(w_op))
-    """
-    print(op_scores)
-    mpl.rcParams.update({'font.size': 7})
-    x = dict(sorted(op_scores.items(), key=lambda item: item[1], reverse=True))
-    mpl.bar(x.keys(), x.values())
-    mpl.show()
-    """
     return w_op + r_op + repl
 
 def post_processing_communication_cost(result):
@@ -654,7 +454,6 @@ def post_processing_communication_cost(result):
                 if attributes_iton.get(a) in op_writes.get(o):
                     total_write += nodes_dict.get(o).get_frequency()
         repl += total_write * repl_num
->>>>>>> Stashed changes:preprocessing.py
 
     rop = 0
     for a in attributes:
@@ -692,6 +491,7 @@ def noise_removal():
         for c in related_columns:
             if all_columns.count(c) == 1:
                 if c in op_reads.get(op):
+                    print("Removed " + c)
                     op_reads.get(op).remove(c)
                 if c in op_writes.get(op):
                     op_writes.get(op).remove(c)
@@ -700,197 +500,140 @@ def noise_removal():
     return to_remove
 
 
-# Computes the first instance of similarity matrix between all the operations
-def compute_initial_similarity_matrix():
-    already_computed = [g for g in graph]
-    similarity_matrix = {}
-    service_indices = {}
-    i = 0
-    for o1 in graph:
-        for o2 in already_computed:
-            if o1 == o2:
-                continue
-            else:
-                service_indices.update({i: ([o1], [o2])})
-                similarity_matrix.update({i: compute_ms_similarity([o1], [o2])})
-                i += 1
-        already_computed.remove(o1)
-    return similarity_matrix, service_indices
+# Finds the static attributes and populates the static_status dict
+def identify_static_attributes():
+    written = []
+    for o in op_writes:
+        for a in op_writes.get(o):
+            written.append(attributes_ntoi.get(a))
+    written = list(set(written))
+    read = []
+    for o in op_reads:
+        for a in op_reads.get(o):
+            read.append(attributes_ntoi.get(a))
+    read = list(set(read))
+    all_attrs = list(set(written + read))
+    for a in all_attrs:
+        static_status.update({a: False})
+        if a not in written:
+            static_status.update({a: True})
 
 
-# Recomputes the similarity matrix after a cluster merging
-def recompute_similarity_matrix(microservices):
-    already_computed = copy.deepcopy(microservices)
-    similarity_matrix = {}
-    service_indices = {}
-    i = 0
-    for o1 in microservices:
-        for o2 in already_computed:
-            if o1 == o2:
-                continue
-            else:
-                service_indices.update({i: (o1, o2)})
-                similarity_matrix.update({i: compute_ms_similarity(o1, o2)})
-                i += 1
-        already_computed.remove(o1)
-    return similarity_matrix, service_indices
+# Finds the hc read only attributes and populates the hc_readonly_status dictionary
+def identify_hc_readonly_attributes():
+    written = []
+    for o in op_writes:
+        if nodes_dict.get(o).get_consistency() == 'H':
+            for a in op_writes.get(o):
+                written.append(attributes_ntoi.get(a))
+    written = list(set(written))
+    read = []
+    for o in op_reads:
+        if nodes_dict.get(o).get_consistency() == 'H':
+            for a in op_reads.get(o):
+                read.append(attributes_ntoi.get(a))
+    read = list(set(read))
+    all_attrs = list(set(written + read))
+    for a in all_attrs:
+        if a not in written:
+            hc_readonly_status.update({a: True})
 
 
-# Elects the primary replicas as the replicas in the microservice where they're accessed the most frequently by high
-# consistency operations, or simply accessed the most frequently if there are no high consistency operations accessing them
 def elect_primary_replicas(microservices):
-    for m in microservices:
-        for n in m:
-            if n >= op_num:
-                replica_locations.update({n: []})
-    for m in microservices:
-        for n in m:
-            if n >= op_num:
-                replica_locations.get(n).append(microservices.index(m))
-    for e in replica_locations:
-        count = []
-        i = 0
-        for l in replica_locations.get(e):
-            count.append(0)
-            for n in microservices[l]:
-                if n < op_num:
-                    if n in edges_from_e_to_o.get(e) and nodes_dict.get(n).get_consistency() == 'S':
-                        count[i] += nodes_dict.get(n).get_frequency()
-            i += 1
-        if max(count) != 0:
-            index_of_primary = count.index(max(count))
-            for n in microservices[replica_locations.get(e)[index_of_primary]]:
-                if n <= op_num:
-                    op_index = n
-                    break
-            primary_replicas_locations.update({e: op_index})
-            primary_replicas_microservices.update({e: replica_locations.get(e)[index_of_primary]})
+    for a in attributes:
+        if not static_status.get(a):
+            if hc_write_status.get(a):
+                elect_hcw(a, microservices)
+            else:
+                elect_w(a, microservices)
         else:
-<<<<<<< Updated upstream:main.py
-            total_count = []
-            i = 0
-            for l in replica_locations.get(e):
-                total_count.append(0)
-                for n in microservices[l]:
-                    if n < op_num:
-                        if n in edges_from_e_to_o.get(e):
-                            total_count[i] += nodes_dict.get(n).get_frequency()
-                i += 1
-                index_of_primary = total_count.index(max(total_count))
-                op_index = -1
-                for n in microservices[replica_locations.get(e)[index_of_primary]]:
-                    if n <= op_num:
-                        op_index = n
-                        break
-                primary_replicas_locations.update({e: op_index})
-                primary_replicas_microservices.update({e: replica_locations.get(e)[index_of_primary]})
-
-
-# Creates the dictionary mapping each secondary replica to a position in a chromosome
-def list_secondary_replicas(microservices):
-    i = 0
-=======
             elect_s(a, microservices)
     return
 
 def elect_s(attribute, microservices):
->>>>>>> Stashed changes:preprocessing.py
     for m in microservices:
-        m_index = microservices.index(m)
-        for n in m:
-            if n >= op_num:
-                if primary_replicas_microservices.get(n) != m_index:
-                    secondary_replicas_indices.update({(n, m_index): i})
-                    i += 1
+        if attribute in m:
+            primary_replicas_locations.update({attribute: microservices.index(m)})
+            return
+
+def elect_hcw(attribute, microservices):
+    for m in microservices:
+        if attribute in m:
+            ops = [n for n in m if n < op_num and nodes_dict.get(n).get_consistency() == 'H']
+            for o2 in ops:
+                if attributes_iton.get(attribute) in op_writes.get(o2) + op_reads.get(o2) and op_writes.get(o2):
+                    primary_replicas_locations.update({attribute: microservices.index(m)})
+                    return
+    raise Exception("Attribute " + attributes_iton.get(attribute) + " was wrongly categorized as hc write.")
 
 
-# If the replica is only read by low consistency ops in its microservice, then it's an unexpensive replica and can be
-# replicated without cost, so it doesn't need to be considered in the genetic algorithm
-def trim_unexpensive_replicas(microservices):
-    to_remove = []
-    for s in secondary_replicas_indices:
-        expensive = False
-        replica = s[0]
-        ops = [x for x in microservices[s[1]] if x < op_num]
-        for o in ops:
-            if relationship_dict.get((o, replica)):
-                if relationship_dict.get((o, replica)) == 'W' or nodes_dict.get(o).get_consistency == 'S':
-                    expensive = True
-                    break
-        if not expensive:
-            to_remove.append(s)
-    for t in to_remove:
-        secondary_replicas_indices.pop(t)
-    i = 0
-    for s in secondary_replicas_indices:
-        secondary_replicas_indices.update({s: i})
-        i += 1
+def elect_w(attribute, microservices):
+    frequencies = []
+    for m in microservices:
+        if attribute in m:
+            ops = [n for n in m if n < op_num]
+            frequency = 0
+            for o2 in ops:
+                if attributes_iton.get(attribute) in op_writes.get(o2):
+                    frequency += nodes_dict.get(o2).get_frequency()
+            frequencies.append(frequency)
+        else:
+            frequencies.append(0)
+    if max(frequencies) == 0:
+        raise Exception("Attribute " + attributes_iton.get(attribute) + " was wrongly categorized as lc write.")
+    primary_replicas_locations.update({attribute: frequencies.index(max(frequencies))})
+    return
 
 
-# Computes the replication cost of a replica as 2 * write frequency in same microservice * num of microservices where such
-# replica is present and accessed by high consistency operations. It essentially means the number of messages we would need
-# to exchange in a synchronous protocol to keep all those replicas updated.
-def compute_repl_costs(replica, microservices, chromosome):
-    ops_in_same_m = [x for x in microservices[replica[1]] if x < op_num]
-    write_frequency = 0
-    for o in ops_in_same_m:
-        if relationship_dict.get((o, replica[0])) == 'W':
-            write_frequency += nodes_dict.get(o).get_frequency()
-    if write_frequency == 0:
+# Joins the forced operations
+def force_operations():
+    services_temp = []
+    services = []
+    for o in op_reads:
+        for o2 in op_reads:
+            if o2 != o and nodes_dict.get(o).get_consistency() == 'H' and nodes_dict.get(o2).get_consistency() == 'H' and op_writes.get(o) and op_writes.get(o2):
+                if compute_op_similarity(o, o2) > 0 and o2 not in forced_operations.get(o):
+                    forced_operations.get(o).append(o2)
+        services_temp.append([o] + forced_operations.get(o))
+    for o in op_reads:
+        indices = []
+        for s in services_temp:
+            if o in s:
+                indices.append(services_temp.index(s))
+        new_serv = []
+        for i in indices:
+            new_serv += services_temp[i]
+        services_temp.append(new_serv)
+        for i in indices:
+            services_temp.remove(services_temp[i])
+            for i2 in indices:
+                if i2 > i:
+                    indices[indices.index(i2)] -= 1
+    for s in services_temp:
+        if s:
+            services.append(list(set(s)))
+    return services
+
+def clean_names():
+    for g in graph:
+        clean = nodes_dict.get(g).get_name().lower()
+        for w in banned_words:
+            if w in clean:
+                clean = clean.replace(w, '')
+        cleaned_names.update({g: clean})
+
+def set_overlap(o1, o2):
+    accesses1 = set(op_writes.get(o1) + op_reads.get(o1))
+    accesses2 = set(op_writes.get(o2) + op_reads.get(o2))
+    return float(len(accesses1.intersection(accesses2)) / min(len(accesses1), len(accesses2)))
+
+def semantic_overlap(o1, o2):
+    name1 = cleaned_names.get(o1)
+    name2 = cleaned_names.get(o2)
+    seqMatch = SequenceMatcher(None, name1, name2)
+    match = seqMatch.find_longest_match(0, len(name1), 0, len(name2))
+    if match.size < 4:
         return 0
-<<<<<<< Updated upstream:main.py
-    num_hc_microservices = 0
-    for l in replica_locations.get(replica[0]):
-        index_in_chromosome = secondary_replicas_indices.get((replica[0], l))
-        if index_in_chromosome and not chromosome[index_in_chromosome]:
-            continue
-        if l != replica[1]:
-            ops = [x for x in microservices[l] if x < op_num]
-            for o in ops:
-                if relationship_dict.get((o, replica[0])) and nodes_dict.get(o).get_consistency() == 'S':
-                    num_hc_microservices += 1
-                    break
-    return num_hc_microservices * 2 * write_frequency
-
-
-# Computes the communication costs of a replica (the costs which occur if the replica is eliminated), as
-# 2 * access frequency in the same microservice * num of microservices where such replica is present and accessed
-# by high consistency operations. Essentially we might have one less microservice to update (since we just eliminated
-# the replica in such service) but we have to pay the access frequency to contact the primary replica in another
-# service.
-def compute_comm_cost(replica, microservices, chromosome):
-    ops_in_same_m = [x for x in microservices[replica[1]] if x < op_num]
-    access_frequency = 0
-    write_frequency = 0
-    for o in ops_in_same_m:
-        if relationship_dict.get((o, replica[0])):
-            access_frequency += nodes_dict.get(o).get_frequency()
-            if relationship_dict.get((o, replica[0])) == 'W':
-                write_frequency += nodes_dict.get(o).get_frequency()
-    if write_frequency == 0:
-        return access_frequency
-    num_hc_microservices = 0
-    for l in replica_locations.get(replica[0]):
-        index_in_chromosome = secondary_replicas_indices.get((replica[0], l))
-        if index_in_chromosome and chromosome[index_in_chromosome] == 0:
-            continue
-        if l != replica[1]:
-            ops = [x for x in microservices[l] if x < op_num]
-            for o in ops:
-                if relationship_dict.get((o, replica[0])) and nodes_dict.get(o).get_consistency() == 'S':
-                    num_hc_microservices += 1
-                    break
-    return 2 * access_frequency + num_hc_microservices * 2 * write_frequency
-
-
-# Sum of replication (if replica is present) and communication (if it was eliminated) costs for all secondary replicas
-def evaluate_fitness(microservices, chromosome):
-    i = 0
-    fitness = 0
-    for s in secondary_replicas_indices:
-        if chromosome[i]:
-            cost = compute_repl_costs(s, microservices, chromosome)
-=======
     else:
         return match.size / min(len(name1), len(name2))
 
@@ -903,7 +646,6 @@ def compute_semantic_score(services):
             for o2 in ops:
                 similarities.append(semantic_overlap(o, o2))
         sim.append(round((sum(similarities) * len(ops)) / (op_num * len(similarities)), 4))
-    print(sim)
     return sum(sim)
 
 def compute_op_similarity(o1, o2):
@@ -932,11 +674,7 @@ def compute_total_coupling(services):
             for o2 in ops:
                 similarities.append(compute_op_similarity(o, o2))
         sim.append(round((sum(similarities) * len(ops)) / (op_num * len(similarities)), 4))
-        print(len(ops))
         suca += len(ops)
-    print(sim)
-    print(op_num)
-    print(suca)
     return sum(sim)
 
 def write_dat_file(num_services):
@@ -1068,54 +806,110 @@ def write_dat_file(num_services):
             spaces += " "
         if nodes_dict.get(o).get_consistency() == 'H':
             data.write(str(1) + spaces)
->>>>>>> Stashed changes:preprocessing.py
         else:
-            cost = compute_comm_cost(s, microservices, chromosome)
-        fitness += cost
-        i += 1
-    return fitness
+            data.write(str(0) + spaces)
+    data.write(";\n\n")
+    data.write("param similarity:\n    ")
+    for n in range(0, op_num):
+        data.write("O" + str(n) + " ")
+    data.write(":=")
+    for n in range(0, op_num):
+        spaces = " "
+        for l in range(0, 2 - len(str(n))):
+            spaces += " "
+        data.write("\nO" + str(n) + spaces)
+        for n2 in range(0, op_num):
+            spaces = " "
+            for l in range(0, len(str(n2))):
+                spaces += " "
+            data.write(str(compute_op_similarity(n, n2)) + spaces)
+    data.write(";")
+    data.close()
 
+def trim_operations(to_remove):
+    op_num = len(graph)
+    for t in to_remove:
+        print("Removed op. " + nodes_dict.get(t).get_name())
+        graph.pop(t)
+        nodes_dict.pop(t)
+        op_reads.pop(t)
+        op_writes.pop(t)
+        forced_operations.pop(t)
+        for i in range(t, op_num):
+            graph.update({i: graph.get(i + 1)})
+            nodes_dict.update({i: nodes_dict.get(i + 1)})
+            op_reads.update({i: op_reads.get(i + 1)})
+            op_writes.update({i: op_writes.get(i + 1)})
+            forced_operations.update({i: forced_operations.get(i + 1)})
+        graph.pop(op_num - 1)
+        nodes_dict.pop(op_num - 1)
+        op_reads.pop(op_num - 1)
+        op_writes.pop(op_num - 1)
+        forced_operations.pop(op_num - 1)
+        for f in forced_operations:
+            if t in forced_operations.get(f):
+                forced_operations.get(f).remove(t)
+            for f2 in forced_operations.get(f):
+                if f2 > t:
+                    forced_operations.get(f)[forced_operations.get(f).index(f2)] -= 1
+        op_num = len(graph)
+        for t2 in range(0, len(to_remove)):
+            if to_remove[t2] > t:
+                to_remove[t2] -= 1
 
-# Roulette wheel selections with probabilities inversely proportional to fitness (since fitness must be minimized)
-def roulette_wheel_selection(fitness_chr_tuples):
-    fitnesses = []
-    generation = []
-    for f in fitness_chr_tuples:
-        generation.append(f[0])
-        fitnesses.append(f[1])
-    max = sum(1 / f for f in fitnesses)
-    probs = [(1 / f) / max for f in fitnesses]
-    mother = generation[np.random.choice(len(generation), p=probs)]
-    father = generation[np.random.choice(len(generation), p=probs)]
-    while mother == father:
-        mother = generation[np.random.choice(len(generation), p=probs)]
-        father = generation[np.random.choice(len(generation), p=probs)]
-    return mother, father
+def build_attr_relationships():
+    attrs = []
+    for g in graph:
+        for a in op_writes.get(g):
+            attrs.append(a)
+        for a in op_reads.get(g):
+            attrs.append(a)
+    all_attrs = list(set(attrs))
+    all_attrs.sort()
+    index = 100000
+    for a in all_attrs:
+        attributes_iton.update({index: a})
+        attributes_ntoi.update({a: index})
+        index += 1
+        read_by = []
+        written_by = []
+        for o in graph:
+            if a in op_reads.get(o):
+                read_by.append(o)
+            if a in op_writes.get(o):
+                written_by.append(o)
+        attr_read_by.update({attributes_ntoi.get(a): read_by})
+        attr_written_by.update({attributes_ntoi.get(a): written_by})
+    res = [attributes_ntoi.get(x) for x in all_attrs]
+    return res
 
+def build_hcw_relationships():
+    # Lists the high consistency write operations
+    hc_writes = []
+    for o in graph:
+        if nodes_dict.get(o).get_consistency() == 'H' and op_writes.get(o) != []:
+            hc_writes.append(o)
 
-# Random crossover between chromosomes
-def crossover(mother, father, mutchance):
-    i = 0
-    son = []
-    for g in mother:
-        if random.randint(0, 100) <= mutchance:
-            son.append(random.choice([0, 1]))
+    hcwassociations = {}
+    # Lists the columns which are written
+    hc_written_columns = []
+    for o in hc_writes:
+        for x in op_writes.get(o) + op_reads.get(o):
+            hc_written_columns.append(x)
+            hcwassociations.update({attributes_ntoi.get(x) - 100000: o})
+    hc_written_columns = list(set(hc_written_columns))
+
+    for a in attributes:
+        if not hcwassociations.get(a - 100000):
+            hcwassociations.update({a - 100000: -1})
+    for a in attributes:
+        if attributes_iton.get(a) in hc_written_columns:
+            hc_write_status.update({a: True})
         else:
-            choice = [mother[i], father[i]]
-            son.append(random.choice(choice))
-        i += 1
-    return son
+            hc_write_status.update(({a: False}))
 
 
 if __name__ == '__main__':
-<<<<<<< Updated upstream:main.py
-    # parse_arch_json('pangaeaArch.json')
-    parse_arch_yaml('pangeaArch2.yaml')
-    op_num = len(graph)
-
-    to_remove = noise_removal()
-    graph_copy = Graph()
-=======
     parse_arch_yaml('trainticket.yaml')
     print("Preprocessing...")
     to_remove = noise_removal()
@@ -1155,381 +949,12 @@ if __name__ == '__main__':
     min_decoupling_bound = compute_total_coupling([[o for o in graph]])
     max_decoupling_bound = compute_total_coupling(services)
     max_com_cost = compute_communication_cost(services)
-    """
-    sc = [
-        ["createNewPriceConfig", "findPriceConfigById", "findByRouteIdAndTrainType", "findAllPriceConfig", "deletePriceConfig", "updatePriceConfig"],
-        ["cancelOrderbyUser", "ticketExecute", "ticketCollect", "getSoldTickets", "createOrder", "cancelOrder", "deleteOrder", "updateOrder", "modifyOrderStatus", "getOrderPrice", "payOrder", "initOrder", "checkOrderValidity", "preserve", "rebook", "distributeSeat", "getLeftTicketOfInterval", "checkSecurityConfig", "getTickets"],
-        ["queryForTravel", "getCheapestTravelResult", "getQuickestTravelResult", "getMinStopTravelResult", "createTrip", "getRouteByTripId", "getTrainTypeByTripId", "retrieveTrip", "updateTrip", "deleteTrip"],
-        ["getAllAssuranceTypes", "getAllAssurances", "findAssuranceById", "findAssuranceByOrderId", "createAssurance", "deleteAssuranceById", "deleteAssuranceByOrderId", "modifyAssurance"],
-        ["saveUser", "getAllUser", "findByUserId", "findByUsername", "updateUser"],
-        ["deleteUserById"],
-        ["createConfig", "updateConfig", "queryConfig", "deleteConfig", "queryAllConfigs"],
-        ["findAllSecurityConfig", "addNewSecurityConfig", "deleteSecurityConfig"],
-        ["modifySecurityConfig"],
-        ["getPriceByWeightAndRegion", "queryConsignPrice", "createAndModifyPrice", "getConsignPrice", "insertConsignRecord", "updateConsignRecord", "queryConsignByAccountId", "queryConsignByOrderId", "queryConsignByConsignee"],
-        ["addVoucher", "queryVoucher"],
-        ["createFoodOrdersInBatch", "createFoodOrder", "deleteFoodOrder", "findFoodOrderByOrderId", "findAllFoodOrders", "updateFoodOrder"],
-        ["getAllOffices", "getSpecificOffice", "addOffice", "deleteOffice", "updateOffice"],
-        ["queryForStationId", "createStation", "existStation", "updateStation", "deleteStation", "queryStations", "queryStationById"] ,
-        ["calculateRefund", "pay", "createPaymentAccount", "addMoney", "queryPaymentAccount", "queryPayments", "drawBack", "payDifference", "queryMoney", "payDifferenceRebook"],
-        ["initPayment"],
-        ["findContactsById", "findContactsByAccountId", "createContact", "deleteContact", "modifyContact", "getAllContacts"],
-        ["createTrainFood", "listTrainFood", "listTrainFoodByTripIds"],
-        ["createFoodStore", "listFoodStores", "listFoodStoredByStationId", "getAllFoods"],
-        ["searchCheapestRouteResult", "searchMinStopRouteResult", "searchQuickestRouteResult", "createAndModifyRoute", "getRouteById", "getRouteByStartAndTerminal", "createTrain", "retrieveTrain", "queryTrains", "updateTrain", "deleteTrain", "getAllRoutes"],
-        ["processDelivery"]
-    ]
-    for s in sc:
-        print(str(s).replace("'", '').replace('[', '').replace(']', ';'))
-    exit(-1)
-    manual = []
-    for s in sc:
-        serv = []
-        for o in s:
-            found = False
-            for n in nodes_dict:
-                if nodes_dict.get(n).get_name() == o:
-                    serv.append(n)
-                    found = True
-            if not found:
-                print("Not found " + o)
-        manual.append(serv)
-        print(len(serv))
 
-    for o in range(0, len(graph)):
-        count = 0
-        for s in manual:
-            count += s.count(o)
-        if count == 0:
-            print(str(o) + " not found " + "(" + nodes_dict.get(o).get_name() + ")")
-        if count > 1:
-            print(str(o) + " duplicate " + "(" + nodes_dict.get(o).get_name() + ")")
-    to_remove = []
-    for n in manual:
-        rem = []
-        for y in n:
-            if isinstance(y, str):
-                rem.append(y)
-        to_remove.append(rem)
-    i = 0
-    for n in manual:
-        for t in to_remove[i]:
-            n.remove(t)
->>>>>>> Stashed changes:preprocessing.py
-
-    # Trims the useless operations from the architecture
-    for t in to_remove:
-        graph.pop(t)
-        nodes_dict.pop(t)
-        op_reads.pop(t)
-        op_writes.pop(t)
-
-<<<<<<< Updated upstream:main.py
-    model = 2
-    if model == 2:
-        # Lists the high consistency write operations
-        hc_writes = []
-        for o in op_writes:
-            if nodes_dict.get(o).get_consistency() == 'S':
-                hc_writes.append(o)
-        # Lists the columns which are written
-        written_columns = []
-        for o in hc_writes:
-                for x in op_writes.get(o):
-                    written_columns.append(x)
-        written_columns = list(set(written_columns))
-
-        # Creates the "writing" services
-        starting_services = []
-        for c in written_columns:
-            this_col = []
-            for o in hc_writes:
-                if c in op_writes.get(o):
-                    this_col.append(o)
-            already_added = False
-            for s in starting_services:
-                if this_col == s:
-                    already_added = True
-            if not already_added:
-                starting_services.append(this_col)
-        for o in hc_writes:
-            indices = []
-            for s in starting_services:
-                if o in s:
-                    indices.append(starting_services.index(s))
-            new_s = []
-            indices = list(set(indices))
-            for i in indices:
-                new_s += starting_services[i]
-            new_s = list(set(new_s))
-            list.sort(indices, reverse=True)
-            for i in indices:
-                starting_services.remove(starting_services[i])
-            starting_services.append(new_s)
-        to_remove = []
-        writing_services = []
-        for s in starting_services:
-            if s:
-                writing_services.append(starting_services[starting_services.index(s)])
-
-        # Associates each written column with its writing service
-        col_ws = {}
-        for w in written_columns:
-            for s in writing_services:
-                for s2 in s:
-                    if w in op_writes.get(s2):
-                        col_ws.update({w: writing_services.index(s)})
-                        break
-        print(col_ws)
-        print(writing_services)
-        services = []
-        for m in writing_services:
-            new_s = []
-            for o in m:
-                new_s += [o] + graph.get(o)
-            new_s = list(set(new_s))
-            services.append(new_s)
-
-        elect_primary_replicas(services)
-        list_secondary_replicas(services)
-        format_and_draw(services, op_num, 'suga.html')
-        exit(-1)
-
-
-
-
-    if model == 0:
-        similarity_matrix, service_indices = compute_initial_similarity_matrix()
-        microservices = [[g] for g in graph]
-        while len(microservices) > 15:
-            candidate_index = max(similarity_matrix, key=similarity_matrix.get)
-            if similarity_matrix.get(candidate_index) <= 0:
-                break
-            candidate = service_indices.get(candidate_index)
-            print(str(candidate) + " are the candidates to be joined, with score " + str(
-                similarity_matrix.get(candidate_index)))
-            new_m = []
-            for c in candidate:
-                for c2 in c:
-                    new_m.append(c2)
-                microservices.remove(c)
-            microservices.append(new_m)
-            similarity_matrix, service_indices = recompute_similarity_matrix(microservices)
-            print(similarity_matrix)
-            print(len(microservices))
-            print(microservices)
-            print("COUPLING SCORE " + str(compute_coupling_score(microservices)))
-            print("INTRA-SERVICE COHESION SCORE " + str(compute_intraservice_cohesion(microservices)))
-            print("CC RATIO " + str(compute_coupling_score(microservices) / compute_intraservice_cohesion(microservices)))
-
-
-        cc_ratio = compute_coupling_score(microservices) / compute_intraservice_cohesion(microservices)
-
-        services = []
-        for m in microservices:
-            new_s = []
-            for o in m:
-                new_s += [o] + graph.get(o)
-            new_s = list(set(new_s))
-            services.append(new_s)
-
-        elect_primary_replicas(services)
-        list_secondary_replicas(services)
-        trim_unexpensive_replicas(services)
-
-        generation = []
-        for i in range(0, 20):
-            chromosome = []
-            for s in secondary_replicas_indices:
-                choice = random.choice([0, 1])
-                chromosome.append(choice)
-            generation.append(chromosome)
-
-        for i in range(0, 100):
-            fitness_chr_tuples = []
-            for g in generation:
-                fitness_chr_tuples.append((g, evaluate_fitness(microservices, g)))
-            fitness_chr_tuples.sort(key=operator.itemgetter(1))
-            print(fitness_chr_tuples)
-            new_gen = []
-            new_gen.append(fitness_chr_tuples[0][0])
-            new_gen.append(fitness_chr_tuples[1][0])
-            for i in range(0, 18):
-                m, f = roulette_wheel_selection(fitness_chr_tuples)
-                new_gen.append(crossover(m, f, 5))
-            generation = new_gen
-
-        print("FINAL SCORE = ", end='')
-        print(evaluate_fitness(microservices, new_gen[0]) * cc_ratio)
-
-        for x in secondary_replicas_indices:
-            if secondary_replicas_indices.get(x) == 7:
-                print(nodes_dict.get(x[0]).get_name())
-                print([x for x in services[x[1]]])
-
-        format_and_draw(services, op_num, "res.html", chr=new_gen[0])
-
-    if model == 3:
-        similarity_matrix, service_indices = compute_initial_similarity_matrix()
-        microservices = [[g] for g in graph]
-        while True:
-            candidate_index = max(similarity_matrix, key=similarity_matrix.get)
-            if similarity_matrix.get(candidate_index) != 1:
-                break
-            candidate = service_indices.get(candidate_index)
-            print(str(candidate) + " are the candidates to be joined, with score " + str(
-                similarity_matrix.get(candidate_index)))
-            new_m = []
-            for c in candidate:
-                for c2 in c:
-                    new_m.append(c2)
-                microservices.remove(c)
-            microservices.append(new_m)
-            similarity_matrix, service_indices = recompute_similarity_matrix(microservices)
-            print(similarity_matrix)
-            print(len(microservices))
-            print(microservices)
-            print("COUPLING SCORE " + str(compute_coupling_score(microservices)))
-            print("INTRA-SERVICE COHESION SCORE " + str(compute_intraservice_cohesion(microservices)))
-            print(
-                "CC RATIO " + str(compute_coupling_score(microservices) / compute_intraservice_cohesion(microservices)))
-
-        cc_ratio = compute_coupling_score(microservices) / compute_intraservice_cohesion(microservices)
-
-        services = []
-        for m in microservices:
-            new_s = []
-            for o in m:
-                new_s += [o] + graph.get(o)
-            new_s = list(set(new_s))
-            services.append(new_s)
-
-        elect_primary_replicas(services)
-        list_secondary_replicas(services)
-        trim_unexpensive_replicas(services)
-
-        generation = []
-        for i in range(0, 20):
-            chromosome = []
-            for s in secondary_replicas_indices:
-                choice = random.choice([0, 1])
-                chromosome.append(choice)
-            generation.append(chromosome)
-
-        for i in range(0, 100):
-            fitness_chr_tuples = []
-            for g in generation:
-                fitness_chr_tuples.append((g, evaluate_fitness(microservices, g)))
-            fitness_chr_tuples.sort(key=operator.itemgetter(1))
-            print(fitness_chr_tuples)
-            new_gen = []
-            new_gen.append(fitness_chr_tuples[0][0])
-            new_gen.append(fitness_chr_tuples[1][0])
-            for i in range(0, 18):
-                m, f = roulette_wheel_selection(fitness_chr_tuples)
-                new_gen.append(crossover(m, f, 5))
-            generation = new_gen
-
-        print("FINAL SCORE = ", end='')
-        print(evaluate_fitness(microservices, new_gen[0]) * cc_ratio)
-
-        for x in secondary_replicas_indices:
-            if secondary_replicas_indices.get(x) == 7:
-                print(nodes_dict.get(x[0]).get_name())
-                print([x for x in services[x[1]]])
-
-        format_and_draw(services, op_num, "res.html", chr=new_gen[0])
-        print(len(services))
-=======
-    manual_final = []
-    for micro in manual:
-        accesses = []
-        for n in micro:
-            accesses_temp = []
-            accesses_temp += op_reads.get(n) + op_writes.get(n)
-            for a in accesses_temp:
-                accesses.append(attributes_ntoi.get(a))
-        manual_final.append(micro + list(set(accesses)))
-    elect_primary_replicas(manual_final)
-    cached_a = {}
-    uncached_a = {}
-    tot_rop = 0
-    for a in attributes:
-        c_a = []
-        u_a = []
-        for micro in manual_final:
-            if a in micro and primary_replicas_locations.get(a) != manual_final.index(micro):
-                read_in_same = 0
-                write_in_others = 0
-                for o in micro:
-                    if o < 10000 and attributes_iton.get(a) in op_reads.get(o):
-                        read_in_same += nodes_dict.get(o).get_frequency()
-                for micro2 in manual_final:
-                    for o in micro2:
-                        if o < 10000 and attributes_iton.get(a) in op_writes.get(o):
-                            write_in_others += nodes_dict.get(o).get_frequency()
-                if read_in_same <= write_in_others:
-                    tot_rop += read_in_same
-                    u_a.append(manual_final.index(micro))
-                else:
-                    tot_rop += write_in_others
-                    c_a.append(manual_final.index(micro))
-        cached_a.update({a: c_a})
-        uncached_a.update({a: u_a})
-    right_format = []
-    for micro in manual:
-        new_serv = [] + micro
-        for a in attributes:
-            if manual.index(micro) in cached_a.get(a):
-                new_serv.append(str(a) + 'R')
-            if manual.index(micro) in uncached_a.get(a):
-                new_serv.append(str(a) + 'N')
-            if manual.index(micro) == primary_replicas_locations.get(a):
-                new_serv.append(str(a) + 'P')
-        right_format.append(new_serv)
-    print(right_format)
-    print(manual)
-    format_and_draw_final(right_format, "formatted_manual.html")
-    print(compute_total_coupling(manual))
-    print(compute_communication_cost(manual_final)/max_com_cost)
-    exit(-1)
-    """
-    print(len(attributes))
+    # Specify number of services HERE
     write_dat_file(4)
-
-    """
-    manual = [[67, 52, 41, 24, 48, 68, 8, 46, 36, 7, 26, 25, 34, 35, 51, 47, 64], [29, 21, 32, 3, 4, 9, 55, 61, 0, 5, 1, 2, 6, 63],
-              [45, 53, 33, 54, 38, 10, 17, 65, 28, 17, 27, 20], [15, 16, 60, 49, 66, 39, 37, 31, 62, 12, 18, 13, 59, 42, 40, 14, 19, 57, 43, 44, 56, 30, 50, 11, 22, 23, 58]]
-    manual_final = []
-    for m in manual:
-        accesses = []
-        for n in m:
-            accesses_temp = []
-            accesses_temp += op_reads.get(n) + op_writes.get(n)
-            for a in accesses_temp:
-                accesses.append(attributes_ntoi.get(a))
-        manual_final.append(m + list(set(accesses)))
-    format_and_draw_complete(manual_final, "manual.html")
-    elect_primary_replicas(manual_final)
-    print(compute_communication_cost(manual_final))
-    print(compute_total_coupling(manual_final))
-    """
-    """
-
-    print(max_com_cost)
-
-    op = 0.2
-    coup = 0.8
-    while coup < 1.001:
-        opt_result = abstractSolver.optimizer(op_num, max_com_cost, min_decoupling_bound, max_decoupling_bound,
-                                          op, coup)
-        op -= 0.05
-        coup += 0.05
-    """
-    alpha = 0.0
-    while alpha <= 1:
-        opt_result = abstractSolverFinalLinear.optimizer(op_num, max_com_cost, alpha)
-        alpha += 0.1
+    # Specify alpha parameter HERE
+    alpha = 0.5
+    opt_result = abstractSolverFinalLinear.optimizer(op_num, max_com_cost, alpha)
 
     opt_result_only_nums = []
     for m in opt_result:
@@ -1545,4 +970,3 @@ if __name__ == '__main__':
     print(compute_communication_cost(opt_result_only_nums) / max_com_cost)
     print(post_processing_communication_cost(opt_result))
     format_and_draw_final(opt_result, "test.html")
->>>>>>> Stashed changes:preprocessing.py
