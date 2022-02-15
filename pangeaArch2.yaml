@@ -1,12 +1,11 @@
 operations:
 - name: AppleV1
-  consistency: S
+  consistency: H
   frequency: 5
-  forced_entity: Apple
+  forced_operations:
+    -
   database_access:
   - entity_name: Apple
-    read_attributes:
-    - id
     write_attributes:
     - id
     - iss
@@ -17,8 +16,6 @@ operations:
     - created_at
     - updated_at
   - entity_name: User
-    read_attributes:
-    - email
     write_attributes:
     - id
     - name
@@ -43,22 +40,22 @@ operations:
     read_attributes:
     - id
 - name: ChangePassword
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     write_attributes:
     - id
     - password
 - name: Facebook
-  consistency: S
+  consistency: H
   frequency: 6
-  forced_entity: Facebook
+  forced_operations:
+    -
   database_access:
   - entity_name: User
-    read_attributes:
-    - email
     write_attributes:
     - id
     - name
@@ -67,8 +64,6 @@ operations:
     - created_at
     - updated_at
   - entity_name: FacebookEntity
-    read_attributes:
-    - id
     write_attributes:
     - id
     - facebook_id
@@ -94,21 +89,21 @@ operations:
     read_attributes:
     - id
 - name: ForgotPassword
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     read_attributes:
     - email
 - name: Google
-  consistency: S
+  consistency: H
   frequency: 6
-  forced_entity: Google
+  forced_operations:
+    -
   database_access:
   - entity_name: User
-    read_attributes:
-    - email
     write_attributes:
     - id
     - name
@@ -116,8 +111,6 @@ operations:
     - email
     - created_at
   - entity_name: GoogleEntity
-    read_attributes:
-    - id
     write_attributes:
     - id
     - alg
@@ -148,9 +141,10 @@ operations:
     read_attributes:
     - id
 - name: Login
-  consistency: S
+  consistency: H
   frequency: 6
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     read_attributes:
@@ -158,26 +152,29 @@ operations:
     - email
     - password
 - name: Logout
-  consistency: S
+  consistency: H
   frequency: 4
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     write_attributes:
     - revoked_tokens
 - name: ResetPassword
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     write_attributes:
     - password
     - updated_at
 - name: RetrieveCommunityArticles
-  consistency: N
+  consistency: L
   frequency: 4
-  forced_entity: CommunityArticle
+  forced_operations:
+    -
   database_access:
   - entity_name: CommunityArticle
     read_attributes:
@@ -195,9 +192,10 @@ operations:
     read_attributes:
     - id
 - name: RetrieveContentsIdFromSlug
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: Content
+  forced_operations:
+    -
   database_access:
   - entity_name: Content
     read_attributes:
@@ -206,13 +204,12 @@ operations:
     read_attributes:
     - slug
 - name: Signup
-  consistency: S
+  consistency: H
   frequency: 4
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
-    read_attributes:
-    - email
     write_attributes:
     - id
     - name
@@ -235,9 +232,10 @@ operations:
     read_attributes:
     - id
 - name: applyJobOffer
-  consistency: S
+  consistency: L
   frequency: 9
-  forced_entity: Application
+  forced_operations:
+    -
   database_access:
   - entity_name: Application
     write_attributes:
@@ -280,9 +278,10 @@ operations:
     - countries_id
     - course_name
 - name: createEducation
-  consistency: N
+  consistency: L
   frequency: 4
-  forced_entity: Education
+  forced_operations:
+    -
   database_access:
   - entity_name: Education
     write_attributes:
@@ -314,9 +313,10 @@ operations:
     - expected_finished_at
     - started_at
 - name: createExperience
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: Experience
+  forced_operations:
+    -
   database_access:
   - entity_name: Experience
     write_attributes:
@@ -331,9 +331,10 @@ operations:
     - created_at
     - updated_at
 - name: createLanguage
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: Language
+  forced_operations:
+    -
   database_access:
   - entity_name: Language
     write_attributes:
@@ -348,9 +349,10 @@ operations:
     - language_levels_id
     - users_id
 - name: createSkill
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: Skill
+  forced_operations:
+    -
   database_access:
   - entity_name: Skill
     read_attributes:
@@ -365,26 +367,29 @@ operations:
     - users_id
     - skill_levels_id
 - name: deleteEducation
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: Education
+  forced_operations:
+    -
   database_access:
   - entity_name: Education
     write_attributes:
     - id
 - name: deleteExperience
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: Experience
+  forced_operations:
+    -
   database_access:
   - entity_name: Experience
     write_attributes:
     - id
     - users_id
 - name: deleteInterview
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: Interview
+  forced_operations:
+    -
   database_access:
   - entity_name: Interview
     write_attributes:
@@ -393,41 +398,46 @@ operations:
     read_attributes:
     - id
 - name: deleteLanguage
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: Language
+  forced_operations:
+    -
   database_access:
   - entity_name: UserHasLanguage
     write_attributes:
     - id
 - name: deleteSkill
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: Skill
+  forced_operations:
+    -
   database_access:
   - entity_name: UserHasSkill
     write_attributes:
     - id
 - name: deleteStory
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: Application
+  forced_operations:
+    -
   database_access:
   - entity_name: Application
     write_attributes:
     - story_url
 - name: deleteUser
-  consistency: N
+  consistency: L
   frequency: 1
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     write_attributes:
     - id
 - name: employerRetrieveCurriculum
-  consistency: N
+  consistency: L
   frequency: 7
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     read_attributes:
@@ -484,9 +494,10 @@ operations:
     - name_it
     - name_en
 - name: employerRetrieveUserInfo
-  consistency: N
+  consistency: L
   frequency: 6
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     read_attributes:
@@ -537,9 +548,10 @@ operations:
     - name_it
     - name_en
 - name: eventCheckIn
-  consistency: S
+  consistency: L
   frequency: 7
-  forced_entity: CheckIn
+  forced_operations:
+    -
   database_access:
   - entity_name: CheckIn
     write_attributes:
@@ -581,9 +593,10 @@ operations:
     - countries_id
     - course_name
 - name: participateWebinar
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: WebinarParticipation
+  forced_operations:
+    -
   database_access:
   - entity_name: WebinarParticipation
     write_attributes:
@@ -624,9 +637,10 @@ operations:
     read_attributes:
     - id
 - name: registerToCareerDay
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: CareerDay
+  forced_operations:
+    -
   database_access:
   - entity_name: CareerDay
     read_attributes:
@@ -642,9 +656,10 @@ operations:
     read_attributes:
     - id
 - name: retrieveActivities
-  consistency: S
+  consistency: L
   frequency: 4
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     read_attributes:
@@ -683,9 +698,10 @@ operations:
     read_attributes:
     - id
 - name: retrieveApplication
-  consistency: S
+  consistency: H
   frequency: 6
-  forced_entity: Application
+  forced_operations:
+    -
   database_access:
   - entity_name: JobOffer
     read_attributes:
@@ -696,9 +712,10 @@ operations:
     - status
     - users_id
 - name: retrieveCompanies
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     read_attributes:
@@ -715,9 +732,10 @@ operations:
     read_attributes:
     - id
 - name: retrieveCurrentUniversityInfo
-  consistency: N
+  consistency: L
   frequency: 10
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     read_attributes:
@@ -736,9 +754,10 @@ operations:
     read_attributes:
     - id
 - name: retrieveCurriculum
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     read_attributes:
@@ -795,9 +814,10 @@ operations:
     - name_it
     - name_en
 - name: retrieveEmployerInfo
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     read_attributes:
@@ -822,9 +842,10 @@ operations:
     - id
     - faculty_tag
 - name: retrieveEmployerJobOffers
-  consistency: N
+  consistency: L
   frequency: 8
-  forced_entity: JobOffer
+  forced_operations:
+    -
   database_access:
   - entity_name: JobOffer
     read_attributes:
@@ -850,9 +871,10 @@ operations:
     read_attributes:
     - id
 - name: retrieveEmployerPosts
-  consistency: N
+  consistency: L
   frequency: 8
-  forced_entity: Post
+  forced_operations:
+    -
   database_access:
   - entity_name: Post
     read_attributes:
@@ -876,9 +898,10 @@ operations:
     read_attributes:
     - id
 - name: retrieveEmployerWebinars
-  consistency: N
+  consistency: L
   frequency: 8
-  forced_entity: Webinar
+  forced_operations:
+    -
   database_access:
   - entity_name: Webinar
     read_attributes:
@@ -900,9 +923,10 @@ operations:
     - title
     - slug
 - name: retrieveEventDetail
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: Event
+  forced_operations:
+    -
   database_access:
   - entity_name: Event
     read_attributes:
@@ -923,9 +947,10 @@ operations:
     - id
     - status
 - name: retrieveExperienceTypes
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: ExperienceType
+  forced_operations:
+    -
   database_access:
   - entity_name: ExperienceType
     read_attributes:
@@ -933,9 +958,10 @@ operations:
     - name_it
     - name_en
 - name: retrieveInstitutes
-  consistency: N
+  consistency: L
   frequency: 8
-  forced_entity: Institute
+  forced_operations:
+    -
   database_access:
   - entity_name: Institute
     read_attributes:
@@ -953,9 +979,10 @@ operations:
     - id
     - name
 - name: retrieveJobOfferDetail
-  consistency: N
+  consistency: L
   frequency: 8
-  forced_entity: JobOffer
+  forced_operations:
+    -
   database_access:
   - entity_name: JobOffer
     read_attributes:
@@ -1006,9 +1033,10 @@ operations:
     - name
     - img
 - name: retrieveLanguageLevels
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: LanguageLevel
+  forced_operations:
+    -
   database_access:
   - entity_name: LanguageLevel
     read_attributes:
@@ -1016,9 +1044,10 @@ operations:
     - name_it
     - name_en
 - name: retrieveLanguages
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: Language
+  forced_operations:
+    -
   database_access:
   - entity_name: Language
     read_attributes:
@@ -1026,9 +1055,10 @@ operations:
     - name_it
     - name_en
 - name: retrievePostDetail
-  consistency: N
+  consistency: L
   frequency: 6
-  forced_entity: Post
+  forced_operations:
+    -
   database_access:
   - entity_name: Post
     read_attributes:
@@ -1071,9 +1101,10 @@ operations:
     read_attributes:
     - id
 - name: retrieveQualifications
-  consistency: N
+  consistency: L
   frequency: 8
-  forced_entity: Qualification
+  forced_operations:
+    -
   database_access:
   - entity_name: Qualification
     read_attributes:
@@ -1084,18 +1115,20 @@ operations:
     read_attributes:
     - id
 - name: retrieveSkillLevels
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: SkillLevel
+  forced_operations:
+    -
   database_access:
   - entity_name: SkillLevel
     read_attributes:
     - name_it
     - name_en
 - name: retrieveSkills
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: Skill
+  forced_operations:
+    -
   database_access:
   - entity_name: Skill
     read_attributes:
@@ -1103,9 +1136,10 @@ operations:
     - name_it
     - name_en
 - name: retrieveStoryVideo
-  consistency: N
+  consistency: L
   frequency: 2
-  forced_entity: Application
+  forced_operations:
+    -
   database_access:
   - entity_name: Application
     read_attributes:
@@ -1116,9 +1150,10 @@ operations:
     read_attributes:
     - id
 - name: retrieveStreamBySlug
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: Stream
+  forced_operations:
+    -
   database_access:
   - entity_name: Stream
     read_attributes:
@@ -1169,9 +1204,10 @@ operations:
     read_attributes:
     - id
 - name: retrieveStreamDetail
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: Stream
+  forced_operations:
+    -
   database_access:
   - entity_name: Stream
     read_attributes:
@@ -1222,9 +1258,10 @@ operations:
     read_attributes:
     - id
 - name: retrieveStreamsHome
-  consistency: N
+  consistency: L
   frequency: 10
-  forced_entity: Stream
+  forced_operations:
+    -
   database_access:
   - entity_name: Stream
     read_attributes:
@@ -1275,9 +1312,10 @@ operations:
     read_attributes:
     - id
 - name: retrieveStudyTags
-  consistency: N
+  consistency: L
   frequency: 8
-  forced_entity: StudyTag
+  forced_operations:
+    -
   database_access:
   - entity_name: StudyTag
     read_attributes:
@@ -1286,9 +1324,10 @@ operations:
     - name_en
     - tag
 - name: retrieveMarks
-  consistency: N
+  consistency: L
   frequency: 8
-  forced_entity: Mark
+  forced_operations:
+    -
   database_access:
   - entity_name: Mark
     read_attributes:
@@ -1300,9 +1339,10 @@ operations:
     read_attributes:
     - id
 - name: retrieveWebinarDetail
-  consistency: N
+  consistency: L
   frequency: 6
-  forced_entity: Webinar
+  forced_operations:
+    -
   database_access:
   - entity_name: Webinar
     read_attributes:
@@ -1336,9 +1376,10 @@ operations:
     - name
     - img
 - name: retrieveWebinarParticipation
-  consistency: N
+  consistency: L
   frequency: 6
-  forced_entity: WebinarParticipation
+  forced_operations:
+    -
   database_access:
   - entity_name: WebinarParticipation
     read_attributes:
@@ -1351,9 +1392,10 @@ operations:
     read_attributes:
     - id
 - name: scheduleInterview
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: Interview
+  forced_operations:
+    -
   database_access:
   - entity_name: Interview
     write_attributes:
@@ -1372,9 +1414,10 @@ operations:
     read_attributes:
     - id
 - name: startApply
-  consistency: N
+  consistency: L
   frequency: 8
-  forced_entity: Application
+  forced_operations:
+    -
   database_access:
   - entity_name: Application
     write_attributes:
@@ -1404,9 +1447,10 @@ operations:
     read_attributes:
     - id
 - name: updateContacts
-  consistency: N
+  consistency: L
   frequency: 2
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     write_attributes:
@@ -1416,9 +1460,10 @@ operations:
     - contact_email
     - birthdate
 - name: updateEducation
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: Education
+  forced_operations:
+    -
   database_access:
   - entity_name: Education
     write_attributes:
@@ -1448,9 +1493,10 @@ operations:
     - expected_finished_at
     - started_at
 - name: updateExperience
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: Experience
+  forced_operations:
+    -
   database_access:
   - entity_name: Experience
     write_attributes:
@@ -1464,33 +1510,37 @@ operations:
     - finished_at
     - updated_at
 - name: updateExperienceOrder
-  consistency: N
+  consistency: L
   frequency: 2
-  forced_entity: Experience
+  forced_operations:
+    -
   database_access:
   - entity_name: Experience
     write_attributes:
     - id
 - name: updateLanguageOrder
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: Language
+  forced_operations:
+    -
   database_access:
   - entity_name: UserHasLanguage
     write_attributes:
     - id
 - name: updateOrderEducation
-  consistency: N
+  consistency: L
   frequency: 2
-  forced_entity: Education
+  forced_operations:
+    -
   database_access:
   - entity_name: Education
     write_attributes:
     - id
 - name: updateProfile
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     read_attributes:
@@ -1500,17 +1550,19 @@ operations:
     - surname
     - img
 - name: updateSkillOrder
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: Skill
+  forced_operations:
+    -
   database_access:
   - entity_name: UserHasSkill
     write_attributes:
     - id
 - name: updateUserProfile
-  consistency: N
+  consistency: L
   frequency: 2
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     write_attributes:
@@ -1519,9 +1571,10 @@ operations:
     - surname
     - img
 - name: uploadCV
-  consistency: S
+  consistency: L
   frequency: 3
-  forced_entity: Event
+  forced_operations:
+    -
   database_access:
   - entity_name: CheckIn
     read_attributes:
@@ -1533,9 +1586,10 @@ operations:
     read_attributes:
     - id
 - name: uploadStory
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: Application
+  forced_operations:
+    -
   database_access:
   - entity_name: Application
     write_attributes:
@@ -1544,9 +1598,10 @@ operations:
     read_attributes:
     - id
 - name: usersMe
-  consistency: N
+  consistency: L
   frequency: 10
-  forced_entity: User
+  forced_operations:
+    -
   database_access:
   - entity_name: User
     read_attributes:
@@ -1603,9 +1658,10 @@ operations:
     - name_it
     - name_en
 - name: webinarOffline
-  consistency: N
+  consistency: L
   frequency: 3
-  forced_entity: WebinarParticipation
+  forced_operations:
+    -
   database_access:
   - entity_name: WebinarParticipation
     write_attributes:
@@ -1646,9 +1702,10 @@ operations:
     read_attributes:
     - id
 - name: webinarRegistration
-  consistency: N
+  consistency: L
   frequency: 5
-  forced_entity: WebinarParticipation
+  forced_operations:
+    -
   database_access:
   - entity_name: WebinarParticipation
     write_attributes:
