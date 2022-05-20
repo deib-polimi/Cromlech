@@ -8,6 +8,15 @@ from pyomo.util.infeasible import log_infeasible_constraints
 from itertools import product
 from pyomo.opt import SolverStatus, TerminationCondition
 
+# Maximum number of services
+num_services = 4
+# Frequency for writing results to file (in seconds)
+write_every = 60 # 7200 # Two hours
+# Alpha (between 0 and 1)
+alpha = 0.5
+# Input file (without .yaml extension)
+input_file = 'pangeaArch2'
+
 # Graph is the starting graph of the architecture, keys are operations and values are entities
 graph = {}
 # Nodes_dict associates each number to an operation or entity
@@ -280,7 +289,7 @@ def format_and_draw_complete(microservices, html_filename):
                 if a in attrs:
                     net.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i))
                     net_single.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i))
-        net_single.show("Service " + str(i) + ".html")
+        net_single.show(html_filename + '_' + str(i) + ".html")
         i += 1
     net.show(html_filename)
 
@@ -341,7 +350,7 @@ def format_and_draw_final(microservices, html_filename):
                 if a in attrs_num:
                     net.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i) + '/' + str(attr_count.get(a)) )
                     net_single.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i) + '/' + str(attr_count.get(a)) )
-        net_single.show("Service " + str(i) + ".html")
+        net_single.show(html_filename + '_' + str(i) + ".html")
         i += 1
 
     net.show(html_filename)
@@ -680,7 +689,7 @@ def compute_total_coupling(services):
         suca += len(ops)
     return sum(sim)
 
-def write_dat_file(num_services):
+def write_dat_file():
     read_dependencies = {}
     write_dependencies = {}
     access_dependencies = {}
@@ -912,7 +921,7 @@ def build_hcw_relationships():
             hc_write_status.update(({a: False}))
 
 
-def optimizer(op_num, max_com_cost, alpha):
+def optimizer(op_num, max_com_cost):
     model = pyo.AbstractModel()
     opt = pyo.SolverFactory('gurobi_persistent', solver_io="lp")
     M = 10000
@@ -1379,14 +1388,16 @@ def optimizer(op_num, max_com_cost, alpha):
     # opt.options['mipfocus'] = 1
     # opt.options['presolve'] = 2
     # opt.options['numericfocus'] = 1
-    opt.options['timelimit'] = 2700
+    opt.options['timelimit'] = write_every
     # opt.options['method'] = 3
     opt.set_instance(instance)
     result = opt.solve(tee=True, save_results=True, load_solutions=True)
     log_infeasible_constraints(instance, log_expression=True)
 
+    iteration = 0
     while not result.solver.termination_condition == TerminationCondition.optimal:
         # model.solutions.load_from(result)
+        iteration = iteration + 1
 
         """
         instance.com.display()
@@ -1423,14 +1434,17 @@ def optimizer(op_num, max_com_cost, alpha):
                 opt_result.append(a)
         print(opt_result)
 
-        f = open("results_new.txt", 'a')
+        experiment_name = input_file + '_M-' + str(num_services) + '_alpha-' + str(alpha)
+        f = open('results/' + experiment_name + '.txt', 'a')
+        f.write(str(iteration))
+        f.write("\n")
         f.write(str(alpha))
         f.write("\n")
         f.write(str(1 - alpha))
         f.write("\n")
         f.write(str(instance.coh.value))
         f.write("\n")
-        f.write(str(instance.com.value))
+        f.write(str(instance.com.value / max_com_cost))
         f.write("\n")
         f.write(str(instance.coh.value * alpha - (1 - alpha) * instance.com.value / max_com_cost))
         f.write("\n")
@@ -1451,13 +1465,13 @@ def optimizer(op_num, max_com_cost, alpha):
         print(compute_communication_cost(result_only_nums))
         print(compute_communication_cost(result_only_nums) / max_com_cost)
         print(post_processing_communication_cost(opt_result))
-        format_and_draw_final(opt_result, "test.html")
+        format_and_draw_final(opt_result, input_file + '.html')
 
         result = opt.solve(tee=True, save_results=True, load_solutions=True)
 
             
 if __name__ == '__main__':
-    parse_arch_yaml('trainticket.yaml')
+    parse_arch_yaml(input_file + '.yaml')
     print("Preprocessing...")
     to_remove = noise_removal()
     graph_copy = Graph()
@@ -1497,8 +1511,5 @@ if __name__ == '__main__':
     max_decoupling_bound = compute_total_coupling(services)
     max_com_cost = compute_communication_cost(services)
 
-    # Specify number of services HERE
-    write_dat_file(27)
-    # Specify alpha parameter HERE
-    alpha = 0.5
-    optimizer(op_num, max_com_cost, alpha)
+    write_dat_file()
+    optimizer(op_num, max_com_cost)
