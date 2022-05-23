@@ -8,12 +8,17 @@ from pyomo.util.infeasible import log_infeasible_constraints
 from itertools import product
 from pyomo.opt import SolverStatus, TerminationCondition
 
-# Maximum number of services
-num_services = 4
-# Frequency for writing results to file (in seconds)
-write_every = 60 # 7200 # Two hours
+# Round duration (in seconds): at the end of each round, the system writes results to file
+round_duration = 3600
+# Maximum (maximum number of rounds)
+max_rounds = 1
+
+# Maximum number of services (default)
+num_services_default = 4
 # Alpha (between 0 and 1)
-alpha = 0.5
+alpha_min = 0.0
+alpha_max = 1.0
+alpha_step = 0.1
 # Input file (without .yaml extension)
 input_file = 'pangeaArch2'
 
@@ -202,7 +207,7 @@ def parse_arch_yaml(yaml_filename):
                     if not association and f:
                         raise Exception("No operation named " + f + ' exists, it cannot be forced along ' + o['name'])
                     forced_operations.update({n: fops})
-            print([e.get_name() for e in entities])
+            # print([e.get_name() for e in entities])
         except yaml.YAMLError as exc:
             print(exc)
 
@@ -447,9 +452,9 @@ def compute_communication_cost(microservices):
                 op_scores.update({ent_name: op_scores.get(ent_name) + total_write * (replica_num - 1)})
             else:
                 op_scores.update({ent_name: total_write * (replica_num - 1)})
-    print("ROP " + str(r_op))
-    print("REPL " + str(repl) + " - " + str(repl2))
-    print("WOP " + str(w_op))
+    #print("ROP " + str(r_op))
+    #print("REPL " + str(repl) + " - " + str(repl2))
+    #print("WOP " + str(w_op))
     return w_op + r_op + repl
 
 def post_processing_communication_cost(result):
@@ -486,10 +491,10 @@ def post_processing_communication_cost(result):
                 for o in ops:
                     if attributes_iton.get(a) in op_writes.get(o):
                         wop += nodes_dict.get(o).get_frequency()
-    print("POST PROCESSING:")
-    print("WOP " + str(wop))
-    print("ROP " + str(rop))
-    print("REPL " + str(repl))
+    #print("POST PROCESSING:")
+    #print("WOP " + str(wop))
+    #print("ROP " + str(rop))
+    #print("REPL " + str(repl))
 
 # Removes all columns which only create noise (as they are only accessed by a single operation) and returns
 # the list of operations which have no accessed columns, which can then be trimmed from the architecture
@@ -503,7 +508,7 @@ def noise_removal():
         for c in related_columns:
             if all_columns.count(c) == 1:
                 if c in op_reads.get(op):
-                    print("Removed " + c)
+                    #print("Removed " + c)
                     op_reads.get(op).remove(c)
                 if c in op_writes.get(op):
                     op_writes.get(op).remove(c)
@@ -689,7 +694,7 @@ def compute_total_coupling(services):
         suca += len(ops)
     return sum(sim)
 
-def write_dat_file():
+def write_dat_file(num_services):
     read_dependencies = {}
     write_dependencies = {}
     access_dependencies = {}
@@ -709,7 +714,6 @@ def write_dat_file():
             if a not in reads and a not in writes:
                 access_dependencies.update({(g, a - 100000): 0})
 
-    print("Producing .dat file with " +str(num_services) + " services...")
     data = open('data.dat', 'w')
     data.write("data;\n\n")
     data.write("set MICROSERVICES := ")
@@ -841,7 +845,7 @@ def write_dat_file():
 def trim_operations(to_remove):
     op_num = len(graph)
     for t in to_remove:
-        print("Removed op. " + nodes_dict.get(t).get_name())
+        #print("Removed op. " + nodes_dict.get(t).get_name())
         graph.pop(t)
         nodes_dict.pop(t)
         op_reads.pop(t)
@@ -921,7 +925,7 @@ def build_hcw_relationships():
             hc_write_status.update(({a: False}))
 
 
-def optimizer(op_num, max_com_cost):
+def optimizer(op_num, max_com_cost, num_services, alpha):
     model = pyo.AbstractModel()
     opt = pyo.SolverFactory('gurobi_persistent', solver_io="lp")
     M = 10000
@@ -1388,16 +1392,16 @@ def optimizer(op_num, max_com_cost):
     # opt.options['mipfocus'] = 1
     # opt.options['presolve'] = 2
     # opt.options['numericfocus'] = 1
-    opt.options['timelimit'] = write_every
+    opt.options['timelimit'] = round_duration
     # opt.options['method'] = 3
     opt.set_instance(instance)
     result = opt.solve(tee=True, save_results=True, load_solutions=True)
     log_infeasible_constraints(instance, log_expression=True)
 
-    iteration = 0
-    while not result.solver.termination_condition == TerminationCondition.optimal:
+    round = 0
+    while not result.solver.termination_condition == TerminationCondition.optimal and round < max_rounds:
         # model.solutions.load_from(result)
-        iteration = iteration + 1
+        round = round + 1
 
         """
         instance.com.display()
@@ -1432,11 +1436,11 @@ def optimizer(op_num, max_com_cost):
         for a in arch:
             if a:
                 opt_result.append(a)
-        print(opt_result)
+        #print(opt_result)
 
         experiment_name = input_file + '_M-' + str(num_services) + '_alpha-' + str(alpha)
         f = open('results/' + experiment_name + '.txt', 'a')
-        f.write(str(iteration))
+        f.write(str(round))
         f.write("\n")
         f.write(str(alpha))
         f.write("\n")
@@ -1459,20 +1463,25 @@ def optimizer(op_num, max_com_cost):
             attrs_num = [int(x[:len(x) - 1]) for x in attrs]
             result_only_nums.append(ops + attrs_num)
 
-        print(result_only_nums)
-        print(compute_total_coupling(result_only_nums))
+        #print(result_only_nums)
+        #print(compute_total_coupling(result_only_nums))
         elect_primary_replicas(result_only_nums)
-        print(compute_communication_cost(result_only_nums))
-        print(compute_communication_cost(result_only_nums) / max_com_cost)
-        print(post_processing_communication_cost(opt_result))
-        format_and_draw_final(opt_result, input_file + '.html')
+        #print(compute_communication_cost(result_only_nums))
+        #print(compute_communication_cost(result_only_nums) / max_com_cost)
+        #print(post_processing_communication_cost(opt_result))
+        format_and_draw_final(opt_result, input_file + '_M-' + str(num_services) + '_alpha-' + str(alpha) + '.html')
 
         result = opt.solve(tee=True, save_results=True, load_solutions=True)
 
-            
+
+def run_experiment(alpha, num_services):
+    print("--- " + input_file + " --- num services=" + str(num_services) + " --- alpha=" + str(alpha) + " ---") 
+    write_dat_file(num_services)
+    optimizer(op_num, max_com_cost, num_services, alpha)
+
+    
 if __name__ == '__main__':
     parse_arch_yaml(input_file + '.yaml')
-    print("Preprocessing...")
     to_remove = noise_removal()
     graph_copy = Graph()
     op_num = len(graph)
@@ -1487,7 +1496,6 @@ if __name__ == '__main__':
         for o1 in s:
             for o2 in graph:
                 if o2 in s:
-                    #######
                     bound_ops.update({(o1, o2): 1})
                 else:
                     bound_ops.update({(o1, o2): 0})
@@ -1504,12 +1512,15 @@ if __name__ == '__main__':
     identify_hc_readonly_attributes()
     elect_primary_replicas(services)
 
-    for g in graph:
-        if g < op_num:
-            print(str(g) + " " + nodes_dict.get(g).get_name())
+    #for g in graph:
+    #    if g < op_num:
+    #        print(str(g) + " " + nodes_dict.get(g).get_name())
     min_decoupling_bound = compute_total_coupling([[o for o in graph]])
     max_decoupling_bound = compute_total_coupling(services)
     max_com_cost = compute_communication_cost(services)
-
-    write_dat_file()
-    optimizer(op_num, max_com_cost)
+    
+    num_services = num_services_default
+    alpha = alpha_min
+    while alpha <= alpha_max:
+        run_experiment(alpha, num_services)
+        alpha = alpha + alpha_step
