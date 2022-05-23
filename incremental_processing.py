@@ -8,6 +8,12 @@ from pyomo.util.infeasible import log_infeasible_constraints
 from itertools import product
 from pyomo.opt import SolverStatus, TerminationCondition
 
+# !Important! I'm not sure that the persistent feature works with multiple parameters
+# For now, either use persistency for a single experiment OR use multiple experiments (multiple paramenters)
+
+# Set to true for individual experiments, when you want to have a number of rounds that is > 1
+persistent = False
+
 # Round duration (in seconds): at the end of each round, the system writes results to file
 round_duration = 3600
 # Maximum (maximum number of rounds)
@@ -927,7 +933,7 @@ def build_hcw_relationships():
 
 def optimizer(op_num, max_com_cost, num_services, alpha):
     model = pyo.AbstractModel()
-    opt = pyo.SolverFactory('gurobi_persistent', solver_io="lp")
+    opt = pyo.SolverFactory('gurobi_persistent', solver_io="lp") if persistent else pyo.SolverFactory('gurobi', solver_io="lp")    
     M = 10000
 
     ######################
@@ -1394,8 +1400,9 @@ def optimizer(op_num, max_com_cost, num_services, alpha):
     # opt.options['numericfocus'] = 1
     opt.options['timelimit'] = round_duration
     # opt.options['method'] = 3
-    opt.set_instance(instance)
-    result = opt.solve(tee=True, save_results=True, load_solutions=True)
+    if persistent:
+        opt.set_instance(instance)
+    result = opt.solve(tee=True, save_results=True, load_solutions=True) if persistent else opt.solve(instance, tee=True)
     log_infeasible_constraints(instance, log_expression=True)
 
     round = 0
@@ -1472,7 +1479,8 @@ def optimizer(op_num, max_com_cost, num_services, alpha):
         format_and_draw_final(opt_result, input_file + '_M-' + str(num_services) + '_alpha-' + str(alpha) + '.html')
 
         if not result.solver.termination_condition == TerminationCondition.optimal:
-            result = opt.solve(tee=True, save_results=True, load_solutions=True)
+            # result = opt.solve(tee=True, save_results=True, load_solutions=True)
+            result = opt.solve(tee=True)
         else:
             break
 
@@ -1481,7 +1489,6 @@ def run_experiment(alpha, num_services):
     print("--- " + input_file + " --- num services=" + str(num_services) + " --- alpha=" + str(alpha) + " ---") 
     write_dat_file(num_services)
     optimizer(op_num, max_com_cost, num_services, alpha)
-
     
 if __name__ == '__main__':
     parse_arch_yaml(input_file + '.yaml')
