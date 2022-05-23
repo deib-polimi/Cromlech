@@ -1399,7 +1399,7 @@ def optimizer(op_num, max_com_cost, num_services, alpha):
     log_infeasible_constraints(instance, log_expression=True)
 
     round = 0
-    while not result.solver.termination_condition == TerminationCondition.optimal and round < max_rounds:
+    while round < max_rounds:
         # model.solutions.load_from(result)
         round = round + 1
 
@@ -1471,7 +1471,10 @@ def optimizer(op_num, max_com_cost, num_services, alpha):
         #print(post_processing_communication_cost(opt_result))
         format_and_draw_final(opt_result, input_file + '_M-' + str(num_services) + '_alpha-' + str(alpha) + '.html')
 
-        result = opt.solve(tee=True, save_results=True, load_solutions=True)
+        if not result.solver.termination_condition == TerminationCondition.optimal:
+            result = opt.solve(tee=True, save_results=True, load_solutions=True)
+        else:
+            break
 
 
 def run_experiment(alpha, num_services):
