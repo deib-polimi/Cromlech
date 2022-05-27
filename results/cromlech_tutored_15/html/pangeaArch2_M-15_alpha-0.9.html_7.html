@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 7, "id": "ChangePassword", "label": "ChangePassword", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 7, "id": "ResetPassword", "label": "ResetPassword", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 7, "id": "updateContacts", "label": "updateContacts", "mass": 1.5, "shape": "dot", "size": 10.4}, {"color": "dodgerblue", "group": 7, "id": "uploadCV", "label": "uploadCV", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "yellow", "group": 7, "id": "CheckIn.cv@7/2", "label": "CheckIn.cv@7/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 7, "id": "CheckIn.id@7/3", "label": "CheckIn.id@7/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 7, "id": "CheckIn.users_id@7/2", "label": "CheckIn.users_id@7/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 7, "id": "User.birthdate@7/2", "label": "User.birthdate@7/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 7, "id": "User.contact_address@7/2", "label": "User.contact_address@7/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 7, "id": "User.contact_phone@7/2", "label": "User.contact_phone@7/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 7, "id": "User.id@7/7", "label": "User.id@7/7", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 7, "id": "User.password@7/2", "label": "User.password@7/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 7, "id": "User.updated_at@7/2", "label": "User.updated_at@7/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "ChangePassword", "to": "User.id@7/7"}, {"from": "ChangePassword", "to": "User.password@7/2"}, {"from": "ResetPassword", "to": "User.password@7/2"}, {"from": "ResetPassword", "to": "User.updated_at@7/2"}, {"from": "updateContacts", "to": "User.id@7/7"}, {"from": "updateContacts", "to": "User.contact_address@7/2"}, {"from": "updateContacts", "to": "User.contact_phone@7/2"}, {"from": "updateContacts", "to": "User.birthdate@7/2"}, {"from": "uploadCV", "to": "CheckIn.id@7/3"}, {"from": "uploadCV", "to": "CheckIn.users_id@7/2"}, {"from": "uploadCV", "to": "User.id@7/7"}, {"from": "uploadCV", "to": "CheckIn.cv@7/2"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

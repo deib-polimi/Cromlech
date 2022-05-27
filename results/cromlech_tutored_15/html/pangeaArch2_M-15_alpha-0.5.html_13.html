@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 13, "id": "createLanguage", "label": "createLanguage", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 13, "id": "deleteLanguage", "label": "deleteLanguage", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 13, "id": "updateLanguageOrder", "label": "updateLanguageOrder", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "red", "group": 13, "id": "Language.id@13/2", "label": "Language.id@13/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "LanguageLevel.id@13/3", "label": "LanguageLevel.id@13/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 13, "id": "UserHasLanguage.id@13/2", "label": "UserHasLanguage.id@13/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 13, "id": "UserHasLanguage.language_levels_id@13/2", "label": "UserHasLanguage.language_levels_id@13/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 13, "id": "UserHasLanguage.languages_id@13/2", "label": "UserHasLanguage.languages_id@13/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "createLanguage", "to": "LanguageLevel.id@13/3"}, {"from": "createLanguage", "to": "Language.id@13/2"}, {"from": "createLanguage", "to": "UserHasLanguage.id@13/2"}, {"from": "createLanguage", "to": "UserHasLanguage.languages_id@13/2"}, {"from": "createLanguage", "to": "UserHasLanguage.language_levels_id@13/2"}, {"from": "deleteLanguage", "to": "UserHasLanguage.id@13/2"}, {"from": "updateLanguageOrder", "to": "UserHasLanguage.id@13/2"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

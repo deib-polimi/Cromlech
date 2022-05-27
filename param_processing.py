@@ -9,15 +9,14 @@ from itertools import product
 from pyomo.opt import SolverStatus, TerminationCondition
 import sys
 
-# Timeout (seconds)
-timeout = 3600
-
 # Input file (without .yaml extension)
 input_file = sys.argv[1]
 # Maximum number of services
 num_services = int(sys.argv[2])
 # Alpha (between 0 and 1)
 alpha = float(sys.argv[3])
+# Timeout (seconds)
+timeout = int(sys.argv[4])
 
 # Graph is the starting graph of the architecture, keys are operations and values are entities
 graph = {}

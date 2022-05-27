@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 12, "id": "retrievePostDetail", "label": "retrievePostDetail", "mass": 1.5, "shape": "dot", "size": 15.2}, {"color": "orange", "group": 12, "id": "City.id@12/5", "label": "City.id@12/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "Content.id@12/5", "label": "Content.id@12/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "JobOffer.cities_id@12/4", "label": "JobOffer.cities_id@12/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "JobOffer.id@12/5", "label": "JobOffer.id@12/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "JobOffer.job_img@12/4", "label": "JobOffer.job_img@12/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "JobOffer.position@12/4", "label": "JobOffer.position@12/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "JobOffer.types_id@12/4", "label": "JobOffer.types_id@12/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "JobOffer.users_id@12/2", "label": "JobOffer.users_id@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "Post.article_abstract@12/2", "label": "Post.article_abstract@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "Post.article_img@12/2", "label": "Post.article_img@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "Post.article_title@12/4", "label": "Post.article_title@12/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "Post.contents_id@12/2", "label": "Post.contents_id@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "Post.id@12/4", "label": "Post.id@12/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "Post.streams_id@12/2", "label": "Post.streams_id@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "Post.users_id@12/2", "label": "Post.users_id@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "Stream.id@12/5", "label": "Stream.id@12/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 12, "id": "Type.id@12/4", "label": "Type.id@12/4", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "retrievePostDetail", "to": "Post.id@12/4"}, {"from": "retrievePostDetail", "to": "Post.article_title@12/4"}, {"from": "retrievePostDetail", "to": "Post.article_abstract@12/2"}, {"from": "retrievePostDetail", "to": "Post.article_img@12/2"}, {"from": "retrievePostDetail", "to": "Post.users_id@12/2"}, {"from": "retrievePostDetail", "to": "Post.streams_id@12/2"}, {"from": "retrievePostDetail", "to": "Post.contents_id@12/2"}, {"from": "retrievePostDetail", "to": "JobOffer.id@12/5"}, {"from": "retrievePostDetail", "to": "JobOffer.position@12/4"}, {"from": "retrievePostDetail", "to": "JobOffer.types_id@12/4"}, {"from": "retrievePostDetail", "to": "JobOffer.cities_id@12/4"}, {"from": "retrievePostDetail", "to": "JobOffer.job_img@12/4"}, {"from": "retrievePostDetail", "to": "JobOffer.users_id@12/2"}, {"from": "retrievePostDetail", "to": "City.id@12/5"}, {"from": "retrievePostDetail", "to": "Type.id@12/4"}, {"from": "retrievePostDetail", "to": "Stream.id@12/5"}, {"from": "retrievePostDetail", "to": "Content.id@12/5"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

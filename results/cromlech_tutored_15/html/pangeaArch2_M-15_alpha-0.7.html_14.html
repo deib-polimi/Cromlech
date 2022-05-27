@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 14, "id": "ResetPassword", "label": "ResetPassword", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "mediumseagreen", "group": 14, "id": "retrieveLanguageLevels", "label": "retrieveLanguageLevels", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 14, "id": "retrieveLanguages", "label": "retrieveLanguages", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 14, "id": "retrieveSkillLevels", "label": "retrieveSkillLevels", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 14, "id": "retrieveSkills", "label": "retrieveSkills", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "orange", "group": 14, "id": "Language.id@14/3", "label": "Language.id@14/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 14, "id": "Language.name_en@14/2", "label": "Language.name_en@14/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 14, "id": "Language.name_it@14/2", "label": "Language.name_it@14/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 14, "id": "LanguageLevel.id@14/3", "label": "LanguageLevel.id@14/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 14, "id": "LanguageLevel.name_en@14/2", "label": "LanguageLevel.name_en@14/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 14, "id": "LanguageLevel.name_it@14/2", "label": "LanguageLevel.name_it@14/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 14, "id": "Skill.id@14/3", "label": "Skill.id@14/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 14, "id": "Skill.name_en@14/2", "label": "Skill.name_en@14/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 14, "id": "Skill.name_it@14/2", "label": "Skill.name_it@14/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 14, "id": "SkillLevel.name_en@14/2", "label": "SkillLevel.name_en@14/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 14, "id": "SkillLevel.name_it@14/2", "label": "SkillLevel.name_it@14/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 14, "id": "User.password@14/3", "label": "User.password@14/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 14, "id": "User.updated_at@14/2", "label": "User.updated_at@14/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "ResetPassword", "to": "User.password@14/3"}, {"from": "ResetPassword", "to": "User.updated_at@14/2"}, {"from": "retrieveLanguageLevels", "to": "LanguageLevel.id@14/3"}, {"from": "retrieveLanguageLevels", "to": "LanguageLevel.name_it@14/2"}, {"from": "retrieveLanguageLevels", "to": "LanguageLevel.name_en@14/2"}, {"from": "retrieveLanguages", "to": "Language.id@14/3"}, {"from": "retrieveLanguages", "to": "Language.name_it@14/2"}, {"from": "retrieveLanguages", "to": "Language.name_en@14/2"}, {"from": "retrieveSkillLevels", "to": "SkillLevel.name_it@14/2"}, {"from": "retrieveSkillLevels", "to": "SkillLevel.name_en@14/2"}, {"from": "retrieveSkills", "to": "Skill.id@14/3"}, {"from": "retrieveSkills", "to": "Skill.name_it@14/2"}, {"from": "retrieveSkills", "to": "Skill.name_en@14/2"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

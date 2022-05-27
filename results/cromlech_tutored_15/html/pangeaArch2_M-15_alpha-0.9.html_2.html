@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 2, "id": "applyJobOffer", "label": "applyJobOffer", "mass": 1.5, "shape": "dot", "size": 18.799999999999997}, {"color": "dodgerblue", "group": 2, "id": "deleteStory", "label": "deleteStory", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 2, "id": "retrieveApplication", "label": "retrieveApplication", "mass": 1.5, "shape": "dot", "size": 15.2}, {"color": "mediumseagreen", "group": 2, "id": "retrieveStoryVideo", "label": "retrieveStoryVideo", "mass": 1.5, "shape": "dot", "size": 10.4}, {"color": "dodgerblue", "group": 2, "id": "startApply", "label": "startApply", "mass": 1.5, "shape": "dot", "size": 17.6}, {"color": "dodgerblue", "group": 2, "id": "uploadStory", "label": "uploadStory", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "red", "group": 2, "id": "Application.applied_at@2/1", "label": "Application.applied_at@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.cities_id@2/1", "label": "Application.cities_id@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.city_name@2/1", "label": "Application.city_name@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.city_tag@2/1", "label": "Application.city_tag@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.countries_id@2/1", "label": "Application.countries_id@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.country_name@2/1", "label": "Application.country_name@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.country_tag@2/1", "label": "Application.country_tag@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.course_name@2/1", "label": "Application.course_name@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.courses_id@2/1", "label": "Application.courses_id@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.created_at@2/1", "label": "Application.created_at@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.employers_id@2/1", "label": "Application.employers_id@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.id@2/3", "label": "Application.id@2/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.job_offers_id@2/1", "label": "Application.job_offers_id@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.score@2/1", "label": "Application.score@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.status@2/1", "label": "Application.status@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.story_url@2/1", "label": "Application.story_url@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.universities_id@2/1", "label": "Application.universities_id@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.university_name@2/1", "label": "Application.university_name@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.university_tag@2/1", "label": "Application.university_tag@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.updated_at@2/1", "label": "Application.updated_at@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.users_id@2/2", "label": "Application.users_id@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Application.view@2/1", "label": "Application.view@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Education.cities_id@2/2", "label": "Education.cities_id@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Education.city_name@2/2", "label": "Education.city_name@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Education.city_tag@2/2", "label": "Education.city_tag@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Education.countries_id@2/2", "label": "Education.countries_id@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Education.country_name@2/2", "label": "Education.country_name@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Education.country_tag@2/2", "label": "Education.country_tag@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Education.course_name@2/2", "label": "Education.course_name@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 2, "id": "Education.id@2/6", "label": "Education.id@2/6", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 2, "id": "Education.universities_id@2/5", "label": "Education.universities_id@2/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 2, "id": "Education.university_name@2/5", "label": "Education.university_name@2/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 2, "id": "Education.university_tag@2/3", "label": "Education.university_tag@2/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "JobOffer.id@2/4", "label": "JobOffer.id@2/4", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "applyJobOffer", "to": "JobOffer.id@2/4"}, {"from": "applyJobOffer", "to": "Education.id@2/6"}, {"from": "applyJobOffer", "to": "Education.university_name@2/5"}, {"from": "applyJobOffer", "to": "Education.university_tag@2/3"}, {"from": "applyJobOffer", "to": "Education.universities_id@2/5"}, {"from": "applyJobOffer", "to": "Education.city_name@2/2"}, {"from": "applyJobOffer", "to": "Education.city_tag@2/2"}, {"from": "applyJobOffer", "to": "Education.cities_id@2/2"}, {"from": "applyJobOffer", "to": "Education.country_name@2/2"}, {"from": "applyJobOffer", "to": "Education.country_tag@2/2"}, {"from": "applyJobOffer", "to": "Education.countries_id@2/2"}, {"from": "applyJobOffer", "to": "Education.course_name@2/2"}, {"from": "applyJobOffer", "to": "Application.id@2/3"}, {"from": "applyJobOffer", "to": "Application.job_offers_id@2/1"}, {"from": "applyJobOffer", "to": "Application.users_id@2/2"}, {"from": "applyJobOffer", "to": "Application.score@2/1"}, {"from": "applyJobOffer", "to": "Application.employers_id@2/1"}, {"from": "applyJobOffer", "to": "Application.view@2/1"}, {"from": "applyJobOffer", "to": "Application.status@2/1"}, {"from": "applyJobOffer", "to": "Application.created_at@2/1"}, {"from": "applyJobOffer", "to": "Application.updated_at@2/1"}, {"from": "applyJobOffer", "to": "Application.university_name@2/1"}, {"from": "applyJobOffer", "to": "Application.university_tag@2/1"}, {"from": "applyJobOffer", "to": "Application.universities_id@2/1"}, {"from": "applyJobOffer", "to": "Application.course_name@2/1"}, {"from": "applyJobOffer", "to": "Application.courses_id@2/1"}, {"from": "applyJobOffer", "to": "Application.city_name@2/1"}, {"from": "applyJobOffer", "to": "Application.city_tag@2/1"}, {"from": "applyJobOffer", "to": "Application.cities_id@2/1"}, {"from": "applyJobOffer", "to": "Application.country_name@2/1"}, {"from": "applyJobOffer", "to": "Application.country_tag@2/1"}, {"from": "applyJobOffer", "to": "Application.countries_id@2/1"}, {"from": "applyJobOffer", "to": "Application.story_url@2/1"}, {"from": "applyJobOffer", "to": "Application.applied_at@2/1"}, {"from": "deleteStory", "to": "Application.story_url@2/1"}, {"from": "retrieveApplication", "to": "JobOffer.id@2/4"}, {"from": "retrieveApplication", "to": "Application.id@2/3"}, {"from": "retrieveApplication", "to": "Application.status@2/1"}, {"from": "retrieveApplication", "to": "Application.users_id@2/2"}, {"from": "retrieveStoryVideo", "to": "Application.id@2/3"}, {"from": "retrieveStoryVideo", "to": "Application.story_url@2/1"}, {"from": "retrieveStoryVideo", "to": "Application.users_id@2/2"}, {"from": "startApply", "to": "JobOffer.id@2/4"}, {"from": "startApply", "to": "Application.id@2/3"}, {"from": "startApply", "to": "Application.job_offers_id@2/1"}, {"from": "startApply", "to": "Application.users_id@2/2"}, {"from": "startApply", "to": "Application.score@2/1"}, {"from": "startApply", "to": "Application.employers_id@2/1"}, {"from": "startApply", "to": "Application.view@2/1"}, {"from": "startApply", "to": "Application.status@2/1"}, {"from": "startApply", "to": "Application.created_at@2/1"}, {"from": "startApply", "to": "Application.updated_at@2/1"}, {"from": "startApply", "to": "Application.university_name@2/1"}, {"from": "startApply", "to": "Application.university_tag@2/1"}, {"from": "startApply", "to": "Application.universities_id@2/1"}, {"from": "startApply", "to": "Application.course_name@2/1"}, {"from": "startApply", "to": "Application.courses_id@2/1"}, {"from": "startApply", "to": "Application.city_name@2/1"}, {"from": "startApply", "to": "Application.city_tag@2/1"}, {"from": "startApply", "to": "Application.cities_id@2/1"}, {"from": "startApply", "to": "Application.country_name@2/1"}, {"from": "startApply", "to": "Application.country_tag@2/1"}, {"from": "startApply", "to": "Application.countries_id@2/1"}, {"from": "startApply", "to": "Application.story_url@2/1"}, {"from": "startApply", "to": "Application.applied_at@2/1"}, {"from": "uploadStory", "to": "JobOffer.id@2/4"}, {"from": "uploadStory", "to": "Application.story_url@2/1"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

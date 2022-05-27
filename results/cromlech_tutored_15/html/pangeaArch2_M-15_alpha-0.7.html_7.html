@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 7, "id": "retrieveActivities", "label": "retrieveActivities", "mass": 1.5, "shape": "dot", "size": 12.8}, {"color": "mediumseagreen", "group": 7, "id": "retrieveEmployerJobOffers", "label": "retrieveEmployerJobOffers", "mass": 1.5, "shape": "dot", "size": 17.6}, {"color": "mediumseagreen", "group": 7, "id": "retrieveEventDetail", "label": "retrieveEventDetail", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 7, "id": "retrieveJobOfferDetail", "label": "retrieveJobOfferDetail", "mass": 1.5, "shape": "dot", "size": 17.6}, {"color": "yellow", "group": 7, "id": "Application.id@7/3", "label": "Application.id@7/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 7, "id": "Application.users_id@7/2", "label": "Application.users_id@7/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 7, "id": "CheckIn.id@7/3", "label": "CheckIn.id@7/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 7, "id": "City.id@7/4", "label": "City.id@7/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 7, "id": "City.name@7/2", "label": "City.name@7/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 7, "id": "Content.id@7/4", "label": "Content.id@7/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 7, "id": "Content.title@7/3", "label": "Content.title@7/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 7, "id": "Event.id@7/2", "label": "Event.id@7/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 7, "id": "Industry.id@7/2", "label": "Industry.id@7/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 7, "id": "JobOffer.cities_id@7/3", "label": "JobOffer.cities_id@7/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 7, "id": "JobOffer.id@7/5", "label": "JobOffer.id@7/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 7, "id": "JobOffer.job_detail_img@7/1", "label": "JobOffer.job_detail_img@7/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 7, "id": "JobOffer.job_img@7/3", "label": "JobOffer.job_img@7/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 7, "id": "JobOffer.position@7/3", "label": "JobOffer.position@7/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 7, "id": "JobOffer.status@7/1", "label": "JobOffer.status@7/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 7, "id": "JobOffer.types_id@7/3", "label": "JobOffer.types_id@7/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 7, "id": "JobOffer.users_id@7/2", "label": "JobOffer.users_id@7/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 7, "id": "Profile.id@7/5", "label": "Profile.id@7/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 7, "id": "Stream.id@7/4", "label": "Stream.id@7/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 7, "id": "Type.id@7/3", "label": "Type.id@7/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 7, "id": "User.id@7/6", "label": "User.id@7/6", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 7, "id": "User.img@7/4", "label": "User.img@7/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 7, "id": "User.name@7/4", "label": "User.name@7/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 7, "id": "Webinar.id@7/4", "label": "Webinar.id@7/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 7, "id": "WebinarParticipation.id@7/2", "label": "WebinarParticipation.id@7/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "retrieveActivities", "to": "User.id@7/6"}, {"from": "retrieveActivities", "to": "Application.id@7/3"}, {"from": "retrieveActivities", "to": "Application.users_id@7/2"}, {"from": "retrieveActivities", "to": "JobOffer.id@7/5"}, {"from": "retrieveActivities", "to": "JobOffer.position@7/3"}, {"from": "retrieveActivities", "to": "JobOffer.job_img@7/3"}, {"from": "retrieveActivities", "to": "JobOffer.types_id@7/3"}, {"from": "retrieveActivities", "to": "JobOffer.cities_id@7/3"}, {"from": "retrieveActivities", "to": "Content.id@7/4"}, {"from": "retrieveActivities", "to": "Content.title@7/3"}, {"from": "retrieveActivities", "to": "Type.id@7/3"}, {"from": "retrieveActivities", "to": "City.id@7/4"}, {"from": "retrieveActivities", "to": "WebinarParticipation.id@7/2"}, {"from": "retrieveActivities", "to": "CheckIn.id@7/3"}, {"from": "retrieveActivities", "to": "Webinar.id@7/4"}, {"from": "retrieveActivities", "to": "Event.id@7/2"}, {"from": "retrieveEmployerJobOffers", "to": "JobOffer.id@7/5"}, {"from": "retrieveEmployerJobOffers", "to": "JobOffer.position@7/3"}, {"from": "retrieveEmployerJobOffers", "to": "JobOffer.job_detail_img@7/1"}, {"from": "retrieveEmployerJobOffers", "to": "JobOffer.job_img@7/3"}, {"from": "retrieveEmployerJobOffers", "to": "JobOffer.cities_id@7/3"}, {"from": "retrieveEmployerJobOffers", "to": "JobOffer.types_id@7/3"}, {"from": "retrieveEmployerJobOffers", "to": "User.id@7/6"}, {"from": "retrieveEmployerJobOffers", "to": "Profile.id@7/5"}, {"from": "retrieveEmployerJobOffers", "to": "Stream.id@7/4"}, {"from": "retrieveEmployerJobOffers", "to": "City.id@7/4"}, {"from": "retrieveEmployerJobOffers", "to": "Type.id@7/3"}, {"from": "retrieveEventDetail", "to": "Event.id@7/2"}, {"from": "retrieveEventDetail", "to": "JobOffer.id@7/5"}, {"from": "retrieveEventDetail", "to": "JobOffer.status@7/1"}, {"from": "retrieveJobOfferDetail", "to": "JobOffer.id@7/5"}, {"from": "retrieveJobOfferDetail", "to": "JobOffer.position@7/3"}, {"from": "retrieveJobOfferDetail", "to": "JobOffer.types_id@7/3"}, {"from": "retrieveJobOfferDetail", "to": "JobOffer.cities_id@7/3"}, {"from": "retrieveJobOfferDetail", "to": "JobOffer.users_id@7/2"}, {"from": "retrieveJobOfferDetail", "to": "JobOffer.job_img@7/3"}, {"from": "retrieveJobOfferDetail", "to": "JobOffer.job_detail_img@7/1"}, {"from": "retrieveJobOfferDetail", "to": "JobOffer.status@7/1"}, {"from": "retrieveJobOfferDetail", "to": "City.id@7/4"}, {"from": "retrieveJobOfferDetail", "to": "City.name@7/2"}, {"from": "retrieveJobOfferDetail", "to": "Industry.id@7/2"}, {"from": "retrieveJobOfferDetail", "to": "Type.id@7/3"}, {"from": "retrieveJobOfferDetail", "to": "User.id@7/6"}, {"from": "retrieveJobOfferDetail", "to": "User.name@7/4"}, {"from": "retrieveJobOfferDetail", "to": "User.img@7/4"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

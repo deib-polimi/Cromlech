@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 9, "id": "RetrieveContentsIdFromSlug", "label": "RetrieveContentsIdFromSlug", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 9, "id": "retrieveEmployerWebinars", "label": "retrieveEmployerWebinars", "mass": 1.5, "shape": "dot", "size": 17.6}, {"color": "mediumseagreen", "group": 9, "id": "retrieveWebinarDetail", "label": "retrieveWebinarDetail", "mass": 1.5, "shape": "dot", "size": 15.2}, {"color": "orange", "group": 9, "id": "Content.id@9/4", "label": "Content.id@9/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "Content.slug@9/1", "label": "Content.slug@9/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 9, "id": "Content.title@9/3", "label": "Content.title@9/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 9, "id": "Profile.id@9/5", "label": "Profile.id@9/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 9, "id": "Stream.id@9/4", "label": "Stream.id@9/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 9, "id": "User.id@9/6", "label": "User.id@9/6", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 9, "id": "User.img@9/4", "label": "User.img@9/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 9, "id": "User.name@9/4", "label": "User.name@9/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 9, "id": "User.slug@9/2", "label": "User.slug@9/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "Webinar.contents_id@9/1", "label": "Webinar.contents_id@9/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "Webinar.duration@9/1", "label": "Webinar.duration@9/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "Webinar.employers_id@9/1", "label": "Webinar.employers_id@9/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 9, "id": "Webinar.id@9/4", "label": "Webinar.id@9/4", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "RetrieveContentsIdFromSlug", "to": "Content.slug@9/1"}, {"from": "RetrieveContentsIdFromSlug", "to": "User.slug@9/2"}, {"from": "retrieveEmployerWebinars", "to": "Webinar.id@9/4"}, {"from": "retrieveEmployerWebinars", "to": "Webinar.contents_id@9/1"}, {"from": "retrieveEmployerWebinars", "to": "Webinar.duration@9/1"}, {"from": "retrieveEmployerWebinars", "to": "Webinar.employers_id@9/1"}, {"from": "retrieveEmployerWebinars", "to": "User.id@9/6"}, {"from": "retrieveEmployerWebinars", "to": "Profile.id@9/5"}, {"from": "retrieveEmployerWebinars", "to": "Stream.id@9/4"}, {"from": "retrieveEmployerWebinars", "to": "Content.title@9/3"}, {"from": "retrieveEmployerWebinars", "to": "Content.slug@9/1"}, {"from": "retrieveWebinarDetail", "to": "Webinar.id@9/4"}, {"from": "retrieveWebinarDetail", "to": "Webinar.contents_id@9/1"}, {"from": "retrieveWebinarDetail", "to": "Webinar.duration@9/1"}, {"from": "retrieveWebinarDetail", "to": "Webinar.employers_id@9/1"}, {"from": "retrieveWebinarDetail", "to": "Content.id@9/4"}, {"from": "retrieveWebinarDetail", "to": "Content.title@9/3"}, {"from": "retrieveWebinarDetail", "to": "Content.slug@9/1"}, {"from": "retrieveWebinarDetail", "to": "User.id@9/6"}, {"from": "retrieveWebinarDetail", "to": "User.name@9/4"}, {"from": "retrieveWebinarDetail", "to": "User.img@9/4"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

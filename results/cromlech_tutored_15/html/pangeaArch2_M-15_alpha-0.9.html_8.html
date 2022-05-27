@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 8, "id": "deleteUser", "label": "deleteUser", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 8, "id": "retrieveCompanies", "label": "retrieveCompanies", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 8, "id": "retrieveEmployerInfo", "label": "retrieveEmployerInfo", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "dodgerblue", "group": 8, "id": "updateProfile", "label": "updateProfile", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 8, "id": "updateUserProfile", "label": "updateUserProfile", "mass": 1.5, "shape": "dot", "size": 10.4}, {"color": "yellow", "group": 8, "id": "Education.faculty_tag@8/2", "label": "Education.faculty_tag@8/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 8, "id": "Education.id@8/6", "label": "Education.id@8/6", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 8, "id": "Industry.id@8/2", "label": "Industry.id@8/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 8, "id": "Profile.id@8/4", "label": "Profile.id@8/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 8, "id": "User.id@8/7", "label": "User.id@8/7", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 8, "id": "User.img@8/4", "label": "User.img@8/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 8, "id": "User.name@8/5", "label": "User.name@8/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 8, "id": "User.slug@8/2", "label": "User.slug@8/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 8, "id": "User.surname@8/3", "label": "User.surname@8/3", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "deleteUser", "to": "User.id@8/7"}, {"from": "retrieveCompanies", "to": "User.id@8/7"}, {"from": "retrieveCompanies", "to": "User.name@8/5"}, {"from": "retrieveCompanies", "to": "User.surname@8/3"}, {"from": "retrieveCompanies", "to": "User.img@8/4"}, {"from": "retrieveCompanies", "to": "User.slug@8/2"}, {"from": "retrieveCompanies", "to": "Profile.id@8/4"}, {"from": "retrieveCompanies", "to": "Industry.id@8/2"}, {"from": "retrieveEmployerInfo", "to": "User.name@8/5"}, {"from": "retrieveEmployerInfo", "to": "User.id@8/7"}, {"from": "retrieveEmployerInfo", "to": "User.img@8/4"}, {"from": "retrieveEmployerInfo", "to": "Profile.id@8/4"}, {"from": "retrieveEmployerInfo", "to": "Education.id@8/6"}, {"from": "retrieveEmployerInfo", "to": "Education.faculty_tag@8/2"}, {"from": "updateProfile", "to": "User.id@8/7"}, {"from": "updateProfile", "to": "User.name@8/5"}, {"from": "updateProfile", "to": "User.surname@8/3"}, {"from": "updateProfile", "to": "User.img@8/4"}, {"from": "updateUserProfile", "to": "User.id@8/7"}, {"from": "updateUserProfile", "to": "User.name@8/5"}, {"from": "updateUserProfile", "to": "User.surname@8/3"}, {"from": "updateUserProfile", "to": "User.img@8/4"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

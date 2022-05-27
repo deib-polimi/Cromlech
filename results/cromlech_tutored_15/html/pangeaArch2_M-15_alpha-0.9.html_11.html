@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 11, "id": "createExperience", "label": "createExperience", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 11, "id": "deleteExperience", "label": "deleteExperience", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 11, "id": "updateExperience", "label": "updateExperience", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 11, "id": "updateExperienceOrder", "label": "updateExperienceOrder", "mass": 1.5, "shape": "dot", "size": 10.4}, {"color": "red", "group": 11, "id": "Experience.description@11/1", "label": "Experience.description@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "Experience.experience_types_id@11/1", "label": "Experience.experience_types_id@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "Experience.finished_at@11/1", "label": "Experience.finished_at@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "Experience.id@11/1", "label": "Experience.id@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "Experience.started_at@11/1", "label": "Experience.started_at@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "Experience.title@11/1", "label": "Experience.title@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "Experience.updated_at@11/1", "label": "Experience.updated_at@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "Experience.users_id@11/1", "label": "Experience.users_id@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "Experience.view@11/1", "label": "Experience.view@11/1", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "createExperience", "to": "Experience.id@11/1"}, {"from": "createExperience", "to": "Experience.title@11/1"}, {"from": "createExperience", "to": "Experience.description@11/1"}, {"from": "createExperience", "to": "Experience.experience_types_id@11/1"}, {"from": "createExperience", "to": "Experience.users_id@11/1"}, {"from": "createExperience", "to": "Experience.view@11/1"}, {"from": "createExperience", "to": "Experience.started_at@11/1"}, {"from": "createExperience", "to": "Experience.finished_at@11/1"}, {"from": "createExperience", "to": "Experience.updated_at@11/1"}, {"from": "deleteExperience", "to": "Experience.id@11/1"}, {"from": "deleteExperience", "to": "Experience.users_id@11/1"}, {"from": "updateExperience", "to": "Experience.id@11/1"}, {"from": "updateExperience", "to": "Experience.title@11/1"}, {"from": "updateExperience", "to": "Experience.description@11/1"}, {"from": "updateExperience", "to": "Experience.experience_types_id@11/1"}, {"from": "updateExperience", "to": "Experience.users_id@11/1"}, {"from": "updateExperience", "to": "Experience.view@11/1"}, {"from": "updateExperience", "to": "Experience.started_at@11/1"}, {"from": "updateExperience", "to": "Experience.finished_at@11/1"}, {"from": "updateExperience", "to": "Experience.updated_at@11/1"}, {"from": "updateExperienceOrder", "to": "Experience.id@11/1"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

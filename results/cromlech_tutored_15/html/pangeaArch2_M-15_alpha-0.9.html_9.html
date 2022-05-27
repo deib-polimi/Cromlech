@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "navy", "group": 9, "id": "AppleV1", "label": "AppleV1", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "navy", "group": 9, "id": "Facebook", "label": "Facebook", "mass": 1.5, "shape": "dot", "size": 15.2}, {"color": "mediumseagreen", "group": 9, "id": "ForgotPassword", "label": "ForgotPassword", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "navy", "group": 9, "id": "Google", "label": "Google", "mass": 1.5, "shape": "dot", "size": 15.2}, {"color": "mediumseagreen", "group": 9, "id": "Login", "label": "Login", "mass": 1.5, "shape": "dot", "size": 15.2}, {"color": "navy", "group": 9, "id": "Signup", "label": "Signup", "mass": 1.5, "shape": "dot", "size": 12.8}, {"color": "mediumseagreen", "group": 9, "id": "retrieveCurrentUniversityInfo", "label": "retrieveCurrentUniversityInfo", "mass": 1.5, "shape": "dot", "size": 20.0}, {"color": "mediumseagreen", "group": 9, "id": "retrieveStudyTags", "label": "retrieveStudyTags", "mass": 1.5, "shape": "dot", "size": 17.6}, {"color": "red", "group": 9, "id": "Education.created_at@9/2", "label": "Education.created_at@9/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "Education.id@9/6", "label": "Education.id@9/6", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "Education.status@9/4", "label": "Education.status@9/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "Education.study_tags_id@9/4", "label": "Education.study_tags_id@9/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "Education.universities_id@9/5", "label": "Education.universities_id@9/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "Education.university_name@9/5", "label": "Education.university_name@9/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "Education.university_tag@9/3", "label": "Education.university_tag@9/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "Education.updated_at@9/2", "label": "Education.updated_at@9/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "Institute.id@9/2", "label": "Institute.id@9/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "Institute.name@9/2", "label": "Institute.name@9/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "StudyTag.id@9/2", "label": "StudyTag.id@9/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "User.created_at@9/1", "label": "User.created_at@9/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "User.email@9/2", "label": "User.email@9/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "User.id@9/7", "label": "User.id@9/7", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "User.name@9/5", "label": "User.name@9/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "User.password@9/2", "label": "User.password@9/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "User.surname@9/3", "label": "User.surname@9/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 9, "id": "User.updated_at@9/2", "label": "User.updated_at@9/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "AppleV1", "to": "Institute.id@9/2"}, {"from": "AppleV1", "to": "StudyTag.id@9/2"}, {"from": "AppleV1", "to": "User.id@9/7"}, {"from": "AppleV1", "to": "User.name@9/5"}, {"from": "AppleV1", "to": "User.surname@9/3"}, {"from": "AppleV1", "to": "User.email@9/2"}, {"from": "AppleV1", "to": "User.created_at@9/1"}, {"from": "AppleV1", "to": "User.updated_at@9/2"}, {"from": "AppleV1", "to": "Education.id@9/6"}, {"from": "AppleV1", "to": "Education.universities_id@9/5"}, {"from": "AppleV1", "to": "Education.study_tags_id@9/4"}, {"from": "AppleV1", "to": "Education.university_name@9/5"}, {"from": "AppleV1", "to": "Education.university_tag@9/3"}, {"from": "AppleV1", "to": "Education.status@9/4"}, {"from": "AppleV1", "to": "Education.created_at@9/2"}, {"from": "AppleV1", "to": "Education.updated_at@9/2"}, {"from": "Facebook", "to": "Institute.id@9/2"}, {"from": "Facebook", "to": "StudyTag.id@9/2"}, {"from": "Facebook", "to": "User.id@9/7"}, {"from": "Facebook", "to": "User.name@9/5"}, {"from": "Facebook", "to": "User.surname@9/3"}, {"from": "Facebook", "to": "User.email@9/2"}, {"from": "Facebook", "to": "User.created_at@9/1"}, {"from": "Facebook", "to": "User.updated_at@9/2"}, {"from": "Facebook", "to": "Education.id@9/6"}, {"from": "Facebook", "to": "Education.universities_id@9/5"}, {"from": "Facebook", "to": "Education.study_tags_id@9/4"}, {"from": "Facebook", "to": "Education.university_name@9/5"}, {"from": "Facebook", "to": "Education.university_tag@9/3"}, {"from": "Facebook", "to": "Education.status@9/4"}, {"from": "Facebook", "to": "Education.created_at@9/2"}, {"from": "Facebook", "to": "Education.updated_at@9/2"}, {"from": "ForgotPassword", "to": "User.email@9/2"}, {"from": "Google", "to": "Institute.id@9/2"}, {"from": "Google", "to": "StudyTag.id@9/2"}, {"from": "Google", "to": "User.id@9/7"}, {"from": "Google", "to": "User.name@9/5"}, {"from": "Google", "to": "User.surname@9/3"}, {"from": "Google", "to": "User.email@9/2"}, {"from": "Google", "to": "User.created_at@9/1"}, {"from": "Google", "to": "Education.id@9/6"}, {"from": "Google", "to": "Education.universities_id@9/5"}, {"from": "Google", "to": "Education.study_tags_id@9/4"}, {"from": "Google", "to": "Education.university_name@9/5"}, {"from": "Google", "to": "Education.university_tag@9/3"}, {"from": "Google", "to": "Education.status@9/4"}, {"from": "Google", "to": "Education.created_at@9/2"}, {"from": "Google", "to": "Education.updated_at@9/2"}, {"from": "Login", "to": "User.id@9/7"}, {"from": "Login", "to": "User.email@9/2"}, {"from": "Login", "to": "User.password@9/2"}, {"from": "Signup", "to": "Institute.id@9/2"}, {"from": "Signup", "to": "StudyTag.id@9/2"}, {"from": "Signup", "to": "User.id@9/7"}, {"from": "Signup", "to": "User.name@9/5"}, {"from": "Signup", "to": "User.surname@9/3"}, {"from": "Signup", "to": "User.email@9/2"}, {"from": "Signup", "to": "Education.id@9/6"}, {"from": "Signup", "to": "Education.universities_id@9/5"}, {"from": "Signup", "to": "Education.study_tags_id@9/4"}, {"from": "Signup", "to": "Education.university_name@9/5"}, {"from": "Signup", "to": "Education.university_tag@9/3"}, {"from": "Signup", "to": "Education.status@9/4"}, {"from": "Signup", "to": "Education.created_at@9/2"}, {"from": "Signup", "to": "Education.updated_at@9/2"}, {"from": "retrieveCurrentUniversityInfo", "to": "User.id@9/7"}, {"from": "retrieveCurrentUniversityInfo", "to": "Education.id@9/6"}, {"from": "retrieveCurrentUniversityInfo", "to": "Education.university_name@9/5"}, {"from": "retrieveCurrentUniversityInfo", "to": "Education.study_tags_id@9/4"}, {"from": "retrieveCurrentUniversityInfo", "to": "Institute.id@9/2"}, {"from": "retrieveCurrentUniversityInfo", "to": "Institute.name@9/2"}, {"from": "retrieveCurrentUniversityInfo", "to": "StudyTag.id@9/2"}, {"from": "retrieveStudyTags", "to": "StudyTag.id@9/2"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

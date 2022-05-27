@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 11, "id": "participateWebinar", "label": "participateWebinar", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 11, "id": "retrieveWebinarParticipation", "label": "retrieveWebinarParticipation", "mass": 1.5, "shape": "dot", "size": 15.2}, {"color": "dodgerblue", "group": 11, "id": "webinarOffline", "label": "webinarOffline", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 11, "id": "webinarRegistration", "label": "webinarRegistration", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "orange", "group": 11, "id": "Education.avg@11/2", "label": "Education.avg@11/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 11, "id": "Education.finished_at@11/2", "label": "Education.finished_at@11/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 11, "id": "Education.id@11/3", "label": "Education.id@11/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 11, "id": "Education.mark@11/2", "label": "Education.mark@11/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 11, "id": "Education.started_at@11/2", "label": "Education.started_at@11/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 11, "id": "Education.status@11/2", "label": "Education.status@11/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 11, "id": "Education.study_tags_id@11/2", "label": "Education.study_tags_id@11/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 11, "id": "Education.universities_id@11/3", "label": "Education.universities_id@11/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 11, "id": "Education.university_name@11/3", "label": "Education.university_name@11/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 11, "id": "Education.users_id@11/2", "label": "Education.users_id@11/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "Webinar.id@11/4", "label": "Webinar.id@11/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.cities_id@11/1", "label": "WebinarParticipation.cities_id@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.city_name@11/1", "label": "WebinarParticipation.city_name@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.city_tag@11/1", "label": "WebinarParticipation.city_tag@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.countries_id@11/1", "label": "WebinarParticipation.countries_id@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.country_name@11/1", "label": "WebinarParticipation.country_name@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.country_tag@11/1", "label": "WebinarParticipation.country_tag@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.courses_id@11/1", "label": "WebinarParticipation.courses_id@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.created_at@11/1", "label": "WebinarParticipation.created_at@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.downloaded@11/1", "label": "WebinarParticipation.downloaded@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.employers_id@11/1", "label": "WebinarParticipation.employers_id@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.id@11/2", "label": "WebinarParticipation.id@11/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.samba_private_url@11/1", "label": "WebinarParticipation.samba_private_url@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.state@11/1", "label": "WebinarParticipation.state@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.study_tags_id@11/1", "label": "WebinarParticipation.study_tags_id@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.universities_id@11/1", "label": "WebinarParticipation.universities_id@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.university_name@11/1", "label": "WebinarParticipation.university_name@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.university_tag@11/1", "label": "WebinarParticipation.university_tag@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.updated_at@11/1", "label": "WebinarParticipation.updated_at@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.users_id@11/1", "label": "WebinarParticipation.users_id@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.viewed@11/1", "label": "WebinarParticipation.viewed@11/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "WebinarParticipation.webinars_id@11/1", "label": "WebinarParticipation.webinars_id@11/1", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "participateWebinar", "to": "Education.id@11/3"}, {"from": "participateWebinar", "to": "Education.university_name@11/3"}, {"from": "participateWebinar", "to": "Education.universities_id@11/3"}, {"from": "participateWebinar", "to": "Education.study_tags_id@11/2"}, {"from": "participateWebinar", "to": "Education.mark@11/2"}, {"from": "participateWebinar", "to": "Education.avg@11/2"}, {"from": "participateWebinar", "to": "Education.started_at@11/2"}, {"from": "participateWebinar", "to": "Education.finished_at@11/2"}, {"from": "participateWebinar", "to": "Education.status@11/2"}, {"from": "participateWebinar", "to": "Education.users_id@11/2"}, {"from": "participateWebinar", "to": "Webinar.id@11/4"}, {"from": "participateWebinar", "to": "WebinarParticipation.id@11/2"}, {"from": "participateWebinar", "to": "WebinarParticipation.webinars_id@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.users_id@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.employers_id@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.viewed@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.state@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.downloaded@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.samba_private_url@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.university_name@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.university_tag@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.universities_id@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.city_name@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.city_tag@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.cities_id@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.country_name@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.country_tag@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.countries_id@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.courses_id@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.study_tags_id@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.created_at@11/1"}, {"from": "participateWebinar", "to": "WebinarParticipation.updated_at@11/1"}, {"from": "retrieveWebinarParticipation", "to": "WebinarParticipation.id@11/2"}, {"from": "retrieveWebinarParticipation", "to": "WebinarParticipation.webinars_id@11/1"}, {"from": "retrieveWebinarParticipation", "to": "WebinarParticipation.users_id@11/1"}, {"from": "retrieveWebinarParticipation", "to": "WebinarParticipation.employers_id@11/1"}, {"from": "retrieveWebinarParticipation", "to": "WebinarParticipation.state@11/1"}, {"from": "retrieveWebinarParticipation", "to": "Webinar.id@11/4"}, {"from": "webinarOffline", "to": "Education.id@11/3"}, {"from": "webinarOffline", "to": "Education.university_name@11/3"}, {"from": "webinarOffline", "to": "Education.universities_id@11/3"}, {"from": "webinarOffline", "to": "Education.study_tags_id@11/2"}, {"from": "webinarOffline", "to": "Education.mark@11/2"}, {"from": "webinarOffline", "to": "Education.avg@11/2"}, {"from": "webinarOffline", "to": "Education.started_at@11/2"}, {"from": "webinarOffline", "to": "Education.finished_at@11/2"}, {"from": "webinarOffline", "to": "Education.status@11/2"}, {"from": "webinarOffline", "to": "Education.users_id@11/2"}, {"from": "webinarOffline", "to": "Webinar.id@11/4"}, {"from": "webinarOffline", "to": "WebinarParticipation.id@11/2"}, {"from": "webinarOffline", "to": "WebinarParticipation.webinars_id@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.users_id@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.employers_id@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.viewed@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.state@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.downloaded@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.samba_private_url@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.university_name@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.university_tag@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.universities_id@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.city_name@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.city_tag@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.cities_id@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.country_name@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.country_tag@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.countries_id@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.courses_id@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.study_tags_id@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.created_at@11/1"}, {"from": "webinarOffline", "to": "WebinarParticipation.updated_at@11/1"}, {"from": "webinarRegistration", "to": "Education.id@11/3"}, {"from": "webinarRegistration", "to": "Education.university_name@11/3"}, {"from": "webinarRegistration", "to": "Education.universities_id@11/3"}, {"from": "webinarRegistration", "to": "Education.study_tags_id@11/2"}, {"from": "webinarRegistration", "to": "Education.mark@11/2"}, {"from": "webinarRegistration", "to": "Education.avg@11/2"}, {"from": "webinarRegistration", "to": "Education.started_at@11/2"}, {"from": "webinarRegistration", "to": "Education.finished_at@11/2"}, {"from": "webinarRegistration", "to": "Education.status@11/2"}, {"from": "webinarRegistration", "to": "Education.users_id@11/2"}, {"from": "webinarRegistration", "to": "Webinar.id@11/4"}, {"from": "webinarRegistration", "to": "WebinarParticipation.id@11/2"}, {"from": "webinarRegistration", "to": "WebinarParticipation.webinars_id@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.users_id@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.employers_id@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.viewed@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.state@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.downloaded@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.samba_private_url@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.university_name@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.university_tag@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.universities_id@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.city_name@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.city_tag@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.cities_id@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.country_name@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.country_tag@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.countries_id@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.courses_id@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.study_tags_id@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.created_at@11/1"}, {"from": "webinarRegistration", "to": "WebinarParticipation.updated_at@11/1"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
