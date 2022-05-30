@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 0, "id": "ResetPassword", "label": "ResetPassword", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "mediumseagreen", "group": 0, "id": "RetrieveContentsIdFromSlug", "label": "RetrieveContentsIdFromSlug", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "dodgerblue", "group": 0, "id": "createExperience", "label": "createExperience", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 0, "id": "createLanguage", "label": "createLanguage", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 0, "id": "createSkill", "label": "createSkill", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 0, "id": "deleteExperience", "label": "deleteExperience", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 0, "id": "deleteLanguage", "label": "deleteLanguage", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 0, "id": "deleteSkill", "label": "deleteSkill", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "mediumseagreen", "group": 0, "id": "retrieveInstitutes", "label": "retrieveInstitutes", "mass": 1.5, "shape": "dot", "size": 17.6}, {"color": "mediumseagreen", "group": 0, "id": "retrieveLanguageLevels", "label": "retrieveLanguageLevels", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 0, "id": "retrieveLanguages", "label": "retrieveLanguages", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 0, "id": "retrieveQualifications", "label": "retrieveQualifications", "mass": 1.5, "shape": "dot", "size": 17.6}, {"color": "mediumseagreen", "group": 0, "id": "retrieveSkillLevels", "label": "retrieveSkillLevels", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 0, "id": "retrieveSkills", "label": "retrieveSkills", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 0, "id": "retrieveMarks", "label": "retrieveMarks", "mass": 1.5, "shape": "dot", "size": 17.6}, {"color": "dodgerblue", "group": 0, "id": "updateExperience", "label": "updateExperience", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 0, "id": "updateExperienceOrder", "label": "updateExperienceOrder", "mass": 1.5, "shape": "dot", "size": 10.4}, {"color": "dodgerblue", "group": 0, "id": "updateLanguageOrder", "label": "updateLanguageOrder", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 0, "id": "updateSkillOrder", "label": "updateSkillOrder", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "orange", "group": 0, "id": "City.id@0/4", "label": "City.id@0/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "City.name@0/2", "label": "City.name@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "Content.slug@0/2", "label": "Content.slug@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "Experience.description@0/1", "label": "Experience.description@0/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "Experience.experience_types_id@0/1", "label": "Experience.experience_types_id@0/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "Experience.finished_at@0/1", "label": "Experience.finished_at@0/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "Experience.id@0/1", "label": "Experience.id@0/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "Experience.started_at@0/1", "label": "Experience.started_at@0/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "Experience.title@0/1", "label": "Experience.title@0/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "Experience.updated_at@0/1", "label": "Experience.updated_at@0/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "Experience.users_id@0/1", "label": "Experience.users_id@0/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "Experience.view@0/1", "label": "Experience.view@0/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "Institute.id@0/2", "label": "Institute.id@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "Institute.name@0/2", "label": "Institute.name@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "Language.id@0/2", "label": "Language.id@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "Language.name_en@0/2", "label": "Language.name_en@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "Language.name_it@0/2", "label": "Language.name_it@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "LanguageLevel.id@0/2", "label": "LanguageLevel.id@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "LanguageLevel.name_en@0/2", "label": "LanguageLevel.name_en@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "LanguageLevel.name_it@0/2", "label": "LanguageLevel.name_it@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "Qualification.id@0/1", "label": "Qualification.id@0/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "Skill.id@0/2", "label": "Skill.id@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "Skill.name_en@0/2", "label": "Skill.name_en@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "Skill.name_it@0/2", "label": "Skill.name_it@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "SkillLevel.id@0/2", "label": "SkillLevel.id@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "SkillLevel.name_en@0/2", "label": "SkillLevel.name_en@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "SkillLevel.name_it@0/2", "label": "SkillLevel.name_it@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 0, "id": "User.password@0/2", "label": "User.password@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 0, "id": "User.slug@0/2", "label": "User.slug@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 0, "id": "User.updated_at@0/2", "label": "User.updated_at@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 0, "id": "UserHasLanguage.id@0/2", "label": "UserHasLanguage.id@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 0, "id": "UserHasLanguage.language_levels_id@0/2", "label": "UserHasLanguage.language_levels_id@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 0, "id": "UserHasLanguage.languages_id@0/2", "label": "UserHasLanguage.languages_id@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 0, "id": "UserHasSkill.id@0/2", "label": "UserHasSkill.id@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 0, "id": "UserHasSkill.skill_levels_id@0/2", "label": "UserHasSkill.skill_levels_id@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 0, "id": "UserHasSkill.skills_id@0/2", "label": "UserHasSkill.skills_id@0/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "ResetPassword", "to": "User.password@0/2"}, {"from": "ResetPassword", "to": "User.updated_at@0/2"}, {"from": "RetrieveContentsIdFromSlug", "to": "Content.slug@0/2"}, {"from": "RetrieveContentsIdFromSlug", "to": "User.slug@0/2"}, {"from": "createExperience", "to": "Experience.id@0/1"}, {"from": "createExperience", "to": "Experience.title@0/1"}, {"from": "createExperience", "to": "Experience.description@0/1"}, {"from": "createExperience", "to": "Experience.experience_types_id@0/1"}, {"from": "createExperience", "to": "Experience.users_id@0/1"}, {"from": "createExperience", "to": "Experience.view@0/1"}, {"from": "createExperience", "to": "Experience.started_at@0/1"}, {"from": "createExperience", "to": "Experience.finished_at@0/1"}, {"from": "createExperience", "to": "Experience.updated_at@0/1"}, {"from": "createLanguage", "to": "LanguageLevel.id@0/2"}, {"from": "createLanguage", "to": "Language.id@0/2"}, {"from": "createLanguage", "to": "UserHasLanguage.id@0/2"}, {"from": "createLanguage", "to": "UserHasLanguage.languages_id@0/2"}, {"from": "createLanguage", "to": "UserHasLanguage.language_levels_id@0/2"}, {"from": "createSkill", "to": "Skill.id@0/2"}, {"from": "createSkill", "to": "SkillLevel.id@0/2"}, {"from": "createSkill", "to": "UserHasSkill.id@0/2"}, {"from": "createSkill", "to": "UserHasSkill.skills_id@0/2"}, {"from": "createSkill", "to": "UserHasSkill.skill_levels_id@0/2"}, {"from": "deleteExperience", "to": "Experience.id@0/1"}, {"from": "deleteExperience", "to": "Experience.users_id@0/1"}, {"from": "deleteLanguage", "to": "UserHasLanguage.id@0/2"}, {"from": "deleteSkill", "to": "UserHasSkill.id@0/2"}, {"from": "retrieveInstitutes", "to": "Institute.id@0/2"}, {"from": "retrieveInstitutes", "to": "Institute.name@0/2"}, {"from": "retrieveInstitutes", "to": "City.id@0/4"}, {"from": "retrieveInstitutes", "to": "City.name@0/2"}, {"from": "retrieveLanguageLevels", "to": "LanguageLevel.id@0/2"}, {"from": "retrieveLanguageLevels", "to": "LanguageLevel.name_it@0/2"}, {"from": "retrieveLanguageLevels", "to": "LanguageLevel.name_en@0/2"}, {"from": "retrieveLanguages", "to": "Language.id@0/2"}, {"from": "retrieveLanguages", "to": "Language.name_it@0/2"}, {"from": "retrieveLanguages", "to": "Language.name_en@0/2"}, {"from": "retrieveQualifications", "to": "Qualification.id@0/1"}, {"from": "retrieveQualifications", "to": "Institute.id@0/2"}, {"from": "retrieveSkillLevels", "to": "SkillLevel.name_it@0/2"}, {"from": "retrieveSkillLevels", "to": "SkillLevel.name_en@0/2"}, {"from": "retrieveSkills", "to": "Skill.id@0/2"}, {"from": "retrieveSkills", "to": "Skill.name_it@0/2"}, {"from": "retrieveSkills", "to": "Skill.name_en@0/2"}, {"from": "retrieveMarks", "to": "Qualification.id@0/1"}, {"from": "updateExperience", "to": "Experience.id@0/1"}, {"from": "updateExperience", "to": "Experience.title@0/1"}, {"from": "updateExperience", "to": "Experience.description@0/1"}, {"from": "updateExperience", "to": "Experience.experience_types_id@0/1"}, {"from": "updateExperience", "to": "Experience.users_id@0/1"}, {"from": "updateExperience", "to": "Experience.view@0/1"}, {"from": "updateExperience", "to": "Experience.started_at@0/1"}, {"from": "updateExperience", "to": "Experience.finished_at@0/1"}, {"from": "updateExperience", "to": "Experience.updated_at@0/1"}, {"from": "updateExperienceOrder", "to": "Experience.id@0/1"}, {"from": "updateLanguageOrder", "to": "UserHasLanguage.id@0/2"}, {"from": "updateSkillOrder", "to": "UserHasSkill.id@0/2"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

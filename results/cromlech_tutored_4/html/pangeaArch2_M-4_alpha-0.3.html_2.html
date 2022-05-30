@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 2, "id": "RetrieveCommunityArticles", "label": "RetrieveCommunityArticles", "mass": 1.5, "shape": "dot", "size": 12.8}, {"color": "mediumseagreen", "group": 2, "id": "retrievePostDetail", "label": "retrievePostDetail", "mass": 1.5, "shape": "dot", "size": 15.2}, {"color": "mediumseagreen", "group": 2, "id": "retrieveStreamBySlug", "label": "retrieveStreamBySlug", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 2, "id": "retrieveStreamDetail", "label": "retrieveStreamDetail", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 2, "id": "retrieveStreamsHome", "label": "retrieveStreamsHome", "mass": 1.5, "shape": "dot", "size": 20.0}, {"color": "orange", "group": 2, "id": "City.id@2/3", "label": "City.id@2/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "CommunityArticle.id@2/1", "label": "CommunityArticle.id@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Content.id@2/2", "label": "Content.id@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Content.title@2/2", "label": "Content.title@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "JobOffer.cities_id@2/2", "label": "JobOffer.cities_id@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "JobOffer.id@2/2", "label": "JobOffer.id@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "JobOffer.job_img@2/2", "label": "JobOffer.job_img@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "JobOffer.position@2/2", "label": "JobOffer.position@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "JobOffer.types_id@2/2", "label": "JobOffer.types_id@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "JobOffer.users_id@2/2", "label": "JobOffer.users_id@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Post.article_abstract@2/2", "label": "Post.article_abstract@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Post.article_img@2/2", "label": "Post.article_img@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Post.article_title@2/2", "label": "Post.article_title@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Post.contents_id@2/2", "label": "Post.contents_id@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Post.id@2/2", "label": "Post.id@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Post.streams_id@2/2", "label": "Post.streams_id@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Post.users_id@2/2", "label": "Post.users_id@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.cities_id@2/1", "label": "Stream.cities_id@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.countries_id@2/1", "label": "Stream.countries_id@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.course_tag@2/1", "label": "Stream.course_tag@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.description@2/1", "label": "Stream.description@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.faculty_tag@2/1", "label": "Stream.faculty_tag@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.filter_definitions_id@2/1", "label": "Stream.filter_definitions_id@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Stream.id@2/2", "label": "Stream.id@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.institutes_id@2/1", "label": "Stream.institutes_id@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.locale@2/1", "label": "Stream.locale@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.order@2/1", "label": "Stream.order@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.priority@2/1", "label": "Stream.priority@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.sectors_id@2/1", "label": "Stream.sectors_id@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.slug@2/1", "label": "Stream.slug@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.stream_career_day@2/1", "label": "Stream.stream_career_day@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.stream_course@2/1", "label": "Stream.stream_course@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.stream_private@2/1", "label": "Stream.stream_private@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.stream_type@2/1", "label": "Stream.stream_type@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.tags@2/1", "label": "Stream.tags@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Stream.title@2/1", "label": "Stream.title@2/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 2, "id": "Type.id@2/2", "label": "Type.id@2/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 2, "id": "Webinar.id@2/2", "label": "Webinar.id@2/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "RetrieveCommunityArticles", "to": "CommunityArticle.id@2/1"}, {"from": "RetrieveCommunityArticles", "to": "Content.id@2/2"}, {"from": "RetrieveCommunityArticles", "to": "Stream.id@2/2"}, {"from": "retrievePostDetail", "to": "Post.id@2/2"}, {"from": "retrievePostDetail", "to": "Post.article_title@2/2"}, {"from": "retrievePostDetail", "to": "Post.article_abstract@2/2"}, {"from": "retrievePostDetail", "to": "Post.article_img@2/2"}, {"from": "retrievePostDetail", "to": "Post.users_id@2/2"}, {"from": "retrievePostDetail", "to": "Post.streams_id@2/2"}, {"from": "retrievePostDetail", "to": "Post.contents_id@2/2"}, {"from": "retrievePostDetail", "to": "JobOffer.id@2/2"}, {"from": "retrievePostDetail", "to": "JobOffer.position@2/2"}, {"from": "retrievePostDetail", "to": "JobOffer.types_id@2/2"}, {"from": "retrievePostDetail", "to": "JobOffer.cities_id@2/2"}, {"from": "retrievePostDetail", "to": "JobOffer.job_img@2/2"}, {"from": "retrievePostDetail", "to": "JobOffer.users_id@2/2"}, {"from": "retrievePostDetail", "to": "City.id@2/3"}, {"from": "retrievePostDetail", "to": "Type.id@2/2"}, {"from": "retrievePostDetail", "to": "Stream.id@2/2"}, {"from": "retrievePostDetail", "to": "Content.id@2/2"}, {"from": "retrieveStreamBySlug", "to": "Stream.id@2/2"}, {"from": "retrieveStreamBySlug", "to": "Stream.slug@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.description@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.locale@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.title@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.stream_type@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.stream_private@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.stream_career_day@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.priority@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.order@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.institutes_id@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.faculty_tag@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.course_tag@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.stream_course@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.cities_id@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.sectors_id@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.countries_id@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.tags@2/1"}, {"from": "retrieveStreamBySlug", "to": "Stream.filter_definitions_id@2/1"}, {"from": "retrieveStreamBySlug", "to": "JobOffer.id@2/2"}, {"from": "retrieveStreamBySlug", "to": "JobOffer.position@2/2"}, {"from": "retrieveStreamBySlug", "to": "JobOffer.job_img@2/2"}, {"from": "retrieveStreamBySlug", "to": "JobOffer.types_id@2/2"}, {"from": "retrieveStreamBySlug", "to": "JobOffer.cities_id@2/2"}, {"from": "retrieveStreamBySlug", "to": "City.id@2/3"}, {"from": "retrieveStreamBySlug", "to": "Type.id@2/2"}, {"from": "retrieveStreamBySlug", "to": "Content.id@2/2"}, {"from": "retrieveStreamBySlug", "to": "Content.title@2/2"}, {"from": "retrieveStreamBySlug", "to": "Post.id@2/2"}, {"from": "retrieveStreamBySlug", "to": "Post.article_title@2/2"}, {"from": "retrieveStreamBySlug", "to": "Webinar.id@2/2"}, {"from": "retrieveStreamBySlug", "to": "CommunityArticle.id@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.id@2/2"}, {"from": "retrieveStreamDetail", "to": "Stream.slug@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.description@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.locale@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.title@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.stream_type@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.stream_private@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.stream_career_day@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.priority@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.order@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.institutes_id@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.faculty_tag@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.course_tag@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.stream_course@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.cities_id@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.sectors_id@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.countries_id@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.tags@2/1"}, {"from": "retrieveStreamDetail", "to": "Stream.filter_definitions_id@2/1"}, {"from": "retrieveStreamDetail", "to": "JobOffer.id@2/2"}, {"from": "retrieveStreamDetail", "to": "JobOffer.position@2/2"}, {"from": "retrieveStreamDetail", "to": "JobOffer.job_img@2/2"}, {"from": "retrieveStreamDetail", "to": "JobOffer.types_id@2/2"}, {"from": "retrieveStreamDetail", "to": "JobOffer.cities_id@2/2"}, {"from": "retrieveStreamDetail", "to": "City.id@2/3"}, {"from": "retrieveStreamDetail", "to": "Type.id@2/2"}, {"from": "retrieveStreamDetail", "to": "Content.id@2/2"}, {"from": "retrieveStreamDetail", "to": "Content.title@2/2"}, {"from": "retrieveStreamDetail", "to": "Post.id@2/2"}, {"from": "retrieveStreamDetail", "to": "Post.article_title@2/2"}, {"from": "retrieveStreamDetail", "to": "Webinar.id@2/2"}, {"from": "retrieveStreamDetail", "to": "CommunityArticle.id@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.id@2/2"}, {"from": "retrieveStreamsHome", "to": "Stream.slug@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.description@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.locale@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.title@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.stream_type@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.stream_private@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.stream_career_day@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.priority@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.order@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.institutes_id@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.faculty_tag@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.course_tag@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.stream_course@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.cities_id@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.sectors_id@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.countries_id@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.tags@2/1"}, {"from": "retrieveStreamsHome", "to": "Stream.filter_definitions_id@2/1"}, {"from": "retrieveStreamsHome", "to": "JobOffer.id@2/2"}, {"from": "retrieveStreamsHome", "to": "JobOffer.position@2/2"}, {"from": "retrieveStreamsHome", "to": "JobOffer.job_img@2/2"}, {"from": "retrieveStreamsHome", "to": "JobOffer.types_id@2/2"}, {"from": "retrieveStreamsHome", "to": "JobOffer.cities_id@2/2"}, {"from": "retrieveStreamsHome", "to": "City.id@2/3"}, {"from": "retrieveStreamsHome", "to": "Type.id@2/2"}, {"from": "retrieveStreamsHome", "to": "Content.id@2/2"}, {"from": "retrieveStreamsHome", "to": "Content.title@2/2"}, {"from": "retrieveStreamsHome", "to": "Post.id@2/2"}, {"from": "retrieveStreamsHome", "to": "Post.article_title@2/2"}, {"from": "retrieveStreamsHome", "to": "Webinar.id@2/2"}, {"from": "retrieveStreamsHome", "to": "CommunityArticle.id@2/1"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

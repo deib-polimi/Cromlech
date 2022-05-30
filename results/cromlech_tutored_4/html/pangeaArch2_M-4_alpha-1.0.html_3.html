@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 3, "id": "createLanguage", "label": "createLanguage", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 3, "id": "deleteLanguage", "label": "deleteLanguage", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 3, "id": "deleteSkill", "label": "deleteSkill", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "mediumseagreen", "group": 3, "id": "employerRetrieveCurriculum", "label": "employerRetrieveCurriculum", "mass": 1.5, "shape": "dot", "size": 16.4}, {"color": "mediumseagreen", "group": 3, "id": "employerRetrieveUserInfo", "label": "employerRetrieveUserInfo", "mass": 1.5, "shape": "dot", "size": 15.2}, {"color": "mediumseagreen", "group": 3, "id": "retrieveCurriculum", "label": "retrieveCurriculum", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 3, "id": "retrieveLanguageLevels", "label": "retrieveLanguageLevels", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 3, "id": "retrieveLanguages", "label": "retrieveLanguages", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 3, "id": "retrieveSkillLevels", "label": "retrieveSkillLevels", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 3, "id": "retrieveSkills", "label": "retrieveSkills", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "mediumseagreen", "group": 3, "id": "retrieveStudyTags", "label": "retrieveStudyTags", "mass": 1.5, "shape": "dot", "size": 17.6}, {"color": "dodgerblue", "group": 3, "id": "updateLanguageOrder", "label": "updateLanguageOrder", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "dodgerblue", "group": 3, "id": "updateSkillOrder", "label": "updateSkillOrder", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "mediumseagreen", "group": 3, "id": "usersMe", "label": "usersMe", "mass": 1.5, "shape": "dot", "size": 20.0}, {"color": "orange", "group": 3, "id": "Education.avg@3/2", "label": "Education.avg@3/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 3, "id": "Education.finished_at@3/2", "label": "Education.finished_at@3/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 3, "id": "Education.id@3/4", "label": "Education.id@3/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "Education.mark@3/2", "label": "Education.mark@3/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 3, "id": "Education.started_at@3/2", "label": "Education.started_at@3/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 3, "id": "Education.status@3/3", "label": "Education.status@3/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 3, "id": "Education.study_tags_id@3/3", "label": "Education.study_tags_id@3/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 3, "id": "Education.universities_id@3/4", "label": "Education.universities_id@3/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 3, "id": "Education.university_name@3/4", "label": "Education.university_name@3/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 3, "id": "Education.users_id@3/2", "label": "Education.users_id@3/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "Language.id@3/1", "label": "Language.id@3/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "Language.name_en@3/1", "label": "Language.name_en@3/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "Language.name_it@3/1", "label": "Language.name_it@3/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "LanguageLevel.id@3/1", "label": "LanguageLevel.id@3/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "LanguageLevel.name_en@3/1", "label": "LanguageLevel.name_en@3/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "LanguageLevel.name_it@3/1", "label": "LanguageLevel.name_it@3/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 3, "id": "Skill.id@3/2", "label": "Skill.id@3/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "Skill.name_en@3/1", "label": "Skill.name_en@3/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "Skill.name_it@3/1", "label": "Skill.name_it@3/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 3, "id": "SkillLevel.id@3/2", "label": "SkillLevel.id@3/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "SkillLevel.name_en@3/1", "label": "SkillLevel.name_en@3/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "SkillLevel.name_it@3/1", "label": "SkillLevel.name_it@3/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 3, "id": "StudyTag.id@3/3", "label": "StudyTag.id@3/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "User.birthdate@3/2", "label": "User.birthdate@3/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 3, "id": "User.contact_address@3/2", "label": "User.contact_address@3/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 3, "id": "User.contact_phone@3/2", "label": "User.contact_phone@3/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 3, "id": "User.email@3/2", "label": "User.email@3/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 3, "id": "User.id@3/4", "label": "User.id@3/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 3, "id": "User.img@3/3", "label": "User.img@3/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 3, "id": "User.name@3/3", "label": "User.name@3/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 3, "id": "User.surname@3/2", "label": "User.surname@3/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "UserHasLanguage.id@3/1", "label": "UserHasLanguage.id@3/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "UserHasLanguage.language_levels_id@3/1", "label": "UserHasLanguage.language_levels_id@3/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "UserHasLanguage.languages_id@3/1", "label": "UserHasLanguage.languages_id@3/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 3, "id": "UserHasSkill.id@3/2", "label": "UserHasSkill.id@3/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 3, "id": "UserHasSkill.skill_levels_id@3/2", "label": "UserHasSkill.skill_levels_id@3/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 3, "id": "UserHasSkill.skills_id@3/2", "label": "UserHasSkill.skills_id@3/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "createLanguage", "to": "LanguageLevel.id@3/1"}, {"from": "createLanguage", "to": "Language.id@3/1"}, {"from": "createLanguage", "to": "UserHasLanguage.id@3/1"}, {"from": "createLanguage", "to": "UserHasLanguage.languages_id@3/1"}, {"from": "createLanguage", "to": "UserHasLanguage.language_levels_id@3/1"}, {"from": "deleteLanguage", "to": "UserHasLanguage.id@3/1"}, {"from": "deleteSkill", "to": "UserHasSkill.id@3/2"}, {"from": "employerRetrieveCurriculum", "to": "User.id@3/4"}, {"from": "employerRetrieveCurriculum", "to": "User.name@3/3"}, {"from": "employerRetrieveCurriculum", "to": "User.surname@3/2"}, {"from": "employerRetrieveCurriculum", "to": "User.email@3/2"}, {"from": "employerRetrieveCurriculum", "to": "User.contact_address@3/2"}, {"from": "employerRetrieveCurriculum", "to": "User.contact_phone@3/2"}, {"from": "employerRetrieveCurriculum", "to": "User.birthdate@3/2"}, {"from": "employerRetrieveCurriculum", "to": "Education.id@3/4"}, {"from": "employerRetrieveCurriculum", "to": "Education.university_name@3/4"}, {"from": "employerRetrieveCurriculum", "to": "Education.universities_id@3/4"}, {"from": "employerRetrieveCurriculum", "to": "Education.study_tags_id@3/3"}, {"from": "employerRetrieveCurriculum", "to": "Education.mark@3/2"}, {"from": "employerRetrieveCurriculum", "to": "Education.avg@3/2"}, {"from": "employerRetrieveCurriculum", "to": "Education.started_at@3/2"}, {"from": "employerRetrieveCurriculum", "to": "Education.finished_at@3/2"}, {"from": "employerRetrieveCurriculum", "to": "Education.status@3/3"}, {"from": "employerRetrieveCurriculum", "to": "Education.users_id@3/2"}, {"from": "employerRetrieveCurriculum", "to": "StudyTag.id@3/3"}, {"from": "employerRetrieveCurriculum", "to": "Skill.id@3/2"}, {"from": "employerRetrieveCurriculum", "to": "Skill.name_it@3/1"}, {"from": "employerRetrieveCurriculum", "to": "Skill.name_en@3/1"}, {"from": "employerRetrieveCurriculum", "to": "Language.id@3/1"}, {"from": "employerRetrieveCurriculum", "to": "Language.name_it@3/1"}, {"from": "employerRetrieveCurriculum", "to": "Language.name_en@3/1"}, {"from": "employerRetrieveCurriculum", "to": "UserHasSkill.id@3/2"}, {"from": "employerRetrieveCurriculum", "to": "UserHasSkill.skill_levels_id@3/2"}, {"from": "employerRetrieveCurriculum", "to": "UserHasSkill.skills_id@3/2"}, {"from": "employerRetrieveCurriculum", "to": "UserHasLanguage.id@3/1"}, {"from": "employerRetrieveCurriculum", "to": "UserHasLanguage.language_levels_id@3/1"}, {"from": "employerRetrieveCurriculum", "to": "UserHasLanguage.languages_id@3/1"}, {"from": "employerRetrieveCurriculum", "to": "LanguageLevel.id@3/1"}, {"from": "employerRetrieveCurriculum", "to": "LanguageLevel.name_it@3/1"}, {"from": "employerRetrieveCurriculum", "to": "LanguageLevel.name_en@3/1"}, {"from": "employerRetrieveCurriculum", "to": "SkillLevel.id@3/2"}, {"from": "employerRetrieveCurriculum", "to": "SkillLevel.name_it@3/1"}, {"from": "employerRetrieveCurriculum", "to": "SkillLevel.name_en@3/1"}, {"from": "employerRetrieveUserInfo", "to": "User.id@3/4"}, {"from": "employerRetrieveUserInfo", "to": "Education.id@3/4"}, {"from": "employerRetrieveUserInfo", "to": "Education.university_name@3/4"}, {"from": "employerRetrieveUserInfo", "to": "Education.universities_id@3/4"}, {"from": "employerRetrieveUserInfo", "to": "Education.study_tags_id@3/3"}, {"from": "employerRetrieveUserInfo", "to": "Education.mark@3/2"}, {"from": "employerRetrieveUserInfo", "to": "Education.avg@3/2"}, {"from": "employerRetrieveUserInfo", "to": "Education.started_at@3/2"}, {"from": "employerRetrieveUserInfo", "to": "Education.finished_at@3/2"}, {"from": "employerRetrieveUserInfo", "to": "Education.status@3/3"}, {"from": "employerRetrieveUserInfo", "to": "Education.users_id@3/2"}, {"from": "employerRetrieveUserInfo", "to": "StudyTag.id@3/3"}, {"from": "employerRetrieveUserInfo", "to": "Skill.id@3/2"}, {"from": "employerRetrieveUserInfo", "to": "Skill.name_it@3/1"}, {"from": "employerRetrieveUserInfo", "to": "Skill.name_en@3/1"}, {"from": "employerRetrieveUserInfo", "to": "Language.id@3/1"}, {"from": "employerRetrieveUserInfo", "to": "Language.name_it@3/1"}, {"from": "employerRetrieveUserInfo", "to": "Language.name_en@3/1"}, {"from": "employerRetrieveUserInfo", "to": "UserHasSkill.id@3/2"}, {"from": "employerRetrieveUserInfo", "to": "UserHasSkill.skill_levels_id@3/2"}, {"from": "employerRetrieveUserInfo", "to": "UserHasSkill.skills_id@3/2"}, {"from": "employerRetrieveUserInfo", "to": "UserHasLanguage.id@3/1"}, {"from": "employerRetrieveUserInfo", "to": "UserHasLanguage.language_levels_id@3/1"}, {"from": "employerRetrieveUserInfo", "to": "UserHasLanguage.languages_id@3/1"}, {"from": "employerRetrieveUserInfo", "to": "LanguageLevel.id@3/1"}, {"from": "employerRetrieveUserInfo", "to": "LanguageLevel.name_it@3/1"}, {"from": "employerRetrieveUserInfo", "to": "LanguageLevel.name_en@3/1"}, {"from": "employerRetrieveUserInfo", "to": "SkillLevel.id@3/2"}, {"from": "employerRetrieveUserInfo", "to": "SkillLevel.name_it@3/1"}, {"from": "employerRetrieveUserInfo", "to": "SkillLevel.name_en@3/1"}, {"from": "retrieveCurriculum", "to": "User.id@3/4"}, {"from": "retrieveCurriculum", "to": "User.name@3/3"}, {"from": "retrieveCurriculum", "to": "User.surname@3/2"}, {"from": "retrieveCurriculum", "to": "User.img@3/3"}, {"from": "retrieveCurriculum", "to": "User.email@3/2"}, {"from": "retrieveCurriculum", "to": "User.contact_address@3/2"}, {"from": "retrieveCurriculum", "to": "User.contact_phone@3/2"}, {"from": "retrieveCurriculum", "to": "Education.id@3/4"}, {"from": "retrieveCurriculum", "to": "Education.university_name@3/4"}, {"from": "retrieveCurriculum", "to": "Education.universities_id@3/4"}, {"from": "retrieveCurriculum", "to": "Education.study_tags_id@3/3"}, {"from": "retrieveCurriculum", "to": "Education.mark@3/2"}, {"from": "retrieveCurriculum", "to": "Education.avg@3/2"}, {"from": "retrieveCurriculum", "to": "Education.started_at@3/2"}, {"from": "retrieveCurriculum", "to": "Education.finished_at@3/2"}, {"from": "retrieveCurriculum", "to": "Education.status@3/3"}, {"from": "retrieveCurriculum", "to": "Education.users_id@3/2"}, {"from": "retrieveCurriculum", "to": "StudyTag.id@3/3"}, {"from": "retrieveCurriculum", "to": "Skill.id@3/2"}, {"from": "retrieveCurriculum", "to": "Skill.name_it@3/1"}, {"from": "retrieveCurriculum", "to": "Skill.name_en@3/1"}, {"from": "retrieveCurriculum", "to": "Language.id@3/1"}, {"from": "retrieveCurriculum", "to": "Language.name_it@3/1"}, {"from": "retrieveCurriculum", "to": "Language.name_en@3/1"}, {"from": "retrieveCurriculum", "to": "UserHasSkill.id@3/2"}, {"from": "retrieveCurriculum", "to": "UserHasSkill.skill_levels_id@3/2"}, {"from": "retrieveCurriculum", "to": "UserHasSkill.skills_id@3/2"}, {"from": "retrieveCurriculum", "to": "UserHasLanguage.id@3/1"}, {"from": "retrieveCurriculum", "to": "UserHasLanguage.language_levels_id@3/1"}, {"from": "retrieveCurriculum", "to": "UserHasLanguage.languages_id@3/1"}, {"from": "retrieveCurriculum", "to": "LanguageLevel.id@3/1"}, {"from": "retrieveCurriculum", "to": "LanguageLevel.name_it@3/1"}, {"from": "retrieveCurriculum", "to": "LanguageLevel.name_en@3/1"}, {"from": "retrieveCurriculum", "to": "SkillLevel.id@3/2"}, {"from": "retrieveCurriculum", "to": "SkillLevel.name_it@3/1"}, {"from": "retrieveCurriculum", "to": "SkillLevel.name_en@3/1"}, {"from": "retrieveLanguageLevels", "to": "LanguageLevel.id@3/1"}, {"from": "retrieveLanguageLevels", "to": "LanguageLevel.name_it@3/1"}, {"from": "retrieveLanguageLevels", "to": "LanguageLevel.name_en@3/1"}, {"from": "retrieveLanguages", "to": "Language.id@3/1"}, {"from": "retrieveLanguages", "to": "Language.name_it@3/1"}, {"from": "retrieveLanguages", "to": "Language.name_en@3/1"}, {"from": "retrieveSkillLevels", "to": "SkillLevel.name_it@3/1"}, {"from": "retrieveSkillLevels", "to": "SkillLevel.name_en@3/1"}, {"from": "retrieveSkills", "to": "Skill.id@3/2"}, {"from": "retrieveSkills", "to": "Skill.name_it@3/1"}, {"from": "retrieveSkills", "to": "Skill.name_en@3/1"}, {"from": "retrieveStudyTags", "to": "StudyTag.id@3/3"}, {"from": "updateLanguageOrder", "to": "UserHasLanguage.id@3/1"}, {"from": "updateSkillOrder", "to": "UserHasSkill.id@3/2"}, {"from": "usersMe", "to": "User.id@3/4"}, {"from": "usersMe", "to": "User.name@3/3"}, {"from": "usersMe", "to": "User.surname@3/2"}, {"from": "usersMe", "to": "User.img@3/3"}, {"from": "usersMe", "to": "User.email@3/2"}, {"from": "usersMe", "to": "User.contact_address@3/2"}, {"from": "usersMe", "to": "User.contact_phone@3/2"}, {"from": "usersMe", "to": "Education.id@3/4"}, {"from": "usersMe", "to": "Education.university_name@3/4"}, {"from": "usersMe", "to": "Education.universities_id@3/4"}, {"from": "usersMe", "to": "Education.study_tags_id@3/3"}, {"from": "usersMe", "to": "Education.mark@3/2"}, {"from": "usersMe", "to": "Education.avg@3/2"}, {"from": "usersMe", "to": "Education.started_at@3/2"}, {"from": "usersMe", "to": "Education.finished_at@3/2"}, {"from": "usersMe", "to": "Education.status@3/3"}, {"from": "usersMe", "to": "Education.users_id@3/2"}, {"from": "usersMe", "to": "StudyTag.id@3/3"}, {"from": "usersMe", "to": "Skill.id@3/2"}, {"from": "usersMe", "to": "Skill.name_it@3/1"}, {"from": "usersMe", "to": "Skill.name_en@3/1"}, {"from": "usersMe", "to": "Language.id@3/1"}, {"from": "usersMe", "to": "Language.name_it@3/1"}, {"from": "usersMe", "to": "Language.name_en@3/1"}, {"from": "usersMe", "to": "UserHasSkill.id@3/2"}, {"from": "usersMe", "to": "UserHasSkill.skill_levels_id@3/2"}, {"from": "usersMe", "to": "UserHasSkill.skills_id@3/2"}, {"from": "usersMe", "to": "UserHasLanguage.id@3/1"}, {"from": "usersMe", "to": "UserHasLanguage.language_levels_id@3/1"}, {"from": "usersMe", "to": "UserHasLanguage.languages_id@3/1"}, {"from": "usersMe", "to": "LanguageLevel.id@3/1"}, {"from": "usersMe", "to": "LanguageLevel.name_it@3/1"}, {"from": "usersMe", "to": "LanguageLevel.name_en@3/1"}, {"from": "usersMe", "to": "SkillLevel.id@3/2"}, {"from": "usersMe", "to": "SkillLevel.name_it@3/1"}, {"from": "usersMe", "to": "SkillLevel.name_en@3/1"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
