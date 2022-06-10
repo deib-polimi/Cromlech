@@ -50,7 +50,7 @@
         
 
         // parsing and collecting nodes and edges from the python
-        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 10, "id": "retrieveEventDetail", "label": "retrieveEventDetail", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "red", "group": 10, "id": "Event.id@10/2", "label": "Event.id@10/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 10, "id": "JobOffer.id@10/5", "label": "JobOffer.id@10/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 10, "id": "JobOffer.status@10/2", "label": "JobOffer.status@10/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 10, "id": "retrieveEventDetail", "label": "retrieveEventDetail", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "orange", "group": 10, "id": "Event.id@10/2", "label": "Event.id@10/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 10, "id": "JobOffer.id@10/5", "label": "JobOffer.id@10/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 10, "id": "JobOffer.status@10/2", "label": "JobOffer.status@10/2", "mass": 1.5, "shape": "square", "size": 8}]);
         edges = new vis.DataSet([{"from": "retrieveEventDetail", "to": "Event.id@10/2"}, {"from": "retrieveEventDetail", "to": "JobOffer.id@10/5"}, {"from": "retrieveEventDetail", "to": "JobOffer.status@10/2"}]);
 
         // adding nodes and edges to the graph

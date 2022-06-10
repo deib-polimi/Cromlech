@@ -50,8 +50,8 @@
         
 
         // parsing and collecting nodes and edges from the python
-        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 11, "id": "retrieveSkills", "label": "retrieveSkills", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "red", "group": 11, "id": "Skill.id@11/3", "label": "Skill.id@11/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 11, "id": "Skill.name_en@11/2", "label": "Skill.name_en@11/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 11, "id": "Skill.name_it@11/2", "label": "Skill.name_it@11/2", "mass": 1.5, "shape": "square", "size": 8}]);
-        edges = new vis.DataSet([{"from": "retrieveSkills", "to": "Skill.id@11/3"}, {"from": "retrieveSkills", "to": "Skill.name_it@11/2"}, {"from": "retrieveSkills", "to": "Skill.name_en@11/2"}]);
+        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 11, "id": "retrieveSkillLevels", "label": "retrieveSkillLevels", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "red", "group": 11, "id": "SkillLevel.name_en@11/2", "label": "SkillLevel.name_en@11/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 11, "id": "SkillLevel.name_it@11/2", "label": "SkillLevel.name_it@11/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "retrieveSkillLevels", "to": "SkillLevel.name_it@11/2"}, {"from": "retrieveSkillLevels", "to": "SkillLevel.name_en@11/2"}]);
 
         // adding nodes and edges to the graph
         data = {nodes: nodes, edges: edges};

@@ -50,7 +50,7 @@
         
 
         // parsing and collecting nodes and edges from the python
-        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 8, "id": "retrieveLanguageLevels", "label": "retrieveLanguageLevels", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "orange", "group": 8, "id": "LanguageLevel.id@8/3", "label": "LanguageLevel.id@8/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 8, "id": "LanguageLevel.name_en@8/2", "label": "LanguageLevel.name_en@8/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 8, "id": "LanguageLevel.name_it@8/2", "label": "LanguageLevel.name_it@8/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 8, "id": "retrieveLanguageLevels", "label": "retrieveLanguageLevels", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "orange", "group": 8, "id": "LanguageLevel.id@8/3", "label": "LanguageLevel.id@8/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 8, "id": "LanguageLevel.name_en@8/2", "label": "LanguageLevel.name_en@8/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 8, "id": "LanguageLevel.name_it@8/2", "label": "LanguageLevel.name_it@8/2", "mass": 1.5, "shape": "square", "size": 8}]);
         edges = new vis.DataSet([{"from": "retrieveLanguageLevels", "to": "LanguageLevel.id@8/3"}, {"from": "retrieveLanguageLevels", "to": "LanguageLevel.name_it@8/2"}, {"from": "retrieveLanguageLevels", "to": "LanguageLevel.name_en@8/2"}]);
 
         // adding nodes and edges to the graph

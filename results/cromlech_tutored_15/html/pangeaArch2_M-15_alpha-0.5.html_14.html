@@ -50,8 +50,8 @@
         
 
         // parsing and collecting nodes and edges from the python
-        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 14, "id": "ForgotPassword", "label": "ForgotPassword", "mass": 1.5, "shape": "dot", "size": 11.6}, {"color": "mediumseagreen", "group": 14, "id": "retrieveSkillLevels", "label": "retrieveSkillLevels", "mass": 1.5, "shape": "dot", "size": 14.0}, {"color": "red", "group": 14, "id": "SkillLevel.name_en@14/3", "label": "SkillLevel.name_en@14/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 14, "id": "SkillLevel.name_it@14/3", "label": "SkillLevel.name_it@14/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 14, "id": "User.email@14/2", "label": "User.email@14/2", "mass": 1.5, "shape": "square", "size": 8}]);
-        edges = new vis.DataSet([{"from": "ForgotPassword", "to": "User.email@14/2"}, {"from": "retrieveSkillLevels", "to": "SkillLevel.name_it@14/3"}, {"from": "retrieveSkillLevels", "to": "SkillLevel.name_en@14/3"}]);
+        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 14, "id": "retrieveQualifications", "label": "retrieveQualifications", "mass": 1.5, "shape": "dot", "size": 17.6}, {"color": "mediumseagreen", "group": 14, "id": "retrieveMarks", "label": "retrieveMarks", "mass": 1.5, "shape": "dot", "size": 17.6}, {"color": "orange", "group": 14, "id": "Institute.id@14/3", "label": "Institute.id@14/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 14, "id": "Qualification.id@14/1", "label": "Qualification.id@14/1", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "retrieveQualifications", "to": "Qualification.id@14/1"}, {"from": "retrieveQualifications", "to": "Institute.id@14/3"}, {"from": "retrieveMarks", "to": "Qualification.id@14/1"}]);
 
         // adding nodes and edges to the graph
         data = {nodes: nodes, edges: edges};
