@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 11, "id": "createAndModifyRoute", "label": "createAndModifyRoute", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 11, "id": "getAllRoutes", "label": "getAllRoutes", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 11, "id": "getRouteById", "label": "getRouteById", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 11, "id": "getRouteByStartAndTerminal", "label": "getRouteByStartAndTerminal", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "yellow", "group": 11, "id": "Route.distances@11/2", "label": "Route.distances@11/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 11, "id": "Route.id@11/2", "label": "Route.id@11/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 11, "id": "Route.startStationId@11/2", "label": "Route.startStationId@11/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 11, "id": "Route.stations@11/2", "label": "Route.stations@11/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 11, "id": "Route.terminalStationId@11/3", "label": "Route.terminalStationId@11/3", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "createAndModifyRoute", "to": "Route.id@11/2"}, {"from": "createAndModifyRoute", "to": "Route.stations@11/2"}, {"from": "createAndModifyRoute", "to": "Route.distances@11/2"}, {"from": "createAndModifyRoute", "to": "Route.startStationId@11/2"}, {"from": "createAndModifyRoute", "to": "Route.terminalStationId@11/3"}, {"from": "getAllRoutes", "to": "Route.id@11/2"}, {"from": "getAllRoutes", "to": "Route.stations@11/2"}, {"from": "getAllRoutes", "to": "Route.distances@11/2"}, {"from": "getAllRoutes", "to": "Route.startStationId@11/2"}, {"from": "getAllRoutes", "to": "Route.terminalStationId@11/3"}, {"from": "getRouteById", "to": "Route.id@11/2"}, {"from": "getRouteById", "to": "Route.stations@11/2"}, {"from": "getRouteById", "to": "Route.distances@11/2"}, {"from": "getRouteById", "to": "Route.startStationId@11/2"}, {"from": "getRouteById", "to": "Route.terminalStationId@11/3"}, {"from": "getRouteByStartAndTerminal", "to": "Route.id@11/2"}, {"from": "getRouteByStartAndTerminal", "to": "Route.stations@11/2"}, {"from": "getRouteByStartAndTerminal", "to": "Route.distances@11/2"}, {"from": "getRouteByStartAndTerminal", "to": "Route.startStationId@11/2"}, {"from": "getRouteByStartAndTerminal", "to": "Route.terminalStationId@11/3"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

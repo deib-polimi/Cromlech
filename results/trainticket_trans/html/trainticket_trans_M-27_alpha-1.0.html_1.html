@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 1, "id": "queryForTravel", "label": "queryForTravel", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 1, "id": "existStation", "label": "existStation", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "orange", "group": 1, "id": "PriceConfig.basicPriceRate@1/5", "label": "PriceConfig.basicPriceRate@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "PriceConfig.firstClassPriceRate@1/5", "label": "PriceConfig.firstClassPriceRate@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "PriceConfig.id@1/5", "label": "PriceConfig.id@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "PriceConfig.routeId@1/5", "label": "PriceConfig.routeId@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "PriceConfig.trainType@1/5", "label": "PriceConfig.trainType@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "Route.distances@1/4", "label": "Route.distances@1/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "Route.id@1/4", "label": "Route.id@1/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 1, "id": "Route.startingStationId@1/3", "label": "Route.startingStationId@1/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "Route.stations@1/4", "label": "Route.stations@1/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "Route.terminalStationId@1/5", "label": "Route.terminalStationId@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "Station.id@1/3", "label": "Station.id@1/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "Station.name@1/3", "label": "Station.name@1/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "TrainType.averageSpeed@1/5", "label": "TrainType.averageSpeed@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "TrainType.confortClass@1/5", "label": "TrainType.confortClass@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "TrainType.economyClass@1/5", "label": "TrainType.economyClass@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 1, "id": "TrainType.id@1/5", "label": "TrainType.id@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 1, "id": "Travel.departureTime@1/2", "label": "Travel.departureTime@1/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 1, "id": "Travel.endPlace@1/2", "label": "Travel.endPlace@1/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 1, "id": "Travel.startingPlace@1/2", "label": "Travel.startingPlace@1/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 1, "id": "Travel.tripId@1/2", "label": "Travel.tripId@1/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "Trip.endTime@1/5", "label": "Trip.endTime@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "Trip.routeId@1/5", "label": "Trip.routeId@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "Trip.startingStationId@1/5", "label": "Trip.startingStationId@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "Trip.startingTime@1/5", "label": "Trip.startingTime@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "Trip.stationsId@1/5", "label": "Trip.stationsId@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "Trip.terminalStationId@1/5", "label": "Trip.terminalStationId@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "Trip.trainTypeId@1/5", "label": "Trip.trainTypeId@1/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 1, "id": "Trip.tripId@1/5", "label": "Trip.tripId@1/5", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "queryForTravel", "to": "Station.id@1/3"}, {"from": "queryForTravel", "to": "Station.name@1/3"}, {"from": "queryForTravel", "to": "TrainType.id@1/5"}, {"from": "queryForTravel", "to": "TrainType.economyClass@1/5"}, {"from": "queryForTravel", "to": "TrainType.confortClass@1/5"}, {"from": "queryForTravel", "to": "TrainType.averageSpeed@1/5"}, {"from": "queryForTravel", "to": "Route.id@1/4"}, {"from": "queryForTravel", "to": "Route.stations@1/4"}, {"from": "queryForTravel", "to": "Route.distances@1/4"}, {"from": "queryForTravel", "to": "Route.startingStationId@1/3"}, {"from": "queryForTravel", "to": "Route.terminalStationId@1/5"}, {"from": "queryForTravel", "to": "PriceConfig.id@1/5"}, {"from": "queryForTravel", "to": "PriceConfig.trainType@1/5"}, {"from": "queryForTravel", "to": "PriceConfig.routeId@1/5"}, {"from": "queryForTravel", "to": "PriceConfig.basicPriceRate@1/5"}, {"from": "queryForTravel", "to": "PriceConfig.firstClassPriceRate@1/5"}, {"from": "queryForTravel", "to": "Trip.tripId@1/5"}, {"from": "queryForTravel", "to": "Trip.trainTypeId@1/5"}, {"from": "queryForTravel", "to": "Trip.routeId@1/5"}, {"from": "queryForTravel", "to": "Trip.startingStationId@1/5"}, {"from": "queryForTravel", "to": "Trip.terminalStationId@1/5"}, {"from": "queryForTravel", "to": "Trip.stationsId@1/5"}, {"from": "queryForTravel", "to": "Trip.startingTime@1/5"}, {"from": "queryForTravel", "to": "Trip.endTime@1/5"}, {"from": "queryForTravel", "to": "Travel.startingPlace@1/2"}, {"from": "queryForTravel", "to": "Travel.tripId@1/2"}, {"from": "queryForTravel", "to": "Travel.endPlace@1/2"}, {"from": "queryForTravel", "to": "Travel.departureTime@1/2"}, {"from": "existStation", "to": "Station.name@1/3"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

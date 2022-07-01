@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 16, "id": "insertConsignRecord", "label": "insertConsignRecord", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 16, "id": "updateConsignRecord", "label": "updateConsignRecord", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 16, "id": "queryConsignByAccountId", "label": "queryConsignByAccountId", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 16, "id": "queryConsignByOrderId", "label": "queryConsignByOrderId", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 16, "id": "queryConsignByConsignee", "label": "queryConsignByConsignee", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "orange", "group": 16, "id": "ConsignPrice.beyondPrice@16/2", "label": "ConsignPrice.beyondPrice@16/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "ConsignPrice.initialPrice@16/2", "label": "ConsignPrice.initialPrice@16/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "ConsignPrice.withinPrice@16/2", "label": "ConsignPrice.withinPrice@16/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 16, "id": "ConsignRecord.accountId@16/1", "label": "ConsignRecord.accountId@16/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 16, "id": "ConsignRecord.consignee@16/1", "label": "ConsignRecord.consignee@16/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 16, "id": "ConsignRecord.from@16/1", "label": "ConsignRecord.from@16/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 16, "id": "ConsignRecord.handleDate@16/1", "label": "ConsignRecord.handleDate@16/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 16, "id": "ConsignRecord.id@16/1", "label": "ConsignRecord.id@16/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 16, "id": "ConsignRecord.orderId@16/1", "label": "ConsignRecord.orderId@16/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 16, "id": "ConsignRecord.phone@16/1", "label": "ConsignRecord.phone@16/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 16, "id": "ConsignRecord.price@16/1", "label": "ConsignRecord.price@16/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 16, "id": "ConsignRecord.targetDate@16/1", "label": "ConsignRecord.targetDate@16/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 16, "id": "ConsignRecord.to@16/1", "label": "ConsignRecord.to@16/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 16, "id": "ConsignRecord.weight@16/1", "label": "ConsignRecord.weight@16/1", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "insertConsignRecord", "to": "ConsignPrice.withinPrice@16/2"}, {"from": "insertConsignRecord", "to": "ConsignPrice.initialPrice@16/2"}, {"from": "insertConsignRecord", "to": "ConsignPrice.beyondPrice@16/2"}, {"from": "insertConsignRecord", "to": "ConsignRecord.id@16/1"}, {"from": "insertConsignRecord", "to": "ConsignRecord.orderId@16/1"}, {"from": "insertConsignRecord", "to": "ConsignRecord.accountId@16/1"}, {"from": "insertConsignRecord", "to": "ConsignRecord.handleDate@16/1"}, {"from": "insertConsignRecord", "to": "ConsignRecord.targetDate@16/1"}, {"from": "insertConsignRecord", "to": "ConsignRecord.from@16/1"}, {"from": "insertConsignRecord", "to": "ConsignRecord.to@16/1"}, {"from": "insertConsignRecord", "to": "ConsignRecord.consignee@16/1"}, {"from": "insertConsignRecord", "to": "ConsignRecord.phone@16/1"}, {"from": "insertConsignRecord", "to": "ConsignRecord.weight@16/1"}, {"from": "insertConsignRecord", "to": "ConsignRecord.price@16/1"}, {"from": "updateConsignRecord", "to": "ConsignPrice.withinPrice@16/2"}, {"from": "updateConsignRecord", "to": "ConsignPrice.initialPrice@16/2"}, {"from": "updateConsignRecord", "to": "ConsignPrice.beyondPrice@16/2"}, {"from": "updateConsignRecord", "to": "ConsignRecord.id@16/1"}, {"from": "updateConsignRecord", "to": "ConsignRecord.orderId@16/1"}, {"from": "updateConsignRecord", "to": "ConsignRecord.accountId@16/1"}, {"from": "updateConsignRecord", "to": "ConsignRecord.handleDate@16/1"}, {"from": "updateConsignRecord", "to": "ConsignRecord.targetDate@16/1"}, {"from": "updateConsignRecord", "to": "ConsignRecord.from@16/1"}, {"from": "updateConsignRecord", "to": "ConsignRecord.to@16/1"}, {"from": "updateConsignRecord", "to": "ConsignRecord.consignee@16/1"}, {"from": "updateConsignRecord", "to": "ConsignRecord.phone@16/1"}, {"from": "updateConsignRecord", "to": "ConsignRecord.weight@16/1"}, {"from": "updateConsignRecord", "to": "ConsignRecord.price@16/1"}, {"from": "queryConsignByAccountId", "to": "ConsignRecord.id@16/1"}, {"from": "queryConsignByAccountId", "to": "ConsignRecord.orderId@16/1"}, {"from": "queryConsignByAccountId", "to": "ConsignRecord.accountId@16/1"}, {"from": "queryConsignByAccountId", "to": "ConsignRecord.handleDate@16/1"}, {"from": "queryConsignByAccountId", "to": "ConsignRecord.targetDate@16/1"}, {"from": "queryConsignByAccountId", "to": "ConsignRecord.from@16/1"}, {"from": "queryConsignByAccountId", "to": "ConsignRecord.to@16/1"}, {"from": "queryConsignByAccountId", "to": "ConsignRecord.consignee@16/1"}, {"from": "queryConsignByAccountId", "to": "ConsignRecord.phone@16/1"}, {"from": "queryConsignByAccountId", "to": "ConsignRecord.weight@16/1"}, {"from": "queryConsignByAccountId", "to": "ConsignRecord.price@16/1"}, {"from": "queryConsignByOrderId", "to": "ConsignRecord.id@16/1"}, {"from": "queryConsignByOrderId", "to": "ConsignRecord.orderId@16/1"}, {"from": "queryConsignByOrderId", "to": "ConsignRecord.accountId@16/1"}, {"from": "queryConsignByOrderId", "to": "ConsignRecord.handleDate@16/1"}, {"from": "queryConsignByOrderId", "to": "ConsignRecord.targetDate@16/1"}, {"from": "queryConsignByOrderId", "to": "ConsignRecord.from@16/1"}, {"from": "queryConsignByOrderId", "to": "ConsignRecord.to@16/1"}, {"from": "queryConsignByOrderId", "to": "ConsignRecord.consignee@16/1"}, {"from": "queryConsignByOrderId", "to": "ConsignRecord.phone@16/1"}, {"from": "queryConsignByOrderId", "to": "ConsignRecord.weight@16/1"}, {"from": "queryConsignByOrderId", "to": "ConsignRecord.price@16/1"}, {"from": "queryConsignByConsignee", "to": "ConsignRecord.id@16/1"}, {"from": "queryConsignByConsignee", "to": "ConsignRecord.orderId@16/1"}, {"from": "queryConsignByConsignee", "to": "ConsignRecord.accountId@16/1"}, {"from": "queryConsignByConsignee", "to": "ConsignRecord.handleDate@16/1"}, {"from": "queryConsignByConsignee", "to": "ConsignRecord.targetDate@16/1"}, {"from": "queryConsignByConsignee", "to": "ConsignRecord.from@16/1"}, {"from": "queryConsignByConsignee", "to": "ConsignRecord.to@16/1"}, {"from": "queryConsignByConsignee", "to": "ConsignRecord.consignee@16/1"}, {"from": "queryConsignByConsignee", "to": "ConsignRecord.phone@16/1"}, {"from": "queryConsignByConsignee", "to": "ConsignRecord.weight@16/1"}, {"from": "queryConsignByConsignee", "to": "ConsignRecord.price@16/1"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

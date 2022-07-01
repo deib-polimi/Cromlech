@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 15, "id": "createNewPriceConfig", "label": "createNewPriceConfig", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 15, "id": "findPriceConfigById", "label": "findPriceConfigById", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 15, "id": "findByRouteIdAndTrainType", "label": "findByRouteIdAndTrainType", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 15, "id": "findAllPriceConfig", "label": "findAllPriceConfig", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 15, "id": "deletePriceConfig", "label": "deletePriceConfig", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 15, "id": "updatePriceConfig", "label": "updatePriceConfig", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "orange", "group": 15, "id": "PriceConfig.basicPriceRate@15/2", "label": "PriceConfig.basicPriceRate@15/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 15, "id": "PriceConfig.firstClassPriceRate@15/2", "label": "PriceConfig.firstClassPriceRate@15/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 15, "id": "PriceConfig.id@15/2", "label": "PriceConfig.id@15/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 15, "id": "PriceConfig.routeId@15/2", "label": "PriceConfig.routeId@15/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 15, "id": "PriceConfig.trainType@15/2", "label": "PriceConfig.trainType@15/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "createNewPriceConfig", "to": "PriceConfig.id@15/2"}, {"from": "createNewPriceConfig", "to": "PriceConfig.trainType@15/2"}, {"from": "createNewPriceConfig", "to": "PriceConfig.routeId@15/2"}, {"from": "createNewPriceConfig", "to": "PriceConfig.basicPriceRate@15/2"}, {"from": "createNewPriceConfig", "to": "PriceConfig.firstClassPriceRate@15/2"}, {"from": "findPriceConfigById", "to": "PriceConfig.id@15/2"}, {"from": "findPriceConfigById", "to": "PriceConfig.trainType@15/2"}, {"from": "findPriceConfigById", "to": "PriceConfig.routeId@15/2"}, {"from": "findPriceConfigById", "to": "PriceConfig.basicPriceRate@15/2"}, {"from": "findPriceConfigById", "to": "PriceConfig.firstClassPriceRate@15/2"}, {"from": "findByRouteIdAndTrainType", "to": "PriceConfig.id@15/2"}, {"from": "findByRouteIdAndTrainType", "to": "PriceConfig.trainType@15/2"}, {"from": "findByRouteIdAndTrainType", "to": "PriceConfig.routeId@15/2"}, {"from": "findByRouteIdAndTrainType", "to": "PriceConfig.basicPriceRate@15/2"}, {"from": "findByRouteIdAndTrainType", "to": "PriceConfig.firstClassPriceRate@15/2"}, {"from": "findAllPriceConfig", "to": "PriceConfig.id@15/2"}, {"from": "findAllPriceConfig", "to": "PriceConfig.trainType@15/2"}, {"from": "findAllPriceConfig", "to": "PriceConfig.routeId@15/2"}, {"from": "findAllPriceConfig", "to": "PriceConfig.basicPriceRate@15/2"}, {"from": "findAllPriceConfig", "to": "PriceConfig.firstClassPriceRate@15/2"}, {"from": "deletePriceConfig", "to": "PriceConfig.id@15/2"}, {"from": "updatePriceConfig", "to": "PriceConfig.id@15/2"}, {"from": "updatePriceConfig", "to": "PriceConfig.trainType@15/2"}, {"from": "updatePriceConfig", "to": "PriceConfig.routeId@15/2"}, {"from": "updatePriceConfig", "to": "PriceConfig.basicPriceRate@15/2"}, {"from": "updatePriceConfig", "to": "PriceConfig.firstClassPriceRate@15/2"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

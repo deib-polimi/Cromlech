@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 15, "id": "createFoodStore", "label": "createFoodStore", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 15, "id": "listFoodStores", "label": "listFoodStores", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 15, "id": "listFoodStoredByStationId", "label": "listFoodStoredByStationId", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 15, "id": "getAllFoods", "label": "getAllFoods", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "red", "group": 15, "id": "FoodStore.businessTime@15/1", "label": "FoodStore.businessTime@15/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 15, "id": "FoodStore.deliveryFee@15/1", "label": "FoodStore.deliveryFee@15/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 15, "id": "FoodStore.foodList@15/1", "label": "FoodStore.foodList@15/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 15, "id": "FoodStore.id@15/1", "label": "FoodStore.id@15/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 15, "id": "FoodStore.stationId@15/1", "label": "FoodStore.stationId@15/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 15, "id": "FoodStore.storeName@15/1", "label": "FoodStore.storeName@15/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 15, "id": "FoodStore.telephone@15/1", "label": "FoodStore.telephone@15/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 15, "id": "Route.startingStationId@15/2", "label": "Route.startingStationId@15/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 15, "id": "Route.terminalStationId@15/2", "label": "Route.terminalStationId@15/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 15, "id": "TrainFood.foodList@15/2", "label": "TrainFood.foodList@15/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 15, "id": "TrainFood.id@15/2", "label": "TrainFood.id@15/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 15, "id": "TrainFood.tripId@15/2", "label": "TrainFood.tripId@15/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "createFoodStore", "to": "FoodStore.id@15/1"}, {"from": "createFoodStore", "to": "FoodStore.stationId@15/1"}, {"from": "createFoodStore", "to": "FoodStore.storeName@15/1"}, {"from": "createFoodStore", "to": "FoodStore.telephone@15/1"}, {"from": "createFoodStore", "to": "FoodStore.businessTime@15/1"}, {"from": "createFoodStore", "to": "FoodStore.deliveryFee@15/1"}, {"from": "createFoodStore", "to": "FoodStore.foodList@15/1"}, {"from": "listFoodStores", "to": "FoodStore.id@15/1"}, {"from": "listFoodStores", "to": "FoodStore.stationId@15/1"}, {"from": "listFoodStores", "to": "FoodStore.storeName@15/1"}, {"from": "listFoodStores", "to": "FoodStore.telephone@15/1"}, {"from": "listFoodStores", "to": "FoodStore.businessTime@15/1"}, {"from": "listFoodStores", "to": "FoodStore.deliveryFee@15/1"}, {"from": "listFoodStores", "to": "FoodStore.foodList@15/1"}, {"from": "listFoodStoredByStationId", "to": "FoodStore.id@15/1"}, {"from": "listFoodStoredByStationId", "to": "FoodStore.stationId@15/1"}, {"from": "listFoodStoredByStationId", "to": "FoodStore.storeName@15/1"}, {"from": "listFoodStoredByStationId", "to": "FoodStore.telephone@15/1"}, {"from": "listFoodStoredByStationId", "to": "FoodStore.businessTime@15/1"}, {"from": "listFoodStoredByStationId", "to": "FoodStore.deliveryFee@15/1"}, {"from": "listFoodStoredByStationId", "to": "FoodStore.foodList@15/1"}, {"from": "getAllFoods", "to": "TrainFood.id@15/2"}, {"from": "getAllFoods", "to": "TrainFood.tripId@15/2"}, {"from": "getAllFoods", "to": "TrainFood.foodList@15/2"}, {"from": "getAllFoods", "to": "Route.terminalStationId@15/2"}, {"from": "getAllFoods", "to": "Route.startingStationId@15/2"}, {"from": "getAllFoods", "to": "FoodStore.id@15/1"}, {"from": "getAllFoods", "to": "FoodStore.stationId@15/1"}, {"from": "getAllFoods", "to": "FoodStore.storeName@15/1"}, {"from": "getAllFoods", "to": "FoodStore.telephone@15/1"}, {"from": "getAllFoods", "to": "FoodStore.businessTime@15/1"}, {"from": "getAllFoods", "to": "FoodStore.deliveryFee@15/1"}, {"from": "getAllFoods", "to": "FoodStore.foodList@15/1"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

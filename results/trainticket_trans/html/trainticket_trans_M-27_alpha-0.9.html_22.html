@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 22, "id": "getAllAssuranceTypes", "label": "getAllAssuranceTypes", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 22, "id": "getAllAssurances", "label": "getAllAssurances", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 22, "id": "modifyAssurance", "label": "modifyAssurance", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "yellow", "group": 22, "id": "Assurance.id@22/2", "label": "Assurance.id@22/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 22, "id": "Assurance.orderId@22/3", "label": "Assurance.orderId@22/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 22, "id": "AssuranceType.index@22/2", "label": "AssuranceType.index@22/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 22, "id": "AssuranceType.name@22/2", "label": "AssuranceType.name@22/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 22, "id": "AssuranceType.price@22/2", "label": "AssuranceType.price@22/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "getAllAssuranceTypes", "to": "AssuranceType.index@22/2"}, {"from": "getAllAssuranceTypes", "to": "AssuranceType.name@22/2"}, {"from": "getAllAssuranceTypes", "to": "AssuranceType.price@22/2"}, {"from": "getAllAssurances", "to": "AssuranceType.index@22/2"}, {"from": "getAllAssurances", "to": "AssuranceType.name@22/2"}, {"from": "getAllAssurances", "to": "AssuranceType.price@22/2"}, {"from": "getAllAssurances", "to": "Assurance.id@22/2"}, {"from": "getAllAssurances", "to": "Assurance.orderId@22/3"}, {"from": "modifyAssurance", "to": "Assurance.id@22/2"}, {"from": "modifyAssurance", "to": "Assurance.orderId@22/3"}, {"from": "modifyAssurance", "to": "AssuranceType.index@22/2"}, {"from": "modifyAssurance", "to": "AssuranceType.name@22/2"}, {"from": "modifyAssurance", "to": "AssuranceType.price@22/2"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

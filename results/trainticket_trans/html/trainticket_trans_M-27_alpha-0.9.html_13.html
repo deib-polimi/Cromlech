@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 13, "id": "queryPaymentAccount", "label": "queryPaymentAccount", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 13, "id": "queryPayments", "label": "queryPayments", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 13, "id": "initPayment", "label": "initPayment", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "yellow", "group": 13, "id": "Money.money@13/3", "label": "Money.money@13/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 13, "id": "Money.type@13/3", "label": "Money.type@13/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 13, "id": "Money.userId@13/3", "label": "Money.userId@13/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Payment.id@13/2", "label": "Payment.id@13/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 13, "id": "Payment.orderId@13/2", "label": "Payment.orderId@13/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 13, "id": "Payment.price@13/2", "label": "Payment.price@13/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 13, "id": "Payment.userId@13/2", "label": "Payment.userId@13/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "User.id@13/2", "label": "User.id@13/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "queryPaymentAccount", "to": "User.id@13/2"}, {"from": "queryPaymentAccount", "to": "Money.userId@13/3"}, {"from": "queryPaymentAccount", "to": "Money.money@13/3"}, {"from": "queryPaymentAccount", "to": "Money.type@13/3"}, {"from": "queryPaymentAccount", "to": "Payment.id@13/2"}, {"from": "queryPaymentAccount", "to": "Payment.orderId@13/2"}, {"from": "queryPaymentAccount", "to": "Payment.userId@13/2"}, {"from": "queryPaymentAccount", "to": "Payment.price@13/2"}, {"from": "queryPayments", "to": "Payment.id@13/2"}, {"from": "queryPayments", "to": "Payment.orderId@13/2"}, {"from": "queryPayments", "to": "Payment.userId@13/2"}, {"from": "queryPayments", "to": "Payment.price@13/2"}, {"from": "initPayment", "to": "Payment.id@13/2"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

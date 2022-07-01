@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 21, "id": "searchMinStopRouteResult", "label": "searchMinStopRouteResult", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 21, "id": "searchQuickestRouteResult", "label": "searchQuickestRouteResult", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 21, "id": "createAndModifyRoute", "label": "createAndModifyRoute", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 21, "id": "getAllRoutes", "label": "getAllRoutes", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 21, "id": "getRouteById", "label": "getRouteById", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 21, "id": "getRouteByStartAndTerminal", "label": "getRouteByStartAndTerminal", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "yellow", "group": 21, "id": "Route.distances@21/4", "label": "Route.distances@21/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 21, "id": "Route.id@21/4", "label": "Route.id@21/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 21, "id": "Route.startStationId@21/4", "label": "Route.startStationId@21/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 21, "id": "Route.stations@21/4", "label": "Route.stations@21/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 21, "id": "Route.terminalStationId@21/5", "label": "Route.terminalStationId@21/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 21, "id": "Trip.endTime@21/5", "label": "Trip.endTime@21/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 21, "id": "Trip.routeId@21/5", "label": "Trip.routeId@21/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 21, "id": "Trip.startingStationId@21/5", "label": "Trip.startingStationId@21/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 21, "id": "Trip.startingTime@21/5", "label": "Trip.startingTime@21/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 21, "id": "Trip.stationsId@21/5", "label": "Trip.stationsId@21/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 21, "id": "Trip.terminalStationId@21/5", "label": "Trip.terminalStationId@21/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 21, "id": "Trip.trainTypeId@21/5", "label": "Trip.trainTypeId@21/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 21, "id": "Trip.tripId@21/5", "label": "Trip.tripId@21/5", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "searchMinStopRouteResult", "to": "Trip.tripId@21/5"}, {"from": "searchMinStopRouteResult", "to": "Trip.trainTypeId@21/5"}, {"from": "searchMinStopRouteResult", "to": "Trip.routeId@21/5"}, {"from": "searchMinStopRouteResult", "to": "Trip.startingTime@21/5"}, {"from": "searchMinStopRouteResult", "to": "Trip.startingStationId@21/5"}, {"from": "searchMinStopRouteResult", "to": "Trip.stationsId@21/5"}, {"from": "searchMinStopRouteResult", "to": "Trip.terminalStationId@21/5"}, {"from": "searchMinStopRouteResult", "to": "Trip.endTime@21/5"}, {"from": "searchMinStopRouteResult", "to": "Route.id@21/4"}, {"from": "searchMinStopRouteResult", "to": "Route.stations@21/4"}, {"from": "searchMinStopRouteResult", "to": "Route.distances@21/4"}, {"from": "searchMinStopRouteResult", "to": "Route.startStationId@21/4"}, {"from": "searchMinStopRouteResult", "to": "Route.terminalStationId@21/5"}, {"from": "searchQuickestRouteResult", "to": "Trip.tripId@21/5"}, {"from": "searchQuickestRouteResult", "to": "Trip.trainTypeId@21/5"}, {"from": "searchQuickestRouteResult", "to": "Trip.routeId@21/5"}, {"from": "searchQuickestRouteResult", "to": "Trip.startingTime@21/5"}, {"from": "searchQuickestRouteResult", "to": "Trip.startingStationId@21/5"}, {"from": "searchQuickestRouteResult", "to": "Trip.stationsId@21/5"}, {"from": "searchQuickestRouteResult", "to": "Trip.terminalStationId@21/5"}, {"from": "searchQuickestRouteResult", "to": "Trip.endTime@21/5"}, {"from": "searchQuickestRouteResult", "to": "Route.id@21/4"}, {"from": "searchQuickestRouteResult", "to": "Route.stations@21/4"}, {"from": "searchQuickestRouteResult", "to": "Route.distances@21/4"}, {"from": "searchQuickestRouteResult", "to": "Route.startStationId@21/4"}, {"from": "searchQuickestRouteResult", "to": "Route.terminalStationId@21/5"}, {"from": "createAndModifyRoute", "to": "Route.id@21/4"}, {"from": "createAndModifyRoute", "to": "Route.stations@21/4"}, {"from": "createAndModifyRoute", "to": "Route.distances@21/4"}, {"from": "createAndModifyRoute", "to": "Route.startStationId@21/4"}, {"from": "createAndModifyRoute", "to": "Route.terminalStationId@21/5"}, {"from": "getAllRoutes", "to": "Route.id@21/4"}, {"from": "getAllRoutes", "to": "Route.stations@21/4"}, {"from": "getAllRoutes", "to": "Route.distances@21/4"}, {"from": "getAllRoutes", "to": "Route.startStationId@21/4"}, {"from": "getAllRoutes", "to": "Route.terminalStationId@21/5"}, {"from": "getRouteById", "to": "Route.id@21/4"}, {"from": "getRouteById", "to": "Route.stations@21/4"}, {"from": "getRouteById", "to": "Route.distances@21/4"}, {"from": "getRouteById", "to": "Route.startStationId@21/4"}, {"from": "getRouteById", "to": "Route.terminalStationId@21/5"}, {"from": "getRouteByStartAndTerminal", "to": "Route.id@21/4"}, {"from": "getRouteByStartAndTerminal", "to": "Route.stations@21/4"}, {"from": "getRouteByStartAndTerminal", "to": "Route.distances@21/4"}, {"from": "getRouteByStartAndTerminal", "to": "Route.startStationId@21/4"}, {"from": "getRouteByStartAndTerminal", "to": "Route.terminalStationId@21/5"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

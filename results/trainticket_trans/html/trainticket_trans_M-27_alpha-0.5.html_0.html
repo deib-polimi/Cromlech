@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 0, "id": "findContactsById", "label": "findContactsById", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 0, "id": "findContactsByAccountId", "label": "findContactsByAccountId", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 0, "id": "createContact", "label": "createContact", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 0, "id": "deleteContact", "label": "deleteContact", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 0, "id": "modifyContact", "label": "modifyContact", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 0, "id": "getAllContacts", "label": "getAllContacts", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "orange", "group": 0, "id": "Contacts.accountId@0/2", "label": "Contacts.accountId@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "Contacts.documentName@0/2", "label": "Contacts.documentName@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "Contacts.documentType@0/2", "label": "Contacts.documentType@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 0, "id": "Contacts.id@0/2", "label": "Contacts.id@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "Contacts.name@0/2", "label": "Contacts.name@0/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 0, "id": "Contacts.phoneNumber@0/2", "label": "Contacts.phoneNumber@0/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "findContactsById", "to": "Contacts.id@0/2"}, {"from": "findContactsById", "to": "Contacts.accountId@0/2"}, {"from": "findContactsById", "to": "Contacts.name@0/2"}, {"from": "findContactsById", "to": "Contacts.documentType@0/2"}, {"from": "findContactsById", "to": "Contacts.documentName@0/2"}, {"from": "findContactsById", "to": "Contacts.phoneNumber@0/2"}, {"from": "findContactsByAccountId", "to": "Contacts.id@0/2"}, {"from": "findContactsByAccountId", "to": "Contacts.accountId@0/2"}, {"from": "findContactsByAccountId", "to": "Contacts.name@0/2"}, {"from": "findContactsByAccountId", "to": "Contacts.documentType@0/2"}, {"from": "findContactsByAccountId", "to": "Contacts.documentName@0/2"}, {"from": "findContactsByAccountId", "to": "Contacts.phoneNumber@0/2"}, {"from": "createContact", "to": "Contacts.id@0/2"}, {"from": "createContact", "to": "Contacts.accountId@0/2"}, {"from": "createContact", "to": "Contacts.name@0/2"}, {"from": "createContact", "to": "Contacts.documentType@0/2"}, {"from": "createContact", "to": "Contacts.documentName@0/2"}, {"from": "createContact", "to": "Contacts.phoneNumber@0/2"}, {"from": "deleteContact", "to": "Contacts.id@0/2"}, {"from": "modifyContact", "to": "Contacts.id@0/2"}, {"from": "modifyContact", "to": "Contacts.accountId@0/2"}, {"from": "modifyContact", "to": "Contacts.name@0/2"}, {"from": "modifyContact", "to": "Contacts.documentType@0/2"}, {"from": "modifyContact", "to": "Contacts.documentName@0/2"}, {"from": "modifyContact", "to": "Contacts.phoneNumber@0/2"}, {"from": "getAllContacts", "to": "Contacts.id@0/2"}, {"from": "getAllContacts", "to": "Contacts.accountId@0/2"}, {"from": "getAllContacts", "to": "Contacts.name@0/2"}, {"from": "getAllContacts", "to": "Contacts.documentType@0/2"}, {"from": "getAllContacts", "to": "Contacts.documentName@0/2"}, {"from": "getAllContacts", "to": "Contacts.phoneNumber@0/2"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

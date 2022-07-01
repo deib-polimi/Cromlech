@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 8, "id": "addVoucher", "label": "addVoucher", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 8, "id": "queryVoucher", "label": "queryVoucher", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "red", "group": 8, "id": "Voucher.contactName@8/1", "label": "Voucher.contactName@8/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 8, "id": "Voucher.destStation@8/1", "label": "Voucher.destStation@8/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 8, "id": "Voucher.orderId@8/1", "label": "Voucher.orderId@8/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 8, "id": "Voucher.price@8/1", "label": "Voucher.price@8/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 8, "id": "Voucher.seatClass@8/1", "label": "Voucher.seatClass@8/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 8, "id": "Voucher.seatNumber@8/1", "label": "Voucher.seatNumber@8/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 8, "id": "Voucher.startStation@8/1", "label": "Voucher.startStation@8/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 8, "id": "Voucher.trainNumber@8/1", "label": "Voucher.trainNumber@8/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 8, "id": "Voucher.travelDate@8/1", "label": "Voucher.travelDate@8/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 8, "id": "Voucher.travelTime@8/1", "label": "Voucher.travelTime@8/1", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 8, "id": "Voucher.voucherId@8/1", "label": "Voucher.voucherId@8/1", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "addVoucher", "to": "Voucher.voucherId@8/1"}, {"from": "addVoucher", "to": "Voucher.orderId@8/1"}, {"from": "addVoucher", "to": "Voucher.travelDate@8/1"}, {"from": "addVoucher", "to": "Voucher.travelTime@8/1"}, {"from": "addVoucher", "to": "Voucher.contactName@8/1"}, {"from": "addVoucher", "to": "Voucher.trainNumber@8/1"}, {"from": "addVoucher", "to": "Voucher.seatClass@8/1"}, {"from": "addVoucher", "to": "Voucher.seatNumber@8/1"}, {"from": "addVoucher", "to": "Voucher.startStation@8/1"}, {"from": "addVoucher", "to": "Voucher.destStation@8/1"}, {"from": "addVoucher", "to": "Voucher.price@8/1"}, {"from": "queryVoucher", "to": "Voucher.voucherId@8/1"}, {"from": "queryVoucher", "to": "Voucher.orderId@8/1"}, {"from": "queryVoucher", "to": "Voucher.travelDate@8/1"}, {"from": "queryVoucher", "to": "Voucher.travelTime@8/1"}, {"from": "queryVoucher", "to": "Voucher.contactName@8/1"}, {"from": "queryVoucher", "to": "Voucher.trainNumber@8/1"}, {"from": "queryVoucher", "to": "Voucher.seatClass@8/1"}, {"from": "queryVoucher", "to": "Voucher.seatNumber@8/1"}, {"from": "queryVoucher", "to": "Voucher.startStation@8/1"}, {"from": "queryVoucher", "to": "Voucher.destStation@8/1"}, {"from": "queryVoucher", "to": "Voucher.price@8/1"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

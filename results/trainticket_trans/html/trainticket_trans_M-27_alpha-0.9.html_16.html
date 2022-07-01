@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "mediumseagreen", "group": 16, "id": "queryForTravel", "label": "queryForTravel", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 16, "id": "searchCheapestRouteResult", "label": "searchCheapestRouteResult", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 16, "id": "searchMinStopRouteResult", "label": "searchMinStopRouteResult", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 16, "id": "searchQuickestRouteResult", "label": "searchQuickestRouteResult", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 16, "id": "createTrip", "label": "createTrip", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 16, "id": "getRouteByTripId", "label": "getRouteByTripId", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 16, "id": "retrieveTrip", "label": "retrieveTrip", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 16, "id": "updateTrip", "label": "updateTrip", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 16, "id": "deleteTrip", "label": "deleteTrip", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "orange", "group": 16, "id": "PriceConfig.basicPriceRate@16/3", "label": "PriceConfig.basicPriceRate@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "PriceConfig.firstClassPriceRate@16/3", "label": "PriceConfig.firstClassPriceRate@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "PriceConfig.id@16/3", "label": "PriceConfig.id@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "PriceConfig.routeId@16/3", "label": "PriceConfig.routeId@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "PriceConfig.trainType@16/3", "label": "PriceConfig.trainType@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 16, "id": "Route.distances@16/3", "label": "Route.distances@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 16, "id": "Route.id@16/3", "label": "Route.id@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 16, "id": "Route.startStationId@16/3", "label": "Route.startStationId@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "Route.startingStationId@16/3", "label": "Route.startingStationId@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 16, "id": "Route.stations@16/3", "label": "Route.stations@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 16, "id": "Route.terminalStationId@16/4", "label": "Route.terminalStationId@16/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 16, "id": "Station.id@16/3", "label": "Station.id@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 16, "id": "Station.name@16/3", "label": "Station.name@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 16, "id": "TrainType.averageSpeed@16/3", "label": "TrainType.averageSpeed@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 16, "id": "TrainType.confortClass@16/3", "label": "TrainType.confortClass@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 16, "id": "TrainType.economyClass@16/3", "label": "TrainType.economyClass@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 16, "id": "TrainType.id@16/3", "label": "TrainType.id@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "Travel.departureTime@16/2", "label": "Travel.departureTime@16/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "Travel.endPlace@16/2", "label": "Travel.endPlace@16/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "Travel.startingPlace@16/2", "label": "Travel.startingPlace@16/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "Travel.tripId@16/2", "label": "Travel.tripId@16/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "Trip.endTime@16/3", "label": "Trip.endTime@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "Trip.routeId@16/3", "label": "Trip.routeId@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "Trip.startingStationId@16/3", "label": "Trip.startingStationId@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "Trip.startingTime@16/3", "label": "Trip.startingTime@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "Trip.stationsId@16/3", "label": "Trip.stationsId@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "Trip.terminalStationId@16/3", "label": "Trip.terminalStationId@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "Trip.trainTypeId@16/3", "label": "Trip.trainTypeId@16/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 16, "id": "Trip.tripId@16/3", "label": "Trip.tripId@16/3", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "queryForTravel", "to": "Station.id@16/3"}, {"from": "queryForTravel", "to": "Station.name@16/3"}, {"from": "queryForTravel", "to": "TrainType.id@16/3"}, {"from": "queryForTravel", "to": "TrainType.economyClass@16/3"}, {"from": "queryForTravel", "to": "TrainType.confortClass@16/3"}, {"from": "queryForTravel", "to": "TrainType.averageSpeed@16/3"}, {"from": "queryForTravel", "to": "Route.id@16/3"}, {"from": "queryForTravel", "to": "Route.stations@16/3"}, {"from": "queryForTravel", "to": "Route.distances@16/3"}, {"from": "queryForTravel", "to": "Route.startingStationId@16/3"}, {"from": "queryForTravel", "to": "Route.terminalStationId@16/4"}, {"from": "queryForTravel", "to": "PriceConfig.id@16/3"}, {"from": "queryForTravel", "to": "PriceConfig.trainType@16/3"}, {"from": "queryForTravel", "to": "PriceConfig.routeId@16/3"}, {"from": "queryForTravel", "to": "PriceConfig.basicPriceRate@16/3"}, {"from": "queryForTravel", "to": "PriceConfig.firstClassPriceRate@16/3"}, {"from": "queryForTravel", "to": "Trip.tripId@16/3"}, {"from": "queryForTravel", "to": "Trip.trainTypeId@16/3"}, {"from": "queryForTravel", "to": "Trip.routeId@16/3"}, {"from": "queryForTravel", "to": "Trip.startingStationId@16/3"}, {"from": "queryForTravel", "to": "Trip.terminalStationId@16/3"}, {"from": "queryForTravel", "to": "Trip.stationsId@16/3"}, {"from": "queryForTravel", "to": "Trip.startingTime@16/3"}, {"from": "queryForTravel", "to": "Trip.endTime@16/3"}, {"from": "queryForTravel", "to": "Travel.startingPlace@16/2"}, {"from": "queryForTravel", "to": "Travel.tripId@16/2"}, {"from": "queryForTravel", "to": "Travel.endPlace@16/2"}, {"from": "queryForTravel", "to": "Travel.departureTime@16/2"}, {"from": "searchCheapestRouteResult", "to": "Trip.tripId@16/3"}, {"from": "searchCheapestRouteResult", "to": "Trip.trainTypeId@16/3"}, {"from": "searchCheapestRouteResult", "to": "Trip.routeId@16/3"}, {"from": "searchCheapestRouteResult", "to": "Trip.startingTime@16/3"}, {"from": "searchCheapestRouteResult", "to": "Trip.startingStationId@16/3"}, {"from": "searchCheapestRouteResult", "to": "Trip.stationsId@16/3"}, {"from": "searchCheapestRouteResult", "to": "Trip.terminalStationId@16/3"}, {"from": "searchCheapestRouteResult", "to": "Trip.endTime@16/3"}, {"from": "searchCheapestRouteResult", "to": "PriceConfig.id@16/3"}, {"from": "searchCheapestRouteResult", "to": "PriceConfig.trainType@16/3"}, {"from": "searchCheapestRouteResult", "to": "PriceConfig.routeId@16/3"}, {"from": "searchCheapestRouteResult", "to": "PriceConfig.basicPriceRate@16/3"}, {"from": "searchCheapestRouteResult", "to": "PriceConfig.firstClassPriceRate@16/3"}, {"from": "searchCheapestRouteResult", "to": "Route.id@16/3"}, {"from": "searchCheapestRouteResult", "to": "Route.stations@16/3"}, {"from": "searchCheapestRouteResult", "to": "Route.distances@16/3"}, {"from": "searchCheapestRouteResult", "to": "Route.startStationId@16/3"}, {"from": "searchCheapestRouteResult", "to": "Route.terminalStationId@16/4"}, {"from": "searchMinStopRouteResult", "to": "Trip.tripId@16/3"}, {"from": "searchMinStopRouteResult", "to": "Trip.trainTypeId@16/3"}, {"from": "searchMinStopRouteResult", "to": "Trip.routeId@16/3"}, {"from": "searchMinStopRouteResult", "to": "Trip.startingTime@16/3"}, {"from": "searchMinStopRouteResult", "to": "Trip.startingStationId@16/3"}, {"from": "searchMinStopRouteResult", "to": "Trip.stationsId@16/3"}, {"from": "searchMinStopRouteResult", "to": "Trip.terminalStationId@16/3"}, {"from": "searchMinStopRouteResult", "to": "Trip.endTime@16/3"}, {"from": "searchMinStopRouteResult", "to": "Route.id@16/3"}, {"from": "searchMinStopRouteResult", "to": "Route.stations@16/3"}, {"from": "searchMinStopRouteResult", "to": "Route.distances@16/3"}, {"from": "searchMinStopRouteResult", "to": "Route.startStationId@16/3"}, {"from": "searchMinStopRouteResult", "to": "Route.terminalStationId@16/4"}, {"from": "searchQuickestRouteResult", "to": "Trip.tripId@16/3"}, {"from": "searchQuickestRouteResult", "to": "Trip.trainTypeId@16/3"}, {"from": "searchQuickestRouteResult", "to": "Trip.routeId@16/3"}, {"from": "searchQuickestRouteResult", "to": "Trip.startingTime@16/3"}, {"from": "searchQuickestRouteResult", "to": "Trip.startingStationId@16/3"}, {"from": "searchQuickestRouteResult", "to": "Trip.stationsId@16/3"}, {"from": "searchQuickestRouteResult", "to": "Trip.terminalStationId@16/3"}, {"from": "searchQuickestRouteResult", "to": "Trip.endTime@16/3"}, {"from": "searchQuickestRouteResult", "to": "Route.id@16/3"}, {"from": "searchQuickestRouteResult", "to": "Route.stations@16/3"}, {"from": "searchQuickestRouteResult", "to": "Route.distances@16/3"}, {"from": "searchQuickestRouteResult", "to": "Route.startStationId@16/3"}, {"from": "searchQuickestRouteResult", "to": "Route.terminalStationId@16/4"}, {"from": "createTrip", "to": "Trip.tripId@16/3"}, {"from": "createTrip", "to": "Trip.trainTypeId@16/3"}, {"from": "createTrip", "to": "Trip.routeId@16/3"}, {"from": "createTrip", "to": "Trip.startingTime@16/3"}, {"from": "createTrip", "to": "Trip.startingStationId@16/3"}, {"from": "createTrip", "to": "Trip.stationsId@16/3"}, {"from": "createTrip", "to": "Trip.terminalStationId@16/3"}, {"from": "createTrip", "to": "Trip.endTime@16/3"}, {"from": "getRouteByTripId", "to": "Trip.tripId@16/3"}, {"from": "getRouteByTripId", "to": "Trip.trainTypeId@16/3"}, {"from": "getRouteByTripId", "to": "Trip.routeId@16/3"}, {"from": "getRouteByTripId", "to": "Trip.startingTime@16/3"}, {"from": "getRouteByTripId", "to": "Trip.startingStationId@16/3"}, {"from": "getRouteByTripId", "to": "Trip.stationsId@16/3"}, {"from": "getRouteByTripId", "to": "Trip.terminalStationId@16/3"}, {"from": "getRouteByTripId", "to": "Trip.endTime@16/3"}, {"from": "getRouteByTripId", "to": "Route.id@16/3"}, {"from": "getRouteByTripId", "to": "Route.stations@16/3"}, {"from": "getRouteByTripId", "to": "Route.distances@16/3"}, {"from": "getRouteByTripId", "to": "Route.startStationId@16/3"}, {"from": "getRouteByTripId", "to": "Route.terminalStationId@16/4"}, {"from": "retrieveTrip", "to": "Trip.tripId@16/3"}, {"from": "retrieveTrip", "to": "Trip.trainTypeId@16/3"}, {"from": "retrieveTrip", "to": "Trip.routeId@16/3"}, {"from": "retrieveTrip", "to": "Trip.startingTime@16/3"}, {"from": "retrieveTrip", "to": "Trip.startingStationId@16/3"}, {"from": "retrieveTrip", "to": "Trip.stationsId@16/3"}, {"from": "retrieveTrip", "to": "Trip.terminalStationId@16/3"}, {"from": "retrieveTrip", "to": "Trip.endTime@16/3"}, {"from": "updateTrip", "to": "Trip.tripId@16/3"}, {"from": "updateTrip", "to": "Trip.trainTypeId@16/3"}, {"from": "updateTrip", "to": "Trip.routeId@16/3"}, {"from": "updateTrip", "to": "Trip.startingTime@16/3"}, {"from": "updateTrip", "to": "Trip.startingStationId@16/3"}, {"from": "updateTrip", "to": "Trip.stationsId@16/3"}, {"from": "updateTrip", "to": "Trip.terminalStationId@16/3"}, {"from": "updateTrip", "to": "Trip.endTime@16/3"}, {"from": "deleteTrip", "to": "Trip.tripId@16/3"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

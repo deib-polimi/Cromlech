@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 24, "id": "createConfig", "label": "createConfig", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 24, "id": "updateConfig", "label": "updateConfig", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 24, "id": "queryConfig", "label": "queryConfig", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 24, "id": "deleteConfig", "label": "deleteConfig", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 24, "id": "queryAllConfigs", "label": "queryAllConfigs", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "yellow", "group": 24, "id": "Config.description@24/2", "label": "Config.description@24/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 24, "id": "Config.name@24/2", "label": "Config.name@24/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "yellow", "group": 24, "id": "Config.value@24/2", "label": "Config.value@24/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "createConfig", "to": "Config.name@24/2"}, {"from": "createConfig", "to": "Config.value@24/2"}, {"from": "createConfig", "to": "Config.description@24/2"}, {"from": "updateConfig", "to": "Config.name@24/2"}, {"from": "updateConfig", "to": "Config.value@24/2"}, {"from": "updateConfig", "to": "Config.description@24/2"}, {"from": "queryConfig", "to": "Config.name@24/2"}, {"from": "queryConfig", "to": "Config.value@24/2"}, {"from": "queryConfig", "to": "Config.description@24/2"}, {"from": "deleteConfig", "to": "Config.name@24/2"}, {"from": "queryAllConfigs", "to": "Config.name@24/2"}, {"from": "queryAllConfigs", "to": "Config.value@24/2"}, {"from": "queryAllConfigs", "to": "Config.description@24/2"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "dodgerblue", "group": 13, "id": "getSoldTickets", "label": "getSoldTickets", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 13, "id": "deleteOrder", "label": "deleteOrder", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 13, "id": "getOrderPrice", "label": "getOrderPrice", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 13, "id": "getCheapestTravelResult", "label": "getCheapestTravelResult", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 13, "id": "getQuickestTravelResult", "label": "getQuickestTravelResult", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 13, "id": "getMinStopTravelResult", "label": "getMinStopTravelResult", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "orange", "group": 13, "id": "Order.accountId@13/4", "label": "Order.accountId@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.boughtDate@13/4", "label": "Order.boughtDate@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.coachNumber@13/4", "label": "Order.coachNumber@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.contactsDocumentNumber@13/4", "label": "Order.contactsDocumentNumber@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.contactsName@13/4", "label": "Order.contactsName@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.documentType@13/4", "label": "Order.documentType@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.from@13/4", "label": "Order.from@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.id@13/3", "label": "Order.id@13/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.price@13/4", "label": "Order.price@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.seatClass@13/4", "label": "Order.seatClass@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.seatNumber@13/4", "label": "Order.seatNumber@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.status@13/4", "label": "Order.status@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.to@13/4", "label": "Order.to@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.trainNumber@13/4", "label": "Order.trainNumber@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.travelDate@13/4", "label": "Order.travelDate@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Order.travelTime@13/4", "label": "Order.travelTime@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "PriceConfig.basicPriceRate@13/5", "label": "PriceConfig.basicPriceRate@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "PriceConfig.firstClassPriceRate@13/5", "label": "PriceConfig.firstClassPriceRate@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "PriceConfig.id@13/5", "label": "PriceConfig.id@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "PriceConfig.routeId@13/5", "label": "PriceConfig.routeId@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "PriceConfig.trainType@13/5", "label": "PriceConfig.trainType@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Route.distances@13/4", "label": "Route.distances@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Route.id@13/4", "label": "Route.id@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Route.startStationId@13/3", "label": "Route.startStationId@13/3", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Route.stations@13/4", "label": "Route.stations@13/4", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Route.terminalStationId@13/5", "label": "Route.terminalStationId@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "TrainType.averageSpeed@13/5", "label": "TrainType.averageSpeed@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "TrainType.confortClass@13/5", "label": "TrainType.confortClass@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "TrainType.economyClass@13/5", "label": "TrainType.economyClass@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "TrainType.id@13/5", "label": "TrainType.id@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Trip.endTime@13/5", "label": "Trip.endTime@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Trip.routeId@13/5", "label": "Trip.routeId@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Trip.startingStationId@13/5", "label": "Trip.startingStationId@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Trip.startingTime@13/5", "label": "Trip.startingTime@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Trip.stationsId@13/5", "label": "Trip.stationsId@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Trip.terminalStationId@13/5", "label": "Trip.terminalStationId@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Trip.trainTypeId@13/5", "label": "Trip.trainTypeId@13/5", "mass": 1.5, "shape": "square", "size": 8}, {"color": "orange", "group": 13, "id": "Trip.tripId@13/5", "label": "Trip.tripId@13/5", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "getSoldTickets", "to": "Order.id@13/3"}, {"from": "getSoldTickets", "to": "Order.boughtDate@13/4"}, {"from": "getSoldTickets", "to": "Order.travelDate@13/4"}, {"from": "getSoldTickets", "to": "Order.travelTime@13/4"}, {"from": "getSoldTickets", "to": "Order.accountId@13/4"}, {"from": "getSoldTickets", "to": "Order.trainNumber@13/4"}, {"from": "getSoldTickets", "to": "Order.coachNumber@13/4"}, {"from": "getSoldTickets", "to": "Order.seatClass@13/4"}, {"from": "getSoldTickets", "to": "Order.seatNumber@13/4"}, {"from": "getSoldTickets", "to": "Order.from@13/4"}, {"from": "getSoldTickets", "to": "Order.to@13/4"}, {"from": "getSoldTickets", "to": "Order.status@13/4"}, {"from": "getSoldTickets", "to": "Order.price@13/4"}, {"from": "deleteOrder", "to": "Order.id@13/3"}, {"from": "deleteOrder", "to": "Order.trainNumber@13/4"}, {"from": "getOrderPrice", "to": "Order.id@13/3"}, {"from": "getOrderPrice", "to": "Order.price@13/4"}, {"from": "getCheapestTravelResult", "to": "PriceConfig.id@13/5"}, {"from": "getCheapestTravelResult", "to": "PriceConfig.trainType@13/5"}, {"from": "getCheapestTravelResult", "to": "PriceConfig.routeId@13/5"}, {"from": "getCheapestTravelResult", "to": "PriceConfig.basicPriceRate@13/5"}, {"from": "getCheapestTravelResult", "to": "PriceConfig.firstClassPriceRate@13/5"}, {"from": "getCheapestTravelResult", "to": "Order.id@13/3"}, {"from": "getCheapestTravelResult", "to": "Order.boughtDate@13/4"}, {"from": "getCheapestTravelResult", "to": "Order.travelDate@13/4"}, {"from": "getCheapestTravelResult", "to": "Order.travelTime@13/4"}, {"from": "getCheapestTravelResult", "to": "Order.accountId@13/4"}, {"from": "getCheapestTravelResult", "to": "Order.contactsName@13/4"}, {"from": "getCheapestTravelResult", "to": "Order.documentType@13/4"}, {"from": "getCheapestTravelResult", "to": "Order.contactsDocumentNumber@13/4"}, {"from": "getCheapestTravelResult", "to": "Order.trainNumber@13/4"}, {"from": "getCheapestTravelResult", "to": "Order.coachNumber@13/4"}, {"from": "getCheapestTravelResult", "to": "Order.seatClass@13/4"}, {"from": "getCheapestTravelResult", "to": "Order.seatNumber@13/4"}, {"from": "getCheapestTravelResult", "to": "Order.from@13/4"}, {"from": "getCheapestTravelResult", "to": "Order.to@13/4"}, {"from": "getCheapestTravelResult", "to": "Order.status@13/4"}, {"from": "getCheapestTravelResult", "to": "Order.price@13/4"}, {"from": "getCheapestTravelResult", "to": "TrainType.id@13/5"}, {"from": "getCheapestTravelResult", "to": "TrainType.economyClass@13/5"}, {"from": "getCheapestTravelResult", "to": "TrainType.confortClass@13/5"}, {"from": "getCheapestTravelResult", "to": "TrainType.averageSpeed@13/5"}, {"from": "getCheapestTravelResult", "to": "Trip.tripId@13/5"}, {"from": "getCheapestTravelResult", "to": "Trip.trainTypeId@13/5"}, {"from": "getCheapestTravelResult", "to": "Trip.routeId@13/5"}, {"from": "getCheapestTravelResult", "to": "Trip.startingTime@13/5"}, {"from": "getCheapestTravelResult", "to": "Trip.startingStationId@13/5"}, {"from": "getCheapestTravelResult", "to": "Trip.stationsId@13/5"}, {"from": "getCheapestTravelResult", "to": "Trip.terminalStationId@13/5"}, {"from": "getCheapestTravelResult", "to": "Trip.endTime@13/5"}, {"from": "getCheapestTravelResult", "to": "Route.id@13/4"}, {"from": "getCheapestTravelResult", "to": "Route.stations@13/4"}, {"from": "getCheapestTravelResult", "to": "Route.distances@13/4"}, {"from": "getCheapestTravelResult", "to": "Route.startStationId@13/3"}, {"from": "getCheapestTravelResult", "to": "Route.terminalStationId@13/5"}, {"from": "getQuickestTravelResult", "to": "Order.id@13/3"}, {"from": "getQuickestTravelResult", "to": "Order.boughtDate@13/4"}, {"from": "getQuickestTravelResult", "to": "Order.travelDate@13/4"}, {"from": "getQuickestTravelResult", "to": "Order.travelTime@13/4"}, {"from": "getQuickestTravelResult", "to": "Order.accountId@13/4"}, {"from": "getQuickestTravelResult", "to": "Order.contactsName@13/4"}, {"from": "getQuickestTravelResult", "to": "Order.documentType@13/4"}, {"from": "getQuickestTravelResult", "to": "Order.contactsDocumentNumber@13/4"}, {"from": "getQuickestTravelResult", "to": "Order.trainNumber@13/4"}, {"from": "getQuickestTravelResult", "to": "Order.coachNumber@13/4"}, {"from": "getQuickestTravelResult", "to": "Order.seatClass@13/4"}, {"from": "getQuickestTravelResult", "to": "Order.seatNumber@13/4"}, {"from": "getQuickestTravelResult", "to": "Order.from@13/4"}, {"from": "getQuickestTravelResult", "to": "Order.to@13/4"}, {"from": "getQuickestTravelResult", "to": "Order.status@13/4"}, {"from": "getQuickestTravelResult", "to": "Order.price@13/4"}, {"from": "getQuickestTravelResult", "to": "TrainType.id@13/5"}, {"from": "getQuickestTravelResult", "to": "TrainType.economyClass@13/5"}, {"from": "getQuickestTravelResult", "to": "TrainType.confortClass@13/5"}, {"from": "getQuickestTravelResult", "to": "TrainType.averageSpeed@13/5"}, {"from": "getQuickestTravelResult", "to": "Trip.tripId@13/5"}, {"from": "getQuickestTravelResult", "to": "Trip.trainTypeId@13/5"}, {"from": "getQuickestTravelResult", "to": "Trip.routeId@13/5"}, {"from": "getQuickestTravelResult", "to": "Trip.startingTime@13/5"}, {"from": "getQuickestTravelResult", "to": "Trip.startingStationId@13/5"}, {"from": "getQuickestTravelResult", "to": "Trip.stationsId@13/5"}, {"from": "getQuickestTravelResult", "to": "Trip.terminalStationId@13/5"}, {"from": "getQuickestTravelResult", "to": "Trip.endTime@13/5"}, {"from": "getQuickestTravelResult", "to": "Route.id@13/4"}, {"from": "getQuickestTravelResult", "to": "Route.stations@13/4"}, {"from": "getQuickestTravelResult", "to": "Route.distances@13/4"}, {"from": "getQuickestTravelResult", "to": "Route.startStationId@13/3"}, {"from": "getQuickestTravelResult", "to": "Route.terminalStationId@13/5"}, {"from": "getMinStopTravelResult", "to": "Order.id@13/3"}, {"from": "getMinStopTravelResult", "to": "Order.boughtDate@13/4"}, {"from": "getMinStopTravelResult", "to": "Order.travelDate@13/4"}, {"from": "getMinStopTravelResult", "to": "Order.travelTime@13/4"}, {"from": "getMinStopTravelResult", "to": "Order.accountId@13/4"}, {"from": "getMinStopTravelResult", "to": "Order.contactsName@13/4"}, {"from": "getMinStopTravelResult", "to": "Order.documentType@13/4"}, {"from": "getMinStopTravelResult", "to": "Order.contactsDocumentNumber@13/4"}, {"from": "getMinStopTravelResult", "to": "Order.trainNumber@13/4"}, {"from": "getMinStopTravelResult", "to": "Order.coachNumber@13/4"}, {"from": "getMinStopTravelResult", "to": "Order.seatClass@13/4"}, {"from": "getMinStopTravelResult", "to": "Order.seatNumber@13/4"}, {"from": "getMinStopTravelResult", "to": "Order.from@13/4"}, {"from": "getMinStopTravelResult", "to": "Order.to@13/4"}, {"from": "getMinStopTravelResult", "to": "Order.status@13/4"}, {"from": "getMinStopTravelResult", "to": "Order.price@13/4"}, {"from": "getMinStopTravelResult", "to": "TrainType.id@13/5"}, {"from": "getMinStopTravelResult", "to": "TrainType.economyClass@13/5"}, {"from": "getMinStopTravelResult", "to": "TrainType.confortClass@13/5"}, {"from": "getMinStopTravelResult", "to": "TrainType.averageSpeed@13/5"}, {"from": "getMinStopTravelResult", "to": "Trip.tripId@13/5"}, {"from": "getMinStopTravelResult", "to": "Trip.trainTypeId@13/5"}, {"from": "getMinStopTravelResult", "to": "Trip.routeId@13/5"}, {"from": "getMinStopTravelResult", "to": "Trip.startingTime@13/5"}, {"from": "getMinStopTravelResult", "to": "Trip.startingStationId@13/5"}, {"from": "getMinStopTravelResult", "to": "Trip.stationsId@13/5"}, {"from": "getMinStopTravelResult", "to": "Trip.terminalStationId@13/5"}, {"from": "getMinStopTravelResult", "to": "Trip.endTime@13/5"}, {"from": "getMinStopTravelResult", "to": "Route.id@13/4"}, {"from": "getMinStopTravelResult", "to": "Route.stations@13/4"}, {"from": "getMinStopTravelResult", "to": "Route.distances@13/4"}, {"from": "getMinStopTravelResult", "to": "Route.startStationId@13/3"}, {"from": "getMinStopTravelResult", "to": "Route.terminalStationId@13/5"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 2500px;
+            background-color: #dddddd;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "navy", "group": 12, "id": "processDelivery", "label": "processDelivery", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 12, "id": "createFoodOrdersInBatch", "label": "createFoodOrdersInBatch", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 12, "id": "createFoodOrder", "label": "createFoodOrder", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 12, "id": "deleteFoodOrder", "label": "deleteFoodOrder", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 12, "id": "findFoodOrderByOrderId", "label": "findFoodOrderByOrderId", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 12, "id": "findAllFoodOrders", "label": "findAllFoodOrders", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 12, "id": "updateFoodOrder", "label": "updateFoodOrder", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 12, "id": "getAllOffices", "label": "getAllOffices", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "mediumseagreen", "group": 12, "id": "getSpecificOffice", "label": "getSpecificOffice", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 12, "id": "addOffice", "label": "addOffice", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 12, "id": "deleteOffice", "label": "deleteOffice", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "dodgerblue", "group": 12, "id": "updateOffice", "label": "updateOffice", "mass": 1.5, "shape": "dot", "size": 9.2}, {"color": "red", "group": 12, "id": "Delivery.foodName@12/2", "label": "Delivery.foodName@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "Delivery.orderId@12/2", "label": "Delivery.orderId@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "Delivery.stationName@12/2", "label": "Delivery.stationName@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "Delivery.storeName@12/2", "label": "Delivery.storeName@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "FoodOrder.foodName@12/2", "label": "FoodOrder.foodName@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "FoodOrder.foodType@12/2", "label": "FoodOrder.foodType@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "FoodOrder.id@12/2", "label": "FoodOrder.id@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "FoodOrder.orderId@12/2", "label": "FoodOrder.orderId@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "FoodOrder.stationName@12/2", "label": "FoodOrder.stationName@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "FoodOrder.storeName@12/2", "label": "FoodOrder.storeName@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "Office.address@12/2", "label": "Office.address@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "Office.city@12/2", "label": "Office.city@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "Office.officeName@12/2", "label": "Office.officeName@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "Office.province@12/2", "label": "Office.province@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "Office.region@12/2", "label": "Office.region@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "Office.windowNum@12/2", "label": "Office.windowNum@12/2", "mass": 1.5, "shape": "square", "size": 8}, {"color": "red", "group": 12, "id": "Office.workTime@12/2", "label": "Office.workTime@12/2", "mass": 1.5, "shape": "square", "size": 8}]);
+        edges = new vis.DataSet([{"from": "processDelivery", "to": "Delivery.orderId@12/2"}, {"from": "processDelivery", "to": "Delivery.foodName@12/2"}, {"from": "processDelivery", "to": "Delivery.storeName@12/2"}, {"from": "processDelivery", "to": "Delivery.stationName@12/2"}, {"from": "createFoodOrdersInBatch", "to": "FoodOrder.id@12/2"}, {"from": "createFoodOrdersInBatch", "to": "FoodOrder.orderId@12/2"}, {"from": "createFoodOrdersInBatch", "to": "FoodOrder.foodType@12/2"}, {"from": "createFoodOrdersInBatch", "to": "FoodOrder.storeName@12/2"}, {"from": "createFoodOrdersInBatch", "to": "FoodOrder.stationName@12/2"}, {"from": "createFoodOrdersInBatch", "to": "FoodOrder.foodName@12/2"}, {"from": "createFoodOrdersInBatch", "to": "Delivery.orderId@12/2"}, {"from": "createFoodOrdersInBatch", "to": "Delivery.foodName@12/2"}, {"from": "createFoodOrdersInBatch", "to": "Delivery.storeName@12/2"}, {"from": "createFoodOrdersInBatch", "to": "Delivery.stationName@12/2"}, {"from": "createFoodOrder", "to": "FoodOrder.id@12/2"}, {"from": "createFoodOrder", "to": "FoodOrder.orderId@12/2"}, {"from": "createFoodOrder", "to": "FoodOrder.foodType@12/2"}, {"from": "createFoodOrder", "to": "FoodOrder.storeName@12/2"}, {"from": "createFoodOrder", "to": "FoodOrder.stationName@12/2"}, {"from": "createFoodOrder", "to": "FoodOrder.foodName@12/2"}, {"from": "createFoodOrder", "to": "Delivery.orderId@12/2"}, {"from": "createFoodOrder", "to": "Delivery.foodName@12/2"}, {"from": "createFoodOrder", "to": "Delivery.storeName@12/2"}, {"from": "createFoodOrder", "to": "Delivery.stationName@12/2"}, {"from": "deleteFoodOrder", "to": "FoodOrder.id@12/2"}, {"from": "findFoodOrderByOrderId", "to": "FoodOrder.id@12/2"}, {"from": "findFoodOrderByOrderId", "to": "FoodOrder.orderId@12/2"}, {"from": "findFoodOrderByOrderId", "to": "FoodOrder.foodType@12/2"}, {"from": "findFoodOrderByOrderId", "to": "FoodOrder.storeName@12/2"}, {"from": "findFoodOrderByOrderId", "to": "FoodOrder.stationName@12/2"}, {"from": "findFoodOrderByOrderId", "to": "FoodOrder.foodName@12/2"}, {"from": "findAllFoodOrders", "to": "FoodOrder.id@12/2"}, {"from": "findAllFoodOrders", "to": "FoodOrder.orderId@12/2"}, {"from": "findAllFoodOrders", "to": "FoodOrder.foodType@12/2"}, {"from": "findAllFoodOrders", "to": "FoodOrder.storeName@12/2"}, {"from": "findAllFoodOrders", "to": "FoodOrder.stationName@12/2"}, {"from": "findAllFoodOrders", "to": "FoodOrder.foodName@12/2"}, {"from": "updateFoodOrder", "to": "FoodOrder.id@12/2"}, {"from": "updateFoodOrder", "to": "FoodOrder.orderId@12/2"}, {"from": "updateFoodOrder", "to": "FoodOrder.foodType@12/2"}, {"from": "updateFoodOrder", "to": "FoodOrder.storeName@12/2"}, {"from": "updateFoodOrder", "to": "FoodOrder.stationName@12/2"}, {"from": "updateFoodOrder", "to": "FoodOrder.foodName@12/2"}, {"from": "getAllOffices", "to": "Office.officeName@12/2"}, {"from": "getAllOffices", "to": "Office.address@12/2"}, {"from": "getAllOffices", "to": "Office.workTime@12/2"}, {"from": "getAllOffices", "to": "Office.windowNum@12/2"}, {"from": "getAllOffices", "to": "Office.province@12/2"}, {"from": "getAllOffices", "to": "Office.city@12/2"}, {"from": "getAllOffices", "to": "Office.region@12/2"}, {"from": "getSpecificOffice", "to": "Office.officeName@12/2"}, {"from": "getSpecificOffice", "to": "Office.address@12/2"}, {"from": "getSpecificOffice", "to": "Office.workTime@12/2"}, {"from": "getSpecificOffice", "to": "Office.windowNum@12/2"}, {"from": "getSpecificOffice", "to": "Office.province@12/2"}, {"from": "getSpecificOffice", "to": "Office.city@12/2"}, {"from": "getSpecificOffice", "to": "Office.region@12/2"}, {"from": "addOffice", "to": "Office.officeName@12/2"}, {"from": "addOffice", "to": "Office.address@12/2"}, {"from": "addOffice", "to": "Office.workTime@12/2"}, {"from": "addOffice", "to": "Office.windowNum@12/2"}, {"from": "addOffice", "to": "Office.province@12/2"}, {"from": "addOffice", "to": "Office.city@12/2"}, {"from": "addOffice", "to": "Office.region@12/2"}, {"from": "deleteOffice", "to": "Office.officeName@12/2"}, {"from": "deleteOffice", "to": "Office.address@12/2"}, {"from": "updateOffice", "to": "Office.officeName@12/2"}, {"from": "updateOffice", "to": "Office.address@12/2"}, {"from": "updateOffice", "to": "Office.workTime@12/2"}, {"from": "updateOffice", "to": "Office.windowNum@12/2"}, {"from": "updateOffice", "to": "Office.province@12/2"}, {"from": "updateOffice", "to": "Office.city@12/2"}, {"from": "updateOffice", "to": "Office.region@12/2"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
