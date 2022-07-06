@@ -1,0 +1,1737 @@
+{
+  "useCases": [
+    {
+      "name": "getAllAssuranceTypes",
+      "nanoentitiesRead": [
+        "AssuranceType.index",
+        "AssuranceType.name",
+        "AssuranceType.price"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "getAllAssurances",
+      "nanoentitiesRead": [
+        "AssuranceType.index",
+        "AssuranceType.name",
+        "AssuranceType.price",
+        "Assurance.id",
+        "Assurance.orderId"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "findAssuranceById",
+      "nanoentitiesRead": [
+        "Assurance.id",
+        "Assurance.orderId",
+        "Assurance.index",
+        "Assurance.name",
+        "Assurance.price"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "findAssuranceByOrderId",
+      "nanoentitiesRead": [
+        "Assurance.id",
+        "Assurance.orderId",
+        "Assurance.index",
+        "Assurance.name",
+        "Assurance.price"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "createAssurance",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Assurance.id",
+        "Assurance.orderId",
+        "Assurance.index",
+        "Assurance.name",
+        "Assurance.price",
+        "AssuranceType.index",
+        "AssuranceType.name",
+        "AssuranceType.price"
+      ]
+    },
+    {
+      "name": "deleteAssuranceById",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Assurance.id"
+      ]
+    },
+    {
+      "name": "deleteAssuranceByOrderId",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Assurance.orderId"
+      ]
+    },
+    {
+      "name": "modifyAssurance",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Assurance.id",
+        "Assurance.orderId",
+        "AssuranceType.index",
+        "AssuranceType.name",
+        "AssuranceType.price"
+      ]
+    },
+    {
+      "name": "saveUser",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "User.userId",
+        "User.userName",
+        "User.password",
+        "User.roles"
+      ]
+    },
+    {
+      "name": "getAllUser",
+      "nanoentitiesRead": [
+        "User.userId",
+        "User.userName",
+        "User.password",
+        "User.roles"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "findByUserId",
+      "nanoentitiesRead": [
+        "User.userId",
+        "User.userName",
+        "User.password",
+        "User.roles"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "findByUsername",
+      "nanoentitiesRead": [
+        "User.userId",
+        "User.userName",
+        "User.password",
+        "User.roles"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "deleteUserById",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "User.userId"
+      ]
+    },
+    {
+      "name": "updateUser",
+      "nanoentitiesRead": [
+        "User.userId"
+      ],
+      "nanoentitiesWritten": [
+        "User.userName",
+        "User.password",
+        "User.roles"
+      ]
+    },
+    {
+      "name": "queryForTravel",
+      "nanoentitiesRead": [
+        "Station.id",
+        "Station.name",
+        "TrainType.id",
+        "TrainType.economyClass",
+        "TrainType.confortClass",
+        "TrainType.averageSpeed",
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startingStationId",
+        "Route.terminalStationId",
+        "PriceConfig.id",
+        "PriceConfig.trainType",
+        "PriceConfig.routeId",
+        "PriceConfig.basicPriceRate",
+        "PriceConfig.firstClassPriceRate",
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingStationId",
+        "Trip.terminalStationId",
+        "Trip.stationsId",
+        "Trip.startingTime",
+        "Trip.endTime",
+        "Travel.startingPlace",
+        "Travel.tripId",
+        "Travel.endPlace",
+        "Travel.departureTime"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "queryForStationId",
+      "nanoentitiesRead": [
+        "Station.id",
+        "Station.name"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "cancelOrderbyUser",
+      "nanoentitiesRead": [
+        "User.id",
+        "User.userName",
+        "User.password"
+      ],
+      "nanoentitiesWritten": [
+        "Order.status",
+        "Order.accountId"
+      ]
+    },
+    {
+      "name": "calculateRefund",
+      "nanoentitiesRead": [
+        "Order.id",
+        "Order.accountId",
+        "Order.status",
+        "Order.price"
+      ],
+      "nanoentitiesWritten": [
+        "Money.userId",
+        "Money.money",
+        "Money.type"
+      ]
+    },
+    {
+      "name": "createConfig",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Config.name",
+        "Config.value",
+        "Config.description"
+      ]
+    },
+    {
+      "name": "updateConfig",
+      "nanoentitiesRead": [
+        "Config.name"
+      ],
+      "nanoentitiesWritten": [
+        "Config.value",
+        "Config.description"
+      ]
+    },
+    {
+      "name": "queryConfig",
+      "nanoentitiesRead": [
+        "Config.name",
+        "Config.value",
+        "Config.description"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "deleteConfig",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Config.name"
+      ]
+    },
+    {
+      "name": "queryAllConfigs",
+      "nanoentitiesRead": [
+        "Config.name",
+        "Config.value",
+        "Config.description"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "getPriceByWeightAndRegion",
+      "nanoentitiesRead": [
+        "ConsignPrice.initialWeight",
+        "ConsignPrice.withinPrice",
+        "ConsignPrice.initialPrice",
+        "ConsignPrice.beyondPrice"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "queryConsignPrice",
+      "nanoentitiesRead": [
+        "ConsignPrice.id",
+        "ConsignPrice.index",
+        "ConsignPrice.initialWeight",
+        "ConsignPrice.withinPrice",
+        "ConsignPrice.initialPrice",
+        "ConsignPrice.beyondPrice"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "createAndModifyPrice",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "ConsignPrice.id",
+        "ConsignPrice.index",
+        "ConsignPrice.initialWeight",
+        "ConsignPrice.withinPrice",
+        "ConsignPrice.initialPrice",
+        "ConsignPrice.beyondPrice"
+      ]
+    },
+    {
+      "name": "getConsignPrice",
+      "nanoentitiesRead": [
+        "ConsignPrice.id",
+        "ConsignPrice.index",
+        "ConsignPrice.initialWeight",
+        "ConsignPrice.withinPrice",
+        "ConsignPrice.initialPrice",
+        "ConsignPrice.beyondPrice"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "insertConsignRecord",
+      "nanoentitiesRead": [
+        "ConsignPrice.withinPrice",
+        "ConsignPrice.initialPrice",
+        "ConsignPrice.beyondPrice"
+      ],
+      "nanoentitiesWritten": [
+        "ConsignRecord.id",
+        "ConsignRecord.orderId",
+        "ConsignRecord.accountId",
+        "ConsignRecord.handleDate",
+        "ConsignRecord.targetDate",
+        "ConsignRecord.from",
+        "ConsignRecord.to",
+        "ConsignRecord.consignee",
+        "ConsignRecord.phone",
+        "ConsignRecord.weight",
+        "ConsignRecord.price"
+      ]
+    },
+    {
+      "name": "updateConsignRecord",
+      "nanoentitiesRead": [
+        "ConsignPrice.withinPrice",
+        "ConsignPrice.initialPrice",
+        "ConsignPrice.beyondPrice",
+        "ConsignRecord.id"
+      ],
+      "nanoentitiesWritten": [
+        "ConsignRecord.orderId",
+        "ConsignRecord.accountId",
+        "ConsignRecord.handleDate",
+        "ConsignRecord.targetDate",
+        "ConsignRecord.from",
+        "ConsignRecord.to",
+        "ConsignRecord.consignee",
+        "ConsignRecord.phone",
+        "ConsignRecord.weight",
+        "ConsignRecord.price"
+      ]
+    },
+    {
+      "name": "queryConsignByAccountId",
+      "nanoentitiesRead": [
+        "ConsignRecord.id",
+        "ConsignRecord.orderId",
+        "ConsignRecord.accountId",
+        "ConsignRecord.handleDate",
+        "ConsignRecord.targetDate",
+        "ConsignRecord.from",
+        "ConsignRecord.to",
+        "ConsignRecord.consignee",
+        "ConsignRecord.phone",
+        "ConsignRecord.weight",
+        "ConsignRecord.price"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "queryConsignByOrderId",
+      "nanoentitiesRead": [
+        "ConsignRecord.id",
+        "ConsignRecord.orderId",
+        "ConsignRecord.accountId",
+        "ConsignRecord.handleDate",
+        "ConsignRecord.targetDate",
+        "ConsignRecord.from",
+        "ConsignRecord.to",
+        "ConsignRecord.consignee",
+        "ConsignRecord.phone",
+        "ConsignRecord.weight",
+        "ConsignRecord.price"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "queryConsignByConsignee",
+      "nanoentitiesRead": [
+        "ConsignRecord.id",
+        "ConsignRecord.orderId",
+        "ConsignRecord.accountId",
+        "ConsignRecord.handleDate",
+        "ConsignRecord.targetDate",
+        "ConsignRecord.from",
+        "ConsignRecord.to",
+        "ConsignRecord.consignee",
+        "ConsignRecord.phone",
+        "ConsignRecord.weight",
+        "ConsignRecord.price"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "findContactsById",
+      "nanoentitiesRead": [
+        "Contacts.id",
+        "Contacts.accountId",
+        "Contacts.name",
+        "Contacts.documentType",
+        "Contacts.documentName",
+        "Contacts.phoneNumber"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "findContactsByAccountId",
+      "nanoentitiesRead": [
+        "Contacts.id",
+        "Contacts.accountId",
+        "Contacts.name",
+        "Contacts.documentType",
+        "Contacts.documentName",
+        "Contacts.phoneNumber"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "createContact",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Contacts.id",
+        "Contacts.accountId",
+        "Contacts.name",
+        "Contacts.documentType",
+        "Contacts.documentName",
+        "Contacts.phoneNumber"
+      ]
+    },
+    {
+      "name": "deleteContact",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Contacts.id"
+      ]
+    },
+    {
+      "name": "modifyContact",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Contacts.id",
+        "Contacts.accountId",
+        "Contacts.name",
+        "Contacts.documentType",
+        "Contacts.documentName",
+        "Contacts.phoneNumber"
+      ]
+    },
+    {
+      "name": "getAllContacts",
+      "nanoentitiesRead": [
+        "Contacts.id",
+        "Contacts.accountId",
+        "Contacts.name",
+        "Contacts.documentType",
+        "Contacts.documentName",
+        "Contacts.phoneNumber"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "processDelivery",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Delivery.orderId",
+        "Delivery.foodName",
+        "Delivery.storeName",
+        "Delivery.stationName"
+      ]
+    },
+    {
+      "name": "ticketExecute",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Order.status"
+      ]
+    },
+    {
+      "name": "ticketCollect",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Order.status"
+      ]
+    },
+    {
+      "name": "createFoodStore",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "FoodStore.id",
+        "FoodStore.stationId",
+        "FoodStore.storeName",
+        "FoodStore.telephone",
+        "FoodStore.businessTime",
+        "FoodStore.deliveryFee",
+        "FoodStore.foodList"
+      ]
+    },
+    {
+      "name": "createTrainFood",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "TrainFood.id",
+        "TrainFood.tripId",
+        "TrainFood.foodList"
+      ]
+    },
+    {
+      "name": "listFoodStores",
+      "nanoentitiesRead": [
+        "FoodStore.id",
+        "FoodStore.stationId",
+        "FoodStore.storeName",
+        "FoodStore.telephone",
+        "FoodStore.businessTime",
+        "FoodStore.deliveryFee",
+        "FoodStore.foodList"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "listTrainFood",
+      "nanoentitiesRead": [
+        "TrainFood.id",
+        "TrainFood.tripId",
+        "TrainFood.foodList"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "listFoodStoredByStationId",
+      "nanoentitiesRead": [
+        "FoodStore.id",
+        "FoodStore.stationId",
+        "FoodStore.storeName",
+        "FoodStore.telephone",
+        "FoodStore.businessTime",
+        "FoodStore.deliveryFee",
+        "FoodStore.foodList"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "listTrainFoodByTripIds",
+      "nanoentitiesRead": [
+        "TrainFood.id",
+        "TrainFood.tripId",
+        "TrainFood.foodList"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "createFoodOrdersInBatch",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "FoodOrder.id",
+        "FoodOrder.orderId",
+        "FoodOrder.foodType",
+        "FoodOrder.storeName",
+        "FoodOrder.stationName",
+        "FoodOrder.foodName",
+        "Delivery.orderId",
+        "Delivery.foodName",
+        "Delivery.storeName",
+        "Delivery.stationName"
+      ]
+    },
+    {
+      "name": "createFoodOrder",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "FoodOrder.id",
+        "FoodOrder.orderId",
+        "FoodOrder.foodType",
+        "FoodOrder.storeName",
+        "FoodOrder.stationName",
+        "FoodOrder.foodName",
+        "Delivery.orderId",
+        "Delivery.foodName",
+        "Delivery.storeName",
+        "Delivery.stationName"
+      ]
+    },
+    {
+      "name": "deleteFoodOrder",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "FoodOrder.id"
+      ]
+    },
+    {
+      "name": "findFoodOrderByOrderId",
+      "nanoentitiesRead": [
+        "FoodOrder.id",
+        "FoodOrder.orderId",
+        "FoodOrder.foodType",
+        "FoodOrder.storeName",
+        "FoodOrder.stationName",
+        "FoodOrder.foodName"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "findAllFoodOrders",
+      "nanoentitiesRead": [
+        "FoodOrder.id",
+        "FoodOrder.orderId",
+        "FoodOrder.foodType",
+        "FoodOrder.storeName",
+        "FoodOrder.stationName",
+        "FoodOrder.foodName"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "updateFoodOrder",
+      "nanoentitiesRead": [
+        "FoodOrder.id"
+      ],
+      "nanoentitiesWritten": [
+        "FoodOrder.orderId",
+        "FoodOrder.foodType",
+        "FoodOrder.storeName",
+        "FoodOrder.stationName",
+        "FoodOrder.foodName"
+      ]
+    },
+    {
+      "name": "getAllFoods",
+      "nanoentitiesRead": [
+        "TrainFood.id",
+        "TrainFood.tripId",
+        "TrainFood.foodList",
+        "Route.terminalStationId",
+        "Route.startingStationId",
+        "FoodStore.id",
+        "FoodStore.stationId",
+        "FoodStore.storeName",
+        "FoodStore.telephone",
+        "FoodStore.businessTime",
+        "FoodStore.deliveryFee",
+        "FoodStore.foodList"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "pay",
+      "nanoentitiesRead": [
+        "Order.id",
+        "Order.boughtDate",
+        "Order.travelDate",
+        "Order.travelTime",
+        "Order.accountId",
+        "Order.contactsName",
+        "Order.documentType",
+        "Order.contactsDocumentNumber",
+        "Order.trainNumber",
+        "Order.coachNumber",
+        "Order.seatClass",
+        "Order.seatNumber",
+        "Order.from",
+        "Order.to",
+        "Order.status",
+        "Order.price",
+        "Payment.id"
+      ],
+      "nanoentitiesWritten": [
+        "Payment.orderId",
+        "Payment.userId",
+        "Payment.price",
+        "Money.userId",
+        "Money.money",
+        "Money.type"
+      ]
+    },
+    {
+      "name": "createPaymentAccount",
+      "nanoentitiesRead": [
+        "User.id"
+      ],
+      "nanoentitiesWritten": [
+        "Money.userId",
+        "Money.money",
+        "Money.type"
+      ]
+    },
+    {
+      "name": "addMoney",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Money.userId",
+        "Money.money",
+        "Money.type"
+      ]
+    },
+    {
+      "name": "queryPaymentAccount",
+      "nanoentitiesRead": [
+        "User.id",
+        "Money.userId",
+        "Money.money",
+        "Money.type",
+        "Payment.id",
+        "Payment.orderId",
+        "Payment.userId",
+        "Payment.price"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "queryPayments",
+      "nanoentitiesRead": [
+        "Payment.id",
+        "Payment.orderId",
+        "Payment.userId",
+        "Payment.price"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "drawBack",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Money.userId",
+        "Money.money",
+        "Money.type"
+      ]
+    },
+    {
+      "name": "payDifference",
+      "nanoentitiesRead": [
+        "Money.userId",
+        "Money.money",
+        "Money.type"
+      ],
+      "nanoentitiesWritten": [
+        "Payment.userId",
+        "Payment.price",
+        "Payment.orderId"
+      ]
+    },
+    {
+      "name": "queryMoney",
+      "nanoentitiesRead": [
+        "Money.userId",
+        "Money.money",
+        "Money.type"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "initPayment",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Payment.id"
+      ]
+    },
+    {
+      "name": "getSoldTickets",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Order.id",
+        "Order.boughtDate",
+        "Order.travelDate",
+        "Order.travelTime",
+        "Order.accountId",
+        "Order.trainNumber",
+        "Order.coachNumber",
+        "Order.seatClass",
+        "Order.seatNumber",
+        "Order.from",
+        "Order.to",
+        "Order.status",
+        "Order.price"
+      ]
+    },
+    {
+      "name": "createOrder",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Order.id",
+        "Order.boughtDate",
+        "Order.travelDate",
+        "Order.travelTime",
+        "Order.accountId",
+        "Order.contactsName",
+        "Order.documentType",
+        "Order.contactsDocumentNumber",
+        "Order.trainNumber",
+        "Order.coachNumber",
+        "Order.seatClass",
+        "Order.seatNumber",
+        "Order.from",
+        "Order.to",
+        "Order.status",
+        "Order.price"
+      ]
+    },
+    {
+      "name": "cancelOrder",
+      "nanoentitiesRead": [
+        "Order.id"
+      ],
+      "nanoentitiesWritten": [
+        "Order.status"
+      ]
+    },
+    {
+      "name": "deleteOrder",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Order.id",
+        "Order.trainNumber"
+      ]
+    },
+    {
+      "name": "updateOrder",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Order.boughtDate",
+        "Order.travelDate",
+        "Order.travelTime",
+        "Order.accountId",
+        "Order.contactsName",
+        "Order.documentType",
+        "Order.contactsDocumentNumber",
+        "Order.trainNumber",
+        "Order.coachNumber",
+        "Order.seatClass",
+        "Order.seatNumber",
+        "Order.from",
+        "Order.to",
+        "Order.status",
+        "Order.price"
+      ]
+    },
+    {
+      "name": "modifyOrderStatus",
+      "nanoentitiesRead": [
+        "Order.id"
+      ],
+      "nanoentitiesWritten": [
+        "Order.status"
+      ]
+    },
+    {
+      "name": "getOrderPrice",
+      "nanoentitiesRead": [
+        "Order.id",
+        "Order.price"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "payOrder",
+      "nanoentitiesRead": [
+        "Order.id"
+      ],
+      "nanoentitiesWritten": [
+        "Order.status"
+      ]
+    },
+    {
+      "name": "initOrder",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Order.id"
+      ]
+    },
+    {
+      "name": "checkOrderValidity",
+      "nanoentitiesRead": [
+        "Order.status",
+        "Order.boughtDate",
+        "Order.travelDate"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "preserve",
+      "nanoentitiesRead": [
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startStationId",
+        "Route.terminalStationId",
+        "Contacts.id",
+        "Contacts.accountId",
+        "Contacts.name",
+        "Contacts.documentType",
+        "Contacts.documentName",
+        "Contacts.phoneNumber",
+        "Station.id",
+        "Station.name",
+        "TrainType.id",
+        "TrainType.economyClass",
+        "TrainType.confortClass",
+        "TrainType.averageSpeed",
+        "PriceConfig.id",
+        "PriceConfig.trainType",
+        "PriceConfig.routeId",
+        "PriceConfig.basicPriceRate",
+        "PriceConfig.firstClassPriceRate",
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingStationId",
+        "Trip.terminalStationId",
+        "Trip.stationsId",
+        "Trip.startingTime",
+        "Trip.endTime",
+        "Travel.startingPlace",
+        "Travel.tripId",
+        "Travel.endPlace",
+        "Travel.departureTime",
+        "TravelResult.status",
+        "TravelResult.percent",
+        "TravelResult.trainType"
+      ],
+      "nanoentitiesWritten": [
+        "Order.id",
+        "Order.boughtDate",
+        "Order.travelDate",
+        "Order.travelTime",
+        "Order.accountId",
+        "Order.contactsName",
+        "Order.documentType",
+        "Order.contactsDocumentNumber",
+        "Order.trainNumber",
+        "Order.coachNumber",
+        "Order.seatClass",
+        "Order.seatNumber",
+        "Order.from",
+        "Order.to",
+        "Order.status",
+        "Order.price"
+      ]
+    },
+    {
+      "name": "createNewPriceConfig",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "PriceConfig.id",
+        "PriceConfig.trainType",
+        "PriceConfig.routeId",
+        "PriceConfig.basicPriceRate",
+        "PriceConfig.firstClassPriceRate"
+      ]
+    },
+    {
+      "name": "findPriceConfigById",
+      "nanoentitiesRead": [
+        "PriceConfig.id",
+        "PriceConfig.trainType",
+        "PriceConfig.routeId",
+        "PriceConfig.basicPriceRate",
+        "PriceConfig.firstClassPriceRate"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "findByRouteIdAndTrainType",
+      "nanoentitiesRead": [
+        "PriceConfig.id",
+        "PriceConfig.trainType",
+        "PriceConfig.routeId",
+        "PriceConfig.basicPriceRate",
+        "PriceConfig.firstClassPriceRate"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "findAllPriceConfig",
+      "nanoentitiesRead": [
+        "PriceConfig.id",
+        "PriceConfig.trainType",
+        "PriceConfig.routeId",
+        "PriceConfig.basicPriceRate",
+        "PriceConfig.firstClassPriceRate"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "deletePriceConfig",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "PriceConfig.id"
+      ]
+    },
+    {
+      "name": "updatePriceConfig",
+      "nanoentitiesRead": [
+        "PriceConfig.id"
+      ],
+      "nanoentitiesWritten": [
+        "PriceConfig.trainType",
+        "PriceConfig.routeId",
+        "PriceConfig.basicPriceRate",
+        "PriceConfig.firstClassPriceRate"
+      ]
+    },
+    {
+      "name": "rebook",
+      "nanoentitiesRead": [
+        "Order.id",
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingTime",
+        "Trip.startingStationId",
+        "Trip.stationsId",
+        "Trip.terminalStationId",
+        "Trip.endTime"
+      ],
+      "nanoentitiesWritten": [
+        "Order.boughtDate",
+        "Order.travelDate",
+        "Order.travelTime",
+        "Order.accountId",
+        "Order.contactsName",
+        "Order.documentType",
+        "Order.contactsDocumentNumber",
+        "Order.trainNumber",
+        "Order.coachNumber",
+        "Order.seatClass",
+        "Order.seatNumber",
+        "Order.from",
+        "Order.to",
+        "Order.status",
+        "Order.price"
+      ]
+    },
+    {
+      "name": "payDifferenceRebook",
+      "nanoentitiesRead": [
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingTime",
+        "Trip.startingStationId",
+        "Trip.stationsId",
+        "Trip.terminalStationId",
+        "Trip.endTime",
+        "Money.userId",
+        "Money.money",
+        "Money.type"
+      ],
+      "nanoentitiesWritten": [
+        "Payment.userId",
+        "Payment.price",
+        "Payment.orderId"
+      ]
+    },
+    {
+      "name": "searchCheapestRouteResult",
+      "nanoentitiesRead": [
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingTime",
+        "Trip.startingStationId",
+        "Trip.stationsId",
+        "Trip.terminalStationId",
+        "Trip.endTime",
+        "PriceConfig.id",
+        "PriceConfig.trainType",
+        "PriceConfig.routeId",
+        "PriceConfig.basicPriceRate",
+        "PriceConfig.firstClassPriceRate"
+      ],
+      "nanoentitiesWritten": [
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startStationId",
+        "Route.terminalStationId"
+      ]
+    },
+    {
+      "name": "searchMinStopRouteResult",
+      "nanoentitiesRead": [
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingTime",
+        "Trip.startingStationId",
+        "Trip.stationsId",
+        "Trip.terminalStationId",
+        "Trip.endTime"
+      ],
+      "nanoentitiesWritten": [
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startStationId",
+        "Route.terminalStationId"
+      ]
+    },
+    {
+      "name": "searchQuickestRouteResult",
+      "nanoentitiesRead": [
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingTime",
+        "Trip.startingStationId",
+        "Trip.stationsId",
+        "Trip.terminalStationId",
+        "Trip.endTime"
+      ],
+      "nanoentitiesWritten": [
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startStationId",
+        "Route.terminalStationId"
+      ]
+    },
+    {
+      "name": "createAndModifyRoute",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startStationId",
+        "Route.terminalStationId"
+      ]
+    },
+    {
+      "name": "getRouteById",
+      "nanoentitiesRead": [
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startStationId",
+        "Route.terminalStationId"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "getRouteByStartAndTerminal",
+      "nanoentitiesRead": [
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startStationId",
+        "Route.terminalStationId"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "distributeSeat",
+      "nanoentitiesRead": [
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startStationId",
+        "Route.terminalStationId"
+      ],
+      "nanoentitiesWritten": [
+        "Order.id",
+        "Order.boughtDate",
+        "Order.travelDate",
+        "Order.travelTime",
+        "Order.accountId",
+        "Order.contactsName",
+        "Order.documentType",
+        "Order.contactsDocumentNumber",
+        "Order.trainNumber",
+        "Order.coachNumber",
+        "Order.seatClass",
+        "Order.seatNumber",
+        "Order.from",
+        "Order.to",
+        "Order.status",
+        "Order.price",
+        "TrainType.id",
+        "TrainType.economyClass",
+        "TrainType.confortClass",
+        "TrainType.averageSpeed"
+      ]
+    },
+    {
+      "name": "getLeftTicketOfInterval",
+      "nanoentitiesRead": [
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startStationId",
+        "Route.terminalStationId",
+        "Order.id",
+        "Order.boughtDate",
+        "Order.travelDate",
+        "Order.travelTime",
+        "Order.accountId",
+        "Order.contactsName",
+        "Order.documentType",
+        "Order.contactsDocumentNumber",
+        "Order.trainNumber",
+        "Order.coachNumber",
+        "Order.seatClass",
+        "Order.seatNumber",
+        "Order.from",
+        "Order.to",
+        "Order.status",
+        "Order.price",
+        "TrainType.id",
+        "TrainType.economyClass",
+        "TrainType.confortClass",
+        "TrainType.averageSpeed",
+        "Config.name",
+        "Config.value",
+        "Config.description"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "findAllSecurityConfig",
+      "nanoentitiesRead": [
+        "SecurityConfig.id",
+        "SecurityConfig.name",
+        "SecurityConfig.value",
+        "SecurityConfig.description"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "addNewSecurityConfig",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "SecurityConfig.id",
+        "SecurityConfig.name",
+        "SecurityConfig.value",
+        "SecurityConfig.description"
+      ]
+    },
+    {
+      "name": "modifySecurityConfig",
+      "nanoentitiesRead": [
+        "SecurityConfig.id"
+      ],
+      "nanoentitiesWritten": [
+        "SecurityConfig.name",
+        "SecurityConfig.value",
+        "SecurityConfig.description"
+      ]
+    },
+    {
+      "name": "deleteSecurityConfig",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "SecurityConfig.id"
+      ]
+    },
+    {
+      "name": "checkSecurityConfig",
+      "nanoentitiesRead": [
+        "Order.status",
+        "Order.boughtDate",
+        "Order.travelDate",
+        "SecurityConfig.name",
+        "SecurityConfig.value"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "createStation",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Station.id",
+        "Station.name",
+        "Station.stayTime"
+      ]
+    },
+    {
+      "name": "existStation",
+      "nanoentitiesRead": [
+        "Station.name"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "updateStation",
+      "nanoentitiesRead": [
+        "Station.id"
+      ],
+      "nanoentitiesWritten": [
+        "Station.name",
+        "Station.stayTime"
+      ]
+    },
+    {
+      "name": "deleteStation",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Station.id"
+      ]
+    },
+    {
+      "name": "queryStations",
+      "nanoentitiesRead": [
+        "Station.id",
+        "Station.name",
+        "Station.stayTime"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "queryStationById",
+      "nanoentitiesRead": [
+        "Station.id",
+        "Station.name",
+        "Station.stayTime"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "getAllOffices",
+      "nanoentitiesRead": [
+        "Office.officeName",
+        "Office.address",
+        "Office.workTime",
+        "Office.windowNum",
+        "Office.province",
+        "Office.city",
+        "Office.region"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "getSpecificOffice",
+      "nanoentitiesRead": [
+        "Office.officeName",
+        "Office.address",
+        "Office.workTime",
+        "Office.windowNum",
+        "Office.province",
+        "Office.city",
+        "Office.region"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "addOffice",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Office.officeName",
+        "Office.address",
+        "Office.workTime",
+        "Office.windowNum",
+        "Office.province",
+        "Office.city",
+        "Office.region"
+      ]
+    },
+    {
+      "name": "deleteOffice",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Office.officeName",
+        "Office.address"
+      ]
+    },
+    {
+      "name": "updateOffice",
+      "nanoentitiesRead": [
+        "Office.officeName",
+        "Office.address"
+      ],
+      "nanoentitiesWritten": [
+        "Office.workTime",
+        "Office.windowNum",
+        "Office.province",
+        "Office.city",
+        "Office.region"
+      ]
+    },
+    {
+      "name": "createTrain",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "TrainType.id",
+        "TrainType.economyClass",
+        "TrainType.confortClass",
+        "TrainType.averageSpeed"
+      ]
+    },
+    {
+      "name": "retrieveTrain",
+      "nanoentitiesRead": [
+        "TrainType.id",
+        "TrainType.economyClass",
+        "TrainType.confortClass",
+        "TrainType.averageSpeed"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "queryTrains",
+      "nanoentitiesRead": [
+        "TrainType.id",
+        "TrainType.economyClass",
+        "TrainType.confortClass",
+        "TrainType.averageSpeed"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "updateTrain",
+      "nanoentitiesRead": [
+        "TrainType.id"
+      ],
+      "nanoentitiesWritten": [
+        "TrainType.economyClass",
+        "TrainType.confortClass",
+        "TrainType.averageSpeed"
+      ]
+    },
+    {
+      "name": "deleteTrain",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "TrainType.id"
+      ]
+    },
+    {
+      "name": "getCheapestTravelResult",
+      "nanoentitiesRead": [
+        "PriceConfig.id",
+        "PriceConfig.trainType",
+        "PriceConfig.routeId",
+        "PriceConfig.basicPriceRate",
+        "PriceConfig.firstClassPriceRate",
+        "Order.id",
+        "Order.boughtDate",
+        "Order.travelDate",
+        "Order.travelTime",
+        "Order.accountId",
+        "Order.contactsName",
+        "Order.documentType",
+        "Order.contactsDocumentNumber",
+        "Order.trainNumber",
+        "Order.coachNumber",
+        "Order.seatClass",
+        "Order.seatNumber",
+        "Order.from",
+        "Order.to",
+        "Order.status",
+        "Order.price",
+        "TrainType.id",
+        "TrainType.economyClass",
+        "TrainType.confortClass",
+        "TrainType.averageSpeed"
+      ],
+      "nanoentitiesWritten": [
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingTime",
+        "Trip.startingStationId",
+        "Trip.stationsId",
+        "Trip.terminalStationId",
+        "Trip.endTime",
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startStationId",
+        "Route.terminalStationId"
+      ]
+    },
+    {
+      "name": "getQuickestTravelResult",
+      "nanoentitiesRead": [
+        "Order.id",
+        "Order.boughtDate",
+        "Order.travelDate",
+        "Order.travelTime",
+        "Order.accountId",
+        "Order.contactsName",
+        "Order.documentType",
+        "Order.contactsDocumentNumber",
+        "Order.trainNumber",
+        "Order.coachNumber",
+        "Order.seatClass",
+        "Order.seatNumber",
+        "Order.from",
+        "Order.to",
+        "Order.status",
+        "Order.price",
+        "TrainType.id",
+        "TrainType.economyClass",
+        "TrainType.confortClass",
+        "TrainType.averageSpeed"
+      ],
+      "nanoentitiesWritten": [
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingTime",
+        "Trip.startingStationId",
+        "Trip.stationsId",
+        "Trip.terminalStationId",
+        "Trip.endTime",
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startStationId",
+        "Route.terminalStationId"
+      ]
+    },
+    {
+      "name": "getMinStopTravelResult",
+      "nanoentitiesRead": [
+        "Order.id",
+        "Order.boughtDate",
+        "Order.travelDate",
+        "Order.travelTime",
+        "Order.accountId",
+        "Order.contactsName",
+        "Order.documentType",
+        "Order.contactsDocumentNumber",
+        "Order.trainNumber",
+        "Order.coachNumber",
+        "Order.seatClass",
+        "Order.seatNumber",
+        "Order.from",
+        "Order.to",
+        "Order.status",
+        "Order.price",
+        "TrainType.id",
+        "TrainType.economyClass",
+        "TrainType.confortClass",
+        "TrainType.averageSpeed"
+      ],
+      "nanoentitiesWritten": [
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingTime",
+        "Trip.startingStationId",
+        "Trip.stationsId",
+        "Trip.terminalStationId",
+        "Trip.endTime",
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startStationId",
+        "Route.terminalStationId"
+      ]
+    },
+    {
+      "name": "createTrip",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingTime",
+        "Trip.startingStationId",
+        "Trip.stationsId",
+        "Trip.terminalStationId",
+        "Trip.endTime"
+      ]
+    },
+    {
+      "name": "getRouteByTripId",
+      "nanoentitiesRead": [
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingTime",
+        "Trip.startingStationId",
+        "Trip.stationsId",
+        "Trip.terminalStationId",
+        "Trip.endTime",
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startStationId",
+        "Route.terminalStationId"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "getTrainTypeByTripId",
+      "nanoentitiesRead": [
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingTime",
+        "Trip.startingStationId",
+        "Trip.stationsId",
+        "Trip.terminalStationId",
+        "Trip.endTime",
+        "TrainType.id",
+        "TrainType.economyClass",
+        "TrainType.confortClass",
+        "TrainType.averageSpeed"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "retrieveTrip",
+      "nanoentitiesRead": [
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingTime",
+        "Trip.startingStationId",
+        "Trip.stationsId",
+        "Trip.terminalStationId",
+        "Trip.endTime"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "updateTrip",
+      "nanoentitiesRead": [
+        "Trip.tripId"
+      ],
+      "nanoentitiesWritten": [
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingTime",
+        "Trip.startingStationId",
+        "Trip.stationsId",
+        "Trip.terminalStationId",
+        "Trip.endTime"
+      ]
+    },
+    {
+      "name": "deleteTrip",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Trip.tripId"
+      ]
+    },
+    {
+      "name": "getTickets",
+      "nanoentitiesRead": [
+        "Station.id",
+        "Station.name",
+        "TrainType.id",
+        "TrainType.economyClass",
+        "TrainType.confortClass",
+        "TrainType.averageSpeed",
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startingStationId",
+        "Route.terminalStationId",
+        "PriceConfig.id",
+        "PriceConfig.trainType",
+        "PriceConfig.routeId",
+        "PriceConfig.basicPriceRate",
+        "PriceConfig.firstClassPriceRate",
+        "Trip.tripId",
+        "Trip.trainTypeId",
+        "Trip.routeId",
+        "Trip.startingStationId",
+        "Trip.terminalStationId",
+        "Trip.stationsId",
+        "Trip.startingTime",
+        "Trip.endTime",
+        "Travel.startingPlace",
+        "Travel.tripId",
+        "Travel.endPlace",
+        "Travel.departureTime",
+        "TravelResult.status",
+        "TravelResult.percent",
+        "TravelResult.trainType"
+      ],
+      "nanoentitiesWritten": [
+        "Order.id",
+        "Order.boughtDate",
+        "Order.travelDate",
+        "Order.travelTime",
+        "Order.accountId",
+        "Order.contactsName",
+        "Order.documentType",
+        "Order.contactsDocumentNumber",
+        "Order.trainNumber",
+        "Order.coachNumber",
+        "Order.seatClass",
+        "Order.seatNumber",
+        "Order.from",
+        "Order.to",
+        "Order.status",
+        "Order.price"
+      ]
+    },
+    {
+      "name": "addVoucher",
+      "nanoentitiesRead": [],
+      "nanoentitiesWritten": [
+        "Voucher.voucherId",
+        "Voucher.orderId",
+        "Voucher.travelDate",
+        "Voucher.travelTime",
+        "Voucher.contactName",
+        "Voucher.trainNumber",
+        "Voucher.seatClass",
+        "Voucher.seatNumber",
+        "Voucher.startStation",
+        "Voucher.destStation",
+        "Voucher.price"
+      ]
+    },
+    {
+      "name": "queryVoucher",
+      "nanoentitiesRead": [
+        "Voucher.voucherId",
+        "Voucher.orderId",
+        "Voucher.travelDate",
+        "Voucher.travelTime",
+        "Voucher.contactName",
+        "Voucher.trainNumber",
+        "Voucher.seatClass",
+        "Voucher.seatNumber",
+        "Voucher.startStation",
+        "Voucher.destStation",
+        "Voucher.price"
+      ],
+      "nanoentitiesWritten": []
+    },
+    {
+      "name": "getAllRoutes",
+      "nanoentitiesRead": [
+        "Route.id",
+        "Route.stations",
+        "Route.distances",
+        "Route.startStationId",
+        "Route.terminalStationId"
+      ],
+      "nanoentitiesWritten": []
+    }
+  ]
+}
