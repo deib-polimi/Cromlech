@@ -1389,7 +1389,7 @@ def optimizer(op_num, max_com_cost, num_services, alpha):
     # opt.options['presolve'] = 2
     # opt.options['numericfocus'] = 1
     opt.options['timelimit'] = timeout
-    # opt.options['method'] = 
+    opt.options['method'] = 5 
     result = opt.solve(instance, tee=True)
     log_infeasible_constraints(instance, log_expression=True)
 
