@@ -19,16 +19,17 @@ if __name__ == '__main__':
     a = ast.literal_eval(f1_content)
     b = ast.literal_eval(f2_content)
 
-    op_num = 0
-    attributes = set()
+    attributes_set = set()
+    ops_set = set()
     for m in a:
         for elem in m:
             if isinstance(elem, numbers.Number):
-                op_num = op_num + 1
+                ops_set.add(elem)
             else:
-                attributes.add(elem.replace('R', '').replace('P', '').replace('N', ''))
-    attr_num = len(attributes)
-
+                attributes_set.add(elem.replace('R', '').replace('P', '').replace('N', ''))
+    attr_num = len(attributes_set)
+    op_num = len(ops_set)
+    
     print("Op: " + str(op_num) + ". Attr: " + str(attr_num))
     
     to_remove = []
@@ -76,7 +77,6 @@ if __name__ == '__main__':
     score = (both_present + both_absent - present_in_a_only - present_in_b_only)*2/total_couples
     print("OPERATION SIMILARITY:" + str(score))
 
-    attr_num = 137
     to_remove = []
     for n in a:
         rem = []
