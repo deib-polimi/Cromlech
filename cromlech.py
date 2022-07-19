@@ -9,15 +9,6 @@ from itertools import product
 from pyomo.opt import SolverStatus, TerminationCondition
 import sys
 
-# Input file (without .yaml extension)
-input_file = sys.argv[1]
-# Maximum number of services
-num_services = int(sys.argv[2])
-# Alpha (between 0 and 1)
-alpha = float(sys.argv[3])
-# Timeout (seconds)
-timeout = int(sys.argv[4])
-
 # Graph is the starting graph of the architecture, keys are operations and values are entities
 graph = {}
 # Nodes_dict associates each number to an operation or entity
@@ -1468,6 +1459,15 @@ def run_experiment(alpha, num_services):
     optimizer(op_num, max_com_cost, num_services, alpha)
     
 if __name__ == '__main__':
+    # Input file (without .yaml extension)
+    input_file = sys.argv[1]
+    # Maximum number of services
+    num_services = int(sys.argv[2])
+    # Alpha (between 0 and 1)
+    alpha = float(sys.argv[3])
+    # Timeout (seconds)
+    timeout = int(sys.argv[4])
+    
     parse_arch_yaml('input/' + input_file + '.yaml')
     to_remove = noise_removal()
     graph_copy = Graph()
