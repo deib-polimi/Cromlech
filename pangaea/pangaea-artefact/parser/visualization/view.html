@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    #cy {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        border-left: black 1px solid;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="cytoscape.js"></script>
+    <script src="layout-base.js"></script>
+    <script src="cose-base.js"></script>
+    <script src="cola.min.js"></script>
+    <script src="cytoscape-cola.min.js"></script>
+    <script src="jquery.min.js"></script>
+    <script type="text/javascript" src="microservices-data.js"></script>
+</head>
+<body>
+
+<div id="graph-container">
+    <!--<div id="data-container">
+        <div id="total-cost-container">
+            <b>Total Cost</b>
+            <span id="total-cost">50</span>
+        </div>
+        <br>
+        <div id="coupling-factor-container">
+            <b>Coupling Factor</b>
+            <span id="coupling-factor">50</span>
+        </div>-->
+    </div>
+    <div id="cy">
+
+    </div>
+</div>
+
+
+<script>
+
+    //document.getElementById('coupling-factor').innerHTML = coupling_factor;
+    //document.getElementById('total-cost').innerHTML = total_cost;
+
+    let cy = cytoscape({
+        container: document.getElementById('cy'),
+        elements: elements,
+        layout: { // http://js.cytoscape.org/#init-opts/layout
+            name: 'cola',
+            infinite: true,
+            fit: true,
+            avoidOverlap: true,
+            handleDisconnected: true,
+            ungrabifyWhileSimulating: false,
+        },
+        style: [ // http://js.cytoscape.org/#style
+            {
+                "selector": "node[label]",
+                "style": {
+                    "label": "data(label)",
+                    "text-valign": "top",
+                    "text-halign": "center"
+                }
+            },
+            {
+                "selector": "node[type='microservice']",
+                "style": {
+                    "border-color": "black",
+                    "background-color": "gray",
+                    "border-opacity": "1",
+                    "border-width": "2px",
+                    "shape":"circle"
+                }
+            },
+            {
+                "selector": "node[type='entity']",
+                "style": {
+                    "border-color": "blue",
+                    "background-color": "blue",
+                    "background-opacity":"0.4",
+                    "width":"15px",
+                    "height":"15px",
+                    "border-opacity": "0.8",
+                    "border-width": "2px",
+                    "shape":"square"
+                }
+            },
+            {
+                "selector": "node[type='operation']",
+                "style": {
+                    "border-color": "green",
+                    "background-color": "green",
+                    "background-opacity":"0.4",
+                    "width":"15px",
+                    "height":"15px",
+                    "border-opacity": "0.8",
+                    "border-width": "2px",
+                    "shape":"triangle"
+                }
+            },
+            {
+                selector: 'edge',
+                style: {
+                    "curve-style": "bezier"
+                }
+            },
+            {
+                "selector": "edge[label]",
+                "style": {
+                    "label": "data(label)",
+                    "text-valign": "top",
+                    "text-halign": "center"
+                }
+            },
+            {
+                "selector": "edge[type='microservice']",
+                "style": {
+                    "width": 3,
+                    "line-color": "red",
+                }
+            },
+            {
+                "selector": "edge[type='entity']",
+                "style": {
+                    "width": 1,
+                    "line-color": "grey",
+                }
+            },
+            {
+                "selector": "edge[type='operation']",
+                "style": {
+                    "width": 1,
+                    "line-color": "grey",
+                }
+            },
+            {
+                "selector": "edge[arrow]",
+                "style": {
+                    "target-arrow-shape": "data(arrow)",
+                    "target-arrow-color":"red"
+                }
+            },
+            {
+                "selector": ".top-center",
+                "style": {
+                    "text-valign": "top",
+                    "text-halign": "center"
+                }
+            },
+        ]
+    })
+</script>
+</body>
+</html>

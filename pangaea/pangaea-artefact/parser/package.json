@@ -1,0 +1,48 @@
+{
+  "name": "microservices-decomposition",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.0",
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.19.0",
+    "bunyan": "^1.8.15",
+    "chalk": "^4.1.0",
+    "csv-parser": "^2.3.3",
+    "csv-writer": "^1.6.0",
+    "cytoscape": "^3.1.0",
+    "cytoscape-cise": "^1.0.0",
+    "cytoscape-cola": "^2.4.0",
+    "cytoscape-cose-bilkent": "^4.1.0",
+    "cytoscape-dagre": "^2.3.2",
+    "cytosnap": "^3.1.0",
+    "express": "^4.17.1",
+    "express-validation": "^0.6.0",
+    "fs": "0.0.1-security",
+    "glob": "^7.1.6",
+    "js-yaml": "^3.14.1",
+    "module-alias": "^2.2.2",
+    "path": "^0.12.7",
+    "process": "^0.11.10",
+    "simple-git": "^2.34.2",
+    "superagent": "^6.1.0",
+    "x-error": "0.0.10"
+  },
+  "_moduleAliases": {
+    "@components": "components",
+    "@config": "./config/index.js",
+    "@common": "common",
+    "@common-modules": "./common-modules.js"
+  },
+  "devDependencies": {
+    "doctrine": "^3.0.0",
+    "joi": "^8.4.2",
+    "nodemon": "^1.18.10"
+  }
+}
