@@ -1,41 +1,18 @@
 import yaml
+import json
 import sys
 
 # Process relations for a single entity
-def process_entity_relations(entity, out_file):
-    if not 'relations' in entity.keys():
-        return
-
-    relations = entity['relations']
-    out_file.write(' * relations:\n')
+def process_entity_relations(entity_name, description_data, out_file):
+    relations = description_data['relations']
+    first = True
     for rel in relations:
-        rel_name = rel['entity_name']
-        rel_type = rel['type']
-        out_file.write(' *   - entity_name: ' + rel_name + '\n')
-        out_file.write(' *     type: ' + rel_type + '\n')
-        
-# Process a single entity
-def process_entity(entity, out_file):
-    out_file.write('/**\n')
-    out_file.write(' * @Entity\n')
-    
-    name = entity['name']
-    out_file.write(' * name: ' + name + '\n')
-        
-    table_name = entity['table_name']
-    out_file.write(' * implementation: ' + table_name + '\n')
-
-    replication_weight = entity['replication_weight']
-    out_file.write(' * replication_overhead: ' + str(replication_weight) + '\n')
-
-    columns = entity['columns']
-    out_file.write(' * columns:\n')
-    for column in columns:
-        out_file.write(' *   - ' + column + '\n')
-
-    process_entity_relations(entity, out_file)
-        
-    out_file.write(' */\n\n')
+        if rel['origin'] == entity_name:
+            if first:
+                out_file.write(' * relations:\n')
+                first = False
+            out_file.write(' *   - entity_name: ' + rel['destination'] + '\n')
+            out_file.write(' *     type: ' + rel['type'] + '\n')    
 
 # Process db accesses for a single operation
 def process_db_accesses(db_accesses, out_file):
@@ -61,7 +38,7 @@ def process_operation(operation, out_file):
     out_file.write(' * frequency: ' + str(frequency) + '\n')
 
     out_file.write(' * forced_entities:\n')
-    out_file.write(' *   - ### TODO va bene lasciare sempre vuoto?\n')
+    out_file.write(' *   -\n') # TODO va bene lasciare sempre vuoto?
 
     db_accesses = operation['database_access']
     process_db_accesses(db_accesses, out_file)
@@ -85,29 +62,27 @@ def process_entity(op_entity, entities):
         entities[name] = attributes
 
 # Print entities to file
-def print_entities(entities, out_file):
+def print_entities(entities, description_data, out_file):
     for e in entities.keys():
         out_file.write('/**\n')
         out_file.write(' * @Entity\n')
         out_file.write(' * name: ' + e + '\n')
         out_file.write(' * implementation: ' + e + '\n')
-        out_file.write(' * replication_overhead: 1 ### TODO possiamo cambiare valore?\n')
+        out_file.write(' * replication_overhead: 1\n') # TODO possiamo cambiare valore?
         out_file.write(' * columns:\n')
         for attr in entities[e]:
             out_file.write(' *   - ' + attr + '\n')
-        out_file.write(' * relations:\n')
-        out_file.write(' *   - entity1_name: ### TODO come determinare?\n')
-        out_file.write(' *     type: ### TODO come determinare?\n')
+        process_entity_relations(e, description_data, out_file)
         out_file.write(' */\n\n')
     
 # Process the list of entities
-def process_entities(yaml_data, out_file):
+def process_entities(yaml_data, desxription_data, out_file):
     entities = {}
     for operation in yaml_data['operations']:
         for op_entity in operation['database_access']:
             process_entity(op_entity, entities)
 
-    print_entities(entities, out_file)
+    print_entities(entities, description_data, out_file)
         
 # Process the list of operations
 def process_operations(yaml_data, out_file):
@@ -115,13 +90,18 @@ def process_operations(yaml_data, out_file):
         process_operation(operation, out_file)
 
 if __name__ == "__main__":
-    input_path = sys.argv[1] if len(sys.argv) > 1 else 'input.yaml'
+    input_path = sys.argv[1] if len(sys.argv) > 1 else 'cromlech_input.yaml'
     input_file = open(input_path, 'r')
     yaml_data = yaml.safe_load(input_file)
     input_file.close()
 
-    output_path = sys.argv[2] if len(sys.argv) > 2 else 'output.txt'
+    description_path = sys.argv[2] if len(sys.argv) > 2 else 'sc_description_input.json'
+    description_file = open(description_path, 'r')
+    description_data = json.load(description_file)
+    description_file.close()
+    
+    output_path = sys.argv[3] if len(sys.argv) > 3 else 'output.txt'
     output_file = open(output_path, 'w')
-    process_entities(yaml_data, output_file)
+    process_entities(yaml_data, description_data, output_file)
     process_operations(yaml_data, output_file)
     output_file.close()
