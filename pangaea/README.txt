@@ -28,3 +28,13 @@
   file microservices-data.js.  Questo file puo' essere invocato per conoscere
   i costi della decomposizione, inoltre il file view.html permette di
   visualizzare la decomposizione ottenuta.
+
+- Per convertire l'output di Pangaea in output (e costi) di Cromlech, copiare
+  il file 'microservices.json' dentro alla directory 'output_converter'.
+  Questo legge il file di descrizione yaml di cromlech e i risultati json di
+  Pangaea e produce i risultati.
+
+*** TODO ***
+
+- L'output converter non funziona ancora correttamente perche' non considera i
+  microservizi senza operazioni

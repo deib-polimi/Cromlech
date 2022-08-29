@@ -1,0 +1,2143 @@
+operations:
+# ts-assurance-service
+- name: getAllAssuranceTypes
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+    - entity_name: AssuranceType
+      read_attributes:
+      - index
+      - name
+      - price
+- name: getAllAssurances
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+    - entity_name: AssuranceType
+      read_attributes:
+      - index
+      - name
+      - price
+    - entity_name: Assurance
+      read_attributes:
+      - id
+      - orderId
+- name: findAssuranceById
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Assurance
+    read_attributes:
+    - id
+    - orderId
+    - index
+    - name
+    - price
+- name: findAssuranceByOrderId
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Assurance
+    read_attributes:
+    - id
+    - orderId
+    - index
+    - name
+    - price
+- name: createAssurance
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Assurance
+    write_attributes:
+    - id
+    - orderId
+    - index
+    - name
+    - price
+  - entity_name: AssuranceType
+    write_attributes:
+    - index
+    - name
+    - price
+- name: deleteAssuranceById
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Assurance
+    write_attributes:
+    - id
+- name: deleteAssuranceByOrderId
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Assurance
+    write_attributes:
+    - orderId
+- name: modifyAssurance
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Assurance
+    write_attributes:
+    - id
+    - orderId
+  - entity_name: AssuranceType
+    write_attributes:
+    - index
+    - name
+    - price
+# ts-auth-service
+- name: saveUser
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: User
+    write_attributes:
+    - userId
+    - userName
+    - password
+    - roles
+- name: getAllUser
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: User
+    read_attributes:
+    - userId
+    - userName
+    - password
+    - roles
+- name: findByUserId
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: User
+    read_attributes:
+    - userId
+    - userName
+    - password
+    - roles
+- name: findByUsername
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: User
+    read_attributes:
+    - userId
+    - userName
+    - password
+    - roles
+- name: deleteUserById
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: User
+    write_attributes:
+    - userId
+- name: updateUser
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: User
+    read_attributes:
+    - userId
+    write_attributes:
+    - userName
+    - password
+    - roles
+# ts-avatar-service skipped because no data used
+# ts-basic-service
+- name: queryForTravel
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Station
+    read_attributes:
+    - id
+    - name
+  - entity_name: TrainType
+    read_attributes:
+    - id
+    - economyClass
+    - confortClass
+    - averageSpeed
+  - entity_name: Route
+    read_attributes:
+    - id
+    - stations
+    - distances
+    - startingStationId
+    - terminalStationId
+  - entity_name: PriceConfig
+    read_attributes:
+    - id
+    - trainType
+    - routeId
+    - basicPriceRate
+    - firstClassPriceRate
+  - entity_name: Trip
+    read_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingStationId
+    - terminalStationId
+    - stationsId
+    - startingTime
+    - endTime
+  - entity_name: Travel
+    read_attributes:
+    - startingPlace
+    - tripId
+    - endPlace
+    - departureTime
+- name: queryForStationId
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Station
+    read_attributes:
+    - id
+    - name
+# ts-cancel-service
+- name: cancelOrderbyUser
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Order
+    write_attributes:
+    - orderId
+    - status
+    - accountId
+  - entity_name: User
+    read_attributes:
+    - id
+    - userName
+    - password
+    - email
+- name: calculateRefund
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Order
+    read_attributes:
+    - id
+    - accountId
+    - status
+    - price
+  - entity_name: Money
+    write_attributes:
+    - userId
+    - money 
+    - type
+# ts-config-service
+- name: createConfig 
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Config
+    write_attributes:
+    - name
+    - value
+    - description
+- name: updateConfig
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Config
+    read_attributes:
+    - name
+    write_attributes:
+    - value
+    - description
+- name: queryConfig
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Config
+    read_attributes:
+    - name
+    - value
+    - description
+- name: deleteConfig
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Config
+    write_attributes:
+    - name
+- name: queryAllConfigs
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Config
+    read_attributes:
+    - name
+    - value
+    - description
+# ts-consign-price-service
+- name: getPriceByWeightAndRegion
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: ConsignPrice
+    read_attributes:
+    - initialWeight
+    - withinPrice
+    - initialPrice
+    - beyondPrice
+- name: queryConsignPrice
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: ConsignPrice
+    read_attributes:
+    - id
+    - index
+    - initialWeight
+    - withinPrice
+    - initialPrice
+    - beyondPrice
+- name: createAndModifyPrice
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: ConsignPrice
+    write_attributes:
+    - id
+    - index
+    - initialWeight
+    - withinPrice
+    - initialPrice
+    - beyondPrice
+- name: getConsignPrice
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: ConsignPrice
+    read_attributes:
+    - id
+    - index
+    - initialWeight
+    - withinPrice
+    - initialPrice
+    - beyondPrice
+# ts-consign-service
+- name: insertConsignRecord
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: ConsignPrice
+    read_attributes:
+    - withinPrice
+    - initialPrice
+    - beyondPrice
+  - entity_name: ConsignRecord
+    write_attributes: 
+    - id
+    - orderId
+    - accountId
+    - handleDate
+    - targetDate
+    - from
+    - to
+    - consignee 
+    - phone 
+    - weight 
+    - price 
+- name: updateConsignRecord
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: ConsignPrice
+    read_attributes:
+    - withinPrice
+    - initialPrice
+    - beyondPrice
+  - entity_name: ConsignRecord
+    read_attributes:
+    - id
+    write_attributes: 
+    - orderId
+    - accountId
+    - handleDate
+    - targetDate
+    - from
+    - to
+    - consignee 
+    - phone 
+    - weight 
+    - price 
+- name: queryConsignByAccountId
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: ConsignRecord
+    read_attributes: 
+    - id
+    - orderId
+    - accountId
+    - handleDate
+    - targetDate
+    - from
+    - to
+    - consignee 
+    - phone 
+    - weight 
+    - price 
+- name: queryConsignByOrderId
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: ConsignRecord
+    read_attributes: 
+    - id
+    - orderId
+    - accountId
+    - handleDate
+    - targetDate
+    - from
+    - to
+    - consignee 
+    - phone 
+    - weight 
+    - price 
+- name: queryConsignByConsignee
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: ConsignRecord
+    read_attributes: 
+    - id
+    - orderId
+    - accountId
+    - handleDate
+    - targetDate
+    - from
+    - to
+    - consignee 
+    - phone 
+    - weight 
+    - price 
+# ts-contacts-service
+- name: findContactsById
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Contacts
+    read_attributes:
+    - id
+    - accountId
+    - name
+    - documentType
+    - documentName
+    - phoneNumber
+- name: findContactsByAccountId
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Contacts
+    read_attributes:
+    - id
+    - accountId
+    - name
+    - documentType
+    - documentName
+    - phoneNumber
+- name: createContact
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Contacts
+    write_attributes:
+    - id
+    - accountId
+    - name
+    - documentType
+    - documentName
+    - phoneNumber
+- name: deleteContact
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Contacts
+    write_attributes:
+    - id
+- name: modifyContact
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Contacts
+    write_attributes:
+    - id
+    - accountId
+    - name
+    - documentType
+    - documentName
+    - phoneNumber 
+- name: getAllContacts
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Contacts
+    read_attributes:
+    - id
+    - accountId
+    - name
+    - documentType
+    - documentName
+    - phoneNumber   
+# ts-delivery-service
+- name: processDelivery
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Delivery
+    write_attributes:
+    - id
+    - orderId
+    - foodName
+    - storeName
+    - stationName
+# ts-execute-service
+- name: ticketExecute
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Order
+    write_attributes: 
+    - status
+- name: ticketCollect
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Order
+    write_attributes: 
+    - status
+# ts-food-map-service
+- name: createFoodStore
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: FoodStore 
+    write_attributes:
+    - id
+    - stationId
+    - storeName 
+    - telephone 
+    - businessTime
+    - deliveryFee
+    - foodList
+- name: createTrainFood
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: TrainFood
+    write_attributes:
+    - id
+    - tripId
+    - foodList
+- name: listFoodStores
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: FoodStore 
+    read_attributes:
+    - id
+    - stationId
+    - storeName 
+    - telephone 
+    - businessTime
+    - deliveryFee
+    - foodList
+- name: listTrainFood
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: TrainFood
+    read_attributes:
+    - id
+    - tripId
+    - foodList
+- name: listFoodStoredByStationId
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: FoodStore 
+    read_attributes:
+    - id
+    - stationId
+    - storeName 
+    - telephone 
+    - businessTime
+    - deliveryFee
+    - foodList
+- name: listTrainFoodByTripIds
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: TrainFood
+    read_attributes:
+    - id
+    - tripId
+    - foodList
+# ts-food-service
+- name: createFoodOrdersInBatch
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: FoodOrder
+    write_attributes:
+    - id
+    - orderId
+    - foodType
+    - storeName
+    - stationName
+    - foodName
+  - entity_name: Delivery
+    write_attributes:
+    - orderId
+    - foodName
+    - storeName
+    - stationName
+- name: createFoodOrder 
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: FoodOrder
+    write_attributes:
+    - id
+    - orderId
+    - foodType
+    - storeName
+    - stationName
+    - foodName
+  - entity_name: Delivery
+    write_attributes:
+    - orderId
+    - foodName
+    - storeName
+    - stationName
+- name: deleteFoodOrder
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: FoodOrder
+    write_attributes:
+    - id
+- name: findFoodOrderByOrderId
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: FoodOrder
+    read_attributes:
+    - id
+    - orderId
+    - foodType
+    - storeName
+    - stationName
+    - foodName
+- name: findAllFoodOrders
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: FoodOrder
+    read_attributes:
+    - id
+    - orderId
+    - foodType
+    - storeName
+    - stationName
+    - foodName
+- name: updateFoodOrder
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: FoodOrder
+    read_attributes:
+    - id
+    write_attributes:
+    - orderId
+    - foodType
+    - storeName
+    - stationName
+    - foodName
+- name: getAllFoods
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: TrainFood
+    read_attributes:
+    - id
+    - tripId
+    - foodList
+  - entity_name: Route
+    read_attributes:
+    - terminalStationId
+    - startingStationId
+  - entity_name: FoodStore
+    read_attributes:
+    - id
+    - stationId
+    - storeName 
+    - telephone 
+    - businessTime
+    - deliveryFee
+    - foodList
+# ts-inside-payment-service
+- name: pay
+  consistency: L
+  frequency: 1
+  forced_operations:
+  -
+  database_access:
+  - entity_name: Order
+    read_attributes:
+    - id
+    - boughtDate
+    - travelDate
+    - travelTime
+    - accountId
+    - contactsName
+    - documentType
+    - contactsDocumentNumber
+    - trainNumber
+    - coachNumber
+    - seatClass
+    - seatNumber
+    - from
+    - to 
+    - status
+    - price
+  - entity_name: Payment
+    read_attributes:
+    - id
+    write_attributes:
+    - orderId
+    - userId
+    - price
+  - entity_name: Money
+    write_attributes:
+    - userId
+    - money 
+    - type
+- name: createPaymentAccount
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: User
+    read_attributes:
+    - id
+  - entity_name: Money
+    write_attributes:
+    - id
+    - userId
+    - money 
+    - type  
+- name: addMoney
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Money
+    write_attributes:
+    - userId
+    - money 
+    - type  
+- name: queryPaymentAccount
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: User
+    read_attributes:
+    - id
+  - entity_name: Money
+    read_attributes:
+    - userId
+    - money 
+    - type  
+  - entity_name: Payment
+    read_attributes:
+    - id
+    - orderId
+    - userId
+    - price
+  - entity_name: Balance
+    write_attributes:
+    - id
+    - userId
+    - balance
+- name: queryPayments
+  consistency: L
+  frequency: 1
+  forced_operations:
+  -
+  database_access:
+  - entity_name: Payment
+    read_attributes:
+    - id
+    - orderId
+    - userId
+    - price
+- name: drawBack
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Money
+    write_attributes:
+    - userId
+    - money 
+    - type 
+- name: payDifference
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Payment
+    write_attributes:
+    - userId
+    - price 
+    - orderId  
+  - entity_name: Money
+    read_attributes:
+    - userId
+    - money 
+    - type 
+- name: queryMoney
+  consistency: L
+  frequency: 1
+  forced_operations:
+  -
+  database_access:
+  - entity_name: Money
+    read_attributes:
+    - userId
+    - money
+    - type
+- name: initPayment
+  consistency: L
+  frequency: 1
+  forced_operations:
+  -
+  database_access:
+  - entity_name: Payment
+    write_attributes: 
+    - id
+# ts-news-service skipped because no data involved
+# ts-notification-service skipped because no data involved, only sending of mails
+# ts-order-service
+- name: getSoldTickets
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Order
+    write_attributes:
+    - id
+    - boughtDate
+    - travelDate
+    - travelTime
+    - accountId
+    - trainNumber
+    - coachNumber
+    - seatClass
+    - seatNumber
+    - from
+    - to 
+    - status
+    - price
+- name: createOrder
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+    - entity_name: Order
+      write_attributes:
+      - id
+      - boughtDate
+      - travelDate
+      - travelTime
+      - accountId
+      - contactsName
+      - documentType
+      - contactsDocumentNumber
+      - trainNumber
+      - coachNumber
+      - seatClass
+      - seatNumber
+      - from
+      - to 
+      - status
+      - price
+- name: cancelOrder
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+    - entity_name: Order
+      read_attributes:
+      - id
+      write_attributes:
+      - status
+- name: deleteOrder
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+    - entity_name: Order
+      write_attributes:
+      - id
+      - trainNumber
+- name: updateOrder
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+    - entity_name: Order
+      write_attributes:
+      - boughtDate
+      - travelDate
+      - travelTime
+      - accountId
+      - contactsName
+      - documentType
+      - contactsDocumentNumber
+      - trainNumber
+      - coachNumber
+      - seatClass
+      - seatNumber
+      - from
+      - to 
+      - status
+      - price
+- name: modifyOrderStatus
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+    - entity_name: Order
+      read_attributes:
+      - id
+      write_attributes:
+      - status
+- name: getOrderPrice
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+    - entity_name: Order
+      read_attributes:
+      - id
+      - price
+- name: payOrder
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Order
+    read_attributes:
+    - id
+    write_attributes:
+    - status
+- name: initOrder
+  consistency: L
+  frequency: 1
+  forced_operations:
+  -
+  database_access:
+  - entity_name: Order
+    write_attributes:
+    - id
+- name: checkOrderValidity
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+    - entity_name: Order
+      read_attributes:
+      - status
+      - boughtDate
+      - travelDate
+# ts-payment-service skipped because duplicate of inside-payment
+# ts-preservation-service
+- name: preserve
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Route
+    read_attributes:
+    - id
+    - stations
+    - distances
+    - startStationId
+    - terminalStationId
+  - entity_name: Order
+    write_attributes:
+    - id
+    - boughtDate
+    - travelDate
+    - travelTime
+    - accountId
+    - contactsName
+    - documentType
+    - contactsDocumentNumber
+    - trainNumber
+    - coachNumber
+    - seatClass
+    - seatNumber
+    - from
+    - to
+    - status
+    - price
+  - entity_name: Contacts
+    read_attributes:
+    - id
+    - accountId
+    - name
+    - documentType
+    - documentName
+    - phoneNumber
+  - entity_name: Station
+    read_attributes:
+    - id
+    - name
+  - entity_name: TrainType
+    read_attributes:
+    - id
+    - economyClass
+    - confortClass
+    - averageSpeed
+  - entity_name: PriceConfig
+    read_attributes:
+    - id
+    - trainType
+    - routeId
+    - basicPriceRate
+    - firstClassPriceRate
+  - entity_name: Trip
+    read_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingStationId
+    - terminalStationId
+    - stationsId
+    - startingTime
+    - endTime
+  - entity_name: Travel
+    read_attributes:
+    - startingPlace
+    - tripId
+    - endPlace
+    - departureTime
+  - entity_name: TravelResult
+    read_attributes:
+    - status
+    - percent
+    - trainType 
+# ts-price-service
+- name: createNewPriceConfig
+  consistency: L
+  frequency: 1
+  forced_operations:
+  -
+  database_access:
+  - entity_name: PriceConfig
+    write_attributes:
+    - id
+    - trainType
+    - routeId
+    - basicPriceRate
+    - firstClassPriceRate
+- name: findPriceConfigById
+  consistency: L
+  frequency: 1
+  forced_operations:
+  -
+  database_access:
+  - entity_name: PriceConfig
+    read_attributes:
+    - id
+    - trainType
+    - routeId
+    - basicPriceRate
+    - firstClassPriceRate
+- name: findByRouteIdAndTrainType
+  consistency: L
+  frequency: 1
+  forced_operations:
+  -
+  database_access:
+  - entity_name: PriceConfig
+    read_attributes:
+    - id
+    - trainType
+    - routeId
+    - basicPriceRate
+    - firstClassPriceRate
+- name: findAllPriceConfig
+  consistency: L
+  frequency: 1
+  forced_operations:
+  -
+  database_access:
+  - entity_name: PriceConfig
+    read_attributes:
+    - id
+    - trainType
+    - routeId
+    - basicPriceRate
+    - firstClassPriceRate
+- name: deletePriceConfig
+  consistency: L
+  frequency: 1
+  forced_operations:
+  -
+  database_access:
+  - entity_name: PriceConfig
+    write_attributes:
+    - id
+- name: updatePriceConfig
+  consistency: L
+  frequency: 1
+  forced_operations:
+  -
+  database_access:
+  - entity_name: PriceConfig
+    read_attributes:
+    - id
+    write_attributes:
+    - trainType
+    - routeId
+    - basicPriceRate
+    - firstClassPriceRate
+# ts-rebook-service
+- name: rebook
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Order
+    read_attributes:
+    - id
+    write_attributes:
+    - boughtDate
+    - travelDate
+    - travelTime
+    - accountId
+    - contactsName
+    - documentType
+    - contactsDocumentNumber
+    - trainNumber
+    - coachNumber
+    - seatClass
+    - seatNumber
+    - from
+    - to
+    - status
+    - price
+  - entity_name: Trip
+    read_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingTime
+    - startingStationId
+    - stationsId
+    - terminalStationId
+    - endTime
+- name: payDifferenceRebook
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Trip
+    read_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingTime
+    - startingStationId
+    - stationsId
+    - terminalStationId
+    - endTime
+  - entity_name: Payment
+    write_attributes:
+    - userId
+    - price 
+    - orderId  
+  - entity_name: Money
+    read_attributes:
+    - userId
+    - money 
+    - type 
+# ts-route-plan-service
+- name: searchCheapestRouteResult
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Trip
+    read_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingTime
+    - startingStationId
+    - stationsId
+    - terminalStationId
+    - endTime
+  - entity_name: PriceConfig
+    read_attributes:
+    - id
+    - trainType
+    - routeId
+    - basicPriceRate
+    - firstClassPriceRate
+  - entity_name: Route
+    write_attributes:
+    - id
+    - stations
+    - distances
+    - startStationId
+    - terminalStationId
+- name: searchMinStopRouteResult
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Trip
+    read_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingTime
+    - startingStationId
+    - stationsId
+    - terminalStationId
+    - endTime
+  - entity_name: Route
+    write_attributes:
+    - id
+    - stations
+    - distances
+    - startStationId
+    - terminalStationId
+- name: searchQuickestRouteResult
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Trip
+    read_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingTime
+    - startingStationId
+    - stationsId
+    - terminalStationId
+    - endTime
+  - entity_name: Route
+    write_attributes:
+    - id
+    - stations
+    - distances
+    - startStationId
+    - terminalStationId
+# ts-route-service
+- name: createAndModifyRoute
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+    - entity_name: Route
+      write_attributes:
+      - id
+      - stations
+      - distances
+      - startStationId
+      - terminalStationId
+- name: deleteRoute
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+    - entity_name: Route
+      write_attributes:
+      - routeId
+- name: getAllRoutes
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Route
+    read_attributes:
+    - id
+    - stations
+    - distances
+    - startStationId
+    - terminalStationId
+- name: getRouteById
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Route
+    read_attributes:
+    - id
+    - stations
+    - distances
+    - startStationId
+    - terminalStationId
+- name: getRouteByStartAndTerminal
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Route
+    read_attributes:
+    - id
+    - stations
+    - distances
+    - startStationId
+    - terminalStationId
+# ts-seat-service
+- name: distributeSeat
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Route
+    read_attributes:
+    - id
+    - stations
+    - distances
+    - startStationId
+    - terminalStationId
+  - entity_name: Order
+    write_attributes:
+    - id
+    - boughtDate
+    - travelDate
+    - travelTime
+    - accountId
+    - contactsName
+    - documentType
+    - contactsDocumentNumber
+    - trainNumber
+    - coachNumber
+    - seatClass
+    - seatNumber
+    - from
+    - to
+    - status
+    - price
+  - entity_name: TrainType
+    write_attributes:
+    - id
+    - economyClass
+    - confortClass
+    - averageSpeed
+- name: getLeftTicketOfInterval
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Route
+    read_attributes:
+    - id
+    - stations
+    - distances
+    - startStationId
+    - terminalStationId
+  - entity_name: Order
+    read_attributes:
+    - id
+    - boughtDate
+    - travelDate
+    - travelTime
+    - accountId
+    - contactsName
+    - documentType
+    - contactsDocumentNumber
+    - trainNumber
+    - coachNumber
+    - seatClass
+    - seatNumber
+    - from
+    - to
+    - status
+    - price
+  - entity_name: TrainType
+    read_attributes:
+    - id
+    - economyClass
+    - confortClass
+    - averageSpeed
+  - entity_name: Config
+    read_attributes:
+    - name
+    - value
+    - description
+# ts-security-service
+- name: findAllSecurityConfig 
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: SecurityConfig
+    read_attributes:
+    - id
+    - name
+    - value
+    - description
+- name: addNewSecurityConfig 
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: SecurityConfig
+    write_attributes:
+    - id
+    - name
+    - value
+    - description
+- name: modifySecurityConfig 
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: SecurityConfig
+    read_attributes:
+    - id
+    write_attributes:
+    - name
+    - value
+    - description
+- name: deleteSecurityConfig 
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: SecurityConfig
+    write_attributes:
+    - id
+- name: checkSecurityConfig 
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access: 
+  - entity_name: Order
+    read_attributes:
+    - status
+    - boughtDate
+    - travelDate
+  - entity_name: SecurityConfig
+    read_attributes:
+    - name
+    - value
+# ts-station-service
+- name: createStation
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Station
+    write_attributes:
+    - id
+    - name
+    - stayTime
+- name: existStation
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Station
+    read_attributes:
+    - name
+- name: updateStation
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Station
+    read_attributes:
+    - id
+    write_attributes:
+    - name
+    - stayTime
+- name: deleteStation
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Station
+    write_attributes:
+    - id
+- name: queryStations
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Station
+    read_attributes:
+    - id
+    - name
+    - stayTime
+- name: queryStationById
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Station
+    read_attributes:
+    - id
+    - name
+    - stayTime
+# ts-ticket-office-service
+- name: getAllOffices
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Office
+    read_attributes:
+    - officeName
+    - address
+    - workTime
+    - windowNum
+    - province
+    - city
+    - region
+- name: getSpecificOffice
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Office
+    read_attributes:
+    - officeName
+    - address
+    - workTime
+    - windowNum
+    - province
+    - city
+    - region
+- name: addOffice
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Office
+    write_attributes:
+    - officeName
+    - address
+    - workTime
+    - windowNum
+    - province
+    - city
+    - region
+- name: deleteOffice
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Office
+    write_attributes:
+    - officeName
+    - address
+- name: updateOffice
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Office
+    read_attributes:
+    - officeName
+    - address
+    write_attributes:
+    - workTime
+    - windowNum
+    - province
+    - city
+    - region
+# ts-ticketinfo-service skipped because only calls operations from basic service
+# ts-train-service
+- name: createTrain
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: TrainType
+    write_attributes:
+    - id
+    - economyClass
+    - confortClass
+    - averageSpeed
+- name: retrieveTrain
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: TrainType
+    read_attributes:
+    - id
+    - economyClass
+    - confortClass
+    - averageSpeed 
+- name: queryTrains
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: TrainType
+    read_attributes:
+    - id
+    - economyClass
+    - confortClass
+    - averageSpeed 
+- name: updateTrain
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: TrainType
+    read_attributes:
+    - id
+    write_attributes:
+    - economyClass
+    - confortClass
+    - averageSpeed 
+- name: deleteTrain
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: TrainType
+    write_attributes:
+    - id
+# ts-travel-plan-service
+- name: getCheapestTravelResult
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Trip
+    write_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingTime
+    - startingStationId
+    - stationsId
+    - terminalStationId
+    - endTime
+  - entity_name: PriceConfig
+    read_attributes:
+    - id
+    - trainType
+    - routeId
+    - basicPriceRate
+    - firstClassPriceRate
+  - entity_name: Route
+    write_attributes:
+    - id
+    - stations
+    - distances
+    - startStationId
+    - terminalStationId
+  - entity_name: Order
+    read_attributes:
+    - id
+    - boughtDate
+    - travelDate
+    - travelTime
+    - accountId
+    - contactsName
+    - documentType
+    - contactsDocumentNumber
+    - trainNumber
+    - coachNumber
+    - seatClass
+    - seatNumber
+    - from
+    - to
+    - status
+    - price
+  - entity_name: TrainType
+    read_attributes:
+    - id
+    - economyClass
+    - confortClass
+    - averageSpeed
+- name: getQuickestTravelResult
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Trip
+    write_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingTime
+    - startingStationId
+    - stationsId
+    - terminalStationId
+    - endTime
+  - entity_name: Route
+    write_attributes:
+    - id
+    - stations
+    - distances
+    - startStationId
+    - terminalStationId
+  - entity_name: Order
+    read_attributes:
+    - id
+    - boughtDate
+    - travelDate
+    - travelTime
+    - accountId
+    - contactsName
+    - documentType
+    - contactsDocumentNumber
+    - trainNumber
+    - coachNumber
+    - seatClass
+    - seatNumber
+    - from
+    - to
+    - status
+    - price
+  - entity_name: TrainType
+    read_attributes:
+    - id
+    - economyClass
+    - confortClass
+    - averageSpeed
+- name: getMinStopTravelResult
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Trip
+    write_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingTime
+    - startingStationId
+    - stationsId
+    - terminalStationId
+    - endTime
+  - entity_name: Route
+    write_attributes:
+    - id
+    - stations
+    - distances
+    - startStationId
+    - terminalStationId
+  - entity_name: Order
+    read_attributes:
+    - id
+    - boughtDate
+    - travelDate
+    - travelTime
+    - accountId
+    - contactsName
+    - documentType
+    - contactsDocumentNumber
+    - trainNumber
+    - coachNumber
+    - seatClass
+    - seatNumber
+    - from
+    - to
+    - status
+    - price
+  - entity_name: TrainType
+    read_attributes:
+    - id
+    - economyClass
+    - confortClass
+    - averageSpeed
+# ts-travel-service
+- name: createTrip
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Trip
+    write_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingTime
+    - startingStationId
+    - stationsId
+    - terminalStationId
+    - endTime
+- name: getRouteByTripId
+  consistency: L
+  frequency: 1
+  forced_operations:
+  -
+  database_access:
+  - entity_name: Trip
+    read_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingTime
+    - startingStationId
+    - stationsId
+    - terminalStationId
+    - endTime
+  - entity_name: Route
+    read_attributes:
+    - id
+    - stations
+    - distances
+    - startStationId
+    - terminalStationId
+- name: getTrainTypeByTripId
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Trip
+    read_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingTime
+    - startingStationId
+    - stationsId
+    - terminalStationId
+    - endTime
+  - entity_name: TrainType
+    read_attributes:
+    - id
+    - economyClass
+    - confortClass
+    - averageSpeed
+- name: retrieveTrip
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Trip
+    read_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingTime
+    - startingStationId
+    - stationsId
+    - terminalStationId
+    - endTime
+- name: updateTrip
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Trip
+    read_attributes:
+    - tripId
+    write_attributes:
+    - trainTypeId
+    - routeId
+    - startingTime
+    - startingStationId
+    - stationsId
+    - terminalStationId
+    - endTime
+- name: deleteTrip
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Trip
+    write_attributes:
+    - tripId
+- name: getTickets
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Station
+    read_attributes:
+    - id
+    - name
+  - entity_name: TrainType
+    read_attributes:
+    - id
+    - economyClass
+    - confortClass
+    - averageSpeed
+  - entity_name: Route
+    read_attributes:
+    - id
+    - stations
+    - distances
+    - startingStationId
+    - terminalStationId
+  - entity_name: PriceConfig
+    read_attributes:
+    - id
+    - trainType
+    - routeId
+    - basicPriceRate
+    - firstClassPriceRate
+  - entity_name: Trip
+    read_attributes:
+    - tripId
+    - trainTypeId
+    - routeId
+    - startingStationId
+    - terminalStationId
+    - stationsId
+    - startingTime
+    - endTime
+  - entity_name: Travel
+    read_attributes:
+    - startingPlace
+    - tripId
+    - endPlace
+    - departureTime
+  - entity_name: TravelResult
+    read_attributes:
+    - status
+    - percent
+    - trainType
+  - entity_name: Order
+    write_attributes:
+    - id
+    - boughtDate
+    - travelDate
+    - travelTime
+    - accountId
+    - contactsName
+    - documentType
+    - contactsDocumentNumber
+    - trainNumber
+    - coachNumber
+    - seatClass
+    - seatNumber
+    - from
+    - to
+    - status
+    - price
+# ts-user-service skipped because same as ts-auth
+# ts-verification-service skipped because no data used
+# ts-voucher-service
+- name: addVoucher
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Voucher
+    write_attributes:
+    - voucherId
+    - orderId
+    - travelDate
+    - travelTime
+    - contactName
+    - trainNumber
+    - seatClass
+    - seatNumber
+    - startStation
+    - destStation
+    - price
+- name: queryVoucher
+  consistency: L
+  frequency: 1
+  forced_operations: 
+  -
+  database_access:
+  - entity_name: Voucher
+    read_attributes:
+    - voucherId
+    - orderId
+    - travelDate
+    - travelTime
+    - contactName
+    - trainNumber
+    - seatClass
+    - seatNumber
+    - startStation
+    - destStation
+    - price
