@@ -504,15 +504,18 @@ def compute_op_similarity(o1, o2):
 
 def compute_total_coupling(services):
     sim = []
-    suca = 0
     for s in services:
         ops = [x for x in s if x < op_num]
         similarities = []
         for o in ops:
             for o2 in ops:
                 similarities.append(compute_op_similarity(o, o2))
-        sim.append(round((sum(similarities) * len(ops)) / (op_num * len(similarities)), 4))
-        suca += len(ops)
+        ### TODO: ho introdotto il caso else per gestire il caso in cui un microservizio non ha operazione.
+        ### Questo caso non era possibile in Cromlech: cosi' e' gestito nel modo corretto.
+        if len(ops) > 0:
+            sim.append(round((sum(similarities) * len(ops)) / (op_num * len(similarities)), 4))
+        else:
+            sim.append(0)
     return sum(sim)
 
 def write_dat_file(num_services):
@@ -825,9 +828,7 @@ if __name__ == '__main__':
         for entity in service['entities']:
             for a in attributes_iton.keys():
                 if attributes_iton.get(a).startswith(entity['label'] + '.'):
-                    ### FIXME: questo serve solo a evitare microservizi con sole entita' ma e' sbagliato (non considera le entita')
-                    if len(service_results) > 0:
-                        service_results.append(a)
+                    service_results.append(a)
                     print(str(a) + " " + attributes_iton.get(a))
 
         # Aggiunge i risultati del microservizio a tutti i risultati
@@ -843,7 +844,8 @@ if __name__ == '__main__':
     #     attrs_num = [int(x[:len(x) - 1]) for x in attrs]
     #     opt_result_only_nums.append(ops + attrs_num)
 
-    # print(results)
+    print("================================")
+    print("Used microservices: " + str(len(results)))
     print("Total coupling: " + str(compute_total_coupling(results)))
     elect_primary_replicas(results)
     print("Communication cost: " + str(compute_communication_cost(results)))

@@ -1,0 +1,29 @@
+### Input converter
+
+- Va bene lasciare forced entities sempre vuote? UPDATE: ok da mail
+
+- Va bene lasciare replication overhead sempre a 1?
+
+### Output converter
+
+- Come gestire il fatto che alcuni microservizi possano non avere operazioni
+  in Pangaea? (Al momento metto similarità a 0)
+
+- Per convertire l'output di Pangaea nell'output di Cromlech utilizzo lo
+  stesso approccio che c'era nel file 'preprocessing.py' originale di
+  Cromlech.  Se capisco bene, a partire da una soluzione (allocazioni di
+  operazioni e entità su microservizi) viene scelto dove mettere le repliche
+  primarie. Perché? La soluzione di Cromlech non contiene già questa
+  informazione?
+
+### General
+
+- Va bene il modo in cui consideriamo tabelle e attributi (in Pangaea
+  consideriamo solo tabelle e poi associamo tutti gli attributi di una tabella
+  l microservizio in cui quella tabella viene messa.
+
+- In base a come gestiamo attributi e tabelle in Cromlech, non dovremmo
+  modellare il fatto che un gruppo di attributi viene acceduto come un unico
+  blocco da una operazione? Intendo, a ogni invocazione dell'operazione
+  cambiano tutti gli attributi: questo non dovrebbe costare comunque meno che
+  se avessi gli attributi distribuiti su servizi diversi?
