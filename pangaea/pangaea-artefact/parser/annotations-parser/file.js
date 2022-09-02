@@ -59,7 +59,6 @@ async function parseResultFile(dependencies, entitiesTranslations, operationsTra
 }
 
 async function parseResultCsv(dependencies, entitiesTranslations, operationsTranslations, entities_coupling) {
-    console.log("AAA");
     let csvFile = `result.csv`;
     let parsedCSV = await csvUtils.parseCSV(csvFile);
     let microservices = [];

@@ -33,8 +33,3 @@
   il file 'microservices.json' dentro alla directory 'output_converter'.
   Questo legge il file di descrizione yaml di cromlech e i risultati json di
   Pangaea e produce i risultati.
-
-*** TODO ***
-
-- L'output converter non funziona ancora correttamente perche' non considera i
-  microservizi senza operazioni
