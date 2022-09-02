@@ -4,7 +4,7 @@ import csv
 import solution
 
 
-def optimizer(debug=False, writeCsv=True, communication_weight=0, coupling_weight=0, num_microservices=0, executionTime=400, file_name='result.csv'):
+def optimizer(debug=False, writeCsv=True, communication_weight=0, coupling_weight=0, num_microservices=0, executionTime=3600, file_name='result.csv'):
     model = pyo.AbstractModel()
 
     # opt = pyo.SolverFactory('glpk', executable="C:\\w64\\glpsol")
@@ -34,15 +34,15 @@ def optimizer(debug=False, writeCsv=True, communication_weight=0, coupling_weigh
 
     # weight coefficient for coupling
     if coupling_weight == 0:
-        model.coupling_weight = pyo.Param(within=pyo.PositiveIntegers)
+        model.coupling_weight = pyo.Param(within=pyo.PositiveIntegers, mutable=True)
     else:
-        model.coupling_weight = pyo.Param(within=pyo.PositiveIntegers, initialize=coupling_weight)
+        model.coupling_weight = pyo.Param(within=pyo.PositiveIntegers, initialize=coupling_weight, mutable=True)
 
     # weight coefficient for communication
     if communication_weight == 0:
-        model.communication_weight = pyo.Param(within=pyo.PositiveIntegers)
+        model.communication_weight = pyo.Param(within=pyo.PositiveIntegers, mutable=True)
     else:
-        model.communication_weight = pyo.Param(within=pyo.PositiveIntegers, initialize=communication_weight)
+        model.communication_weight = pyo.Param(within=pyo.PositiveIntegers, initialize=communication_weight, mutable=True)
 
     # weight coefficient for entities' replication
     model.replication_overhead = pyo.Param({'C'}, model.ENTITIES, within=pyo.Integers, initialize=1)
@@ -162,7 +162,9 @@ def optimizer(debug=False, writeCsv=True, communication_weight=0, coupling_weigh
     model.obj = pyo.Objective(rule=total_cost, sense=pyo.minimize)
     model.name = 'Microservices Decomposition'
     instance = model.create_instance('microservices.dat')
-
+    instance.coupling_weight.value = coupling_weight
+    instance.communication_weight.value = communication_weight
+    
     #opt.options["mipgap"] = 0.05
     opt.options['mipfocus'] = 1
     opt.options['presolve'] = 2
@@ -281,4 +283,4 @@ def optimizer(debug=False, writeCsv=True, communication_weight=0, coupling_weigh
             total_cost=total_cost
         )
 
-optimizer(debug=True)
+# optimizer(debug=True)

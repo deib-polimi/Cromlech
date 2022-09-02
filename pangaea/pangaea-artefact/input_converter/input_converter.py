@@ -90,5 +90,4 @@ if __name__ == "__main__":
     process_entities(json_data, output_file)
     process_operations(json_data, output_file)
     output_file.close()
-
-
+    

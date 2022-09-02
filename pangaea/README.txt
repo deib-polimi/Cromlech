@@ -33,3 +33,6 @@
   il file 'microservices.json' dentro alla directory 'output_converter'.
   Questo legge il file di descrizione yaml di cromlech e i risultati json di
   Pangaea e produce i risultati.
+
+- (Gli ulimi tre punti per l'analisi dei risultati sono automatizzati per
+  trainticket con uno script nella cartella results/trainticket)
