@@ -316,6 +316,7 @@ def post_processing_communication_cost(result):
     print("WOP " + str(wop))
     print("ROP " + str(rop))
     print("REPL " + str(repl))
+    return wop + rop + repl
 
 # Removes all columns which only create noise (as they are only accessed by a single operation) and returns
 # the list of operations which have no accessed columns, which can then be trimmed from the architecture
@@ -750,6 +751,47 @@ def build_hcw_relationships():
             hc_write_status.update(({a: False}))
 
 
+def annotate_replicas(services, only_ops):
+    cached_a = {}
+    uncached_a = {}
+    tot_rop = 0
+    for a in attributes:
+        c_a = []
+        u_a = []
+        for s in services:
+            if a in s and primary_replicas_locations.get(a) != services.index(s):
+                read_in_same = 0
+                write_in_others = 0
+                for o in s:
+                    if o < 10000 and attributes_iton.get(a) in op_reads.get(o):
+                        read_in_same += nodes_dict.get(o).get_frequency()
+                for s2 in services:
+                    for o in s2:
+                        if o < 10000 and attributes_iton.get(a) in op_writes.get(o):
+                            write_in_others += nodes_dict.get(o).get_frequency()
+                if read_in_same <= write_in_others:
+                    tot_rop += read_in_same
+                    u_a.append(services.index(s))
+                else:
+                    tot_rop += write_in_others
+                    c_a.append(services.index(s))
+        cached_a.update({a: c_a})
+        uncached_a.update({a: u_a})
+    final = []
+    for s in only_ops:
+        new_serv = [] + s
+        for a in attributes:
+            if only_ops.index(s) in cached_a.get(a):
+                new_serv.append(str(a) + 'R')
+            if only_ops.index(s) in uncached_a.get(a):
+                new_serv.append(str(a) + 'N')
+            if only_ops.index(s) == primary_replicas_locations.get(a):
+                new_serv.append(str(a) + 'P')
+        final.append(new_serv)
+    print("FINAL FORMAT: " + str(final))
+    return final
+
+
 if __name__ == '__main__':
     parse_arch_yaml('trainticket.yaml')
     print("Preprocessing...")
@@ -810,17 +852,20 @@ if __name__ == '__main__':
     results_json = json.load(results_file)
 
     results = []
+    results_only_ops = []
     for service in results_json['microservices']:
         print(service['label'])
 
         # Cerca il valore nel dizionario e, quando lo trova, aggiunge la chiave tra le operazioni
         service_results = []
+        service_only_ops = []
         print("Operations: ")
         for op in service['operations']:
             for n in nodes_dict.keys():
                 if nodes_dict.get(n) is not None:
                     if nodes_dict.get(n).get_name() == op['label']:
                         service_results.append(n)
+                        service_only_ops.append(n)
                         print(str(n) + " " + nodes_dict.get(n).get_name())
 
         # Cerca il valore nel dizionario e, quando lo trova, aggiunge la chiave tra le operazioni
@@ -834,6 +879,8 @@ if __name__ == '__main__':
         # Aggiunge i risultati del microservizio a tutti i risultati
         if len(service_results) > 0:
             results.append(service_results)
+        if len(service_only_ops) > 0:
+            results_only_ops.append(service_only_ops)
     
     results_file.close()
     
@@ -848,6 +895,8 @@ if __name__ == '__main__':
     print("Used microservices: " + str(len(results)))
     print("Total coupling: " + str(compute_total_coupling(results)))
     elect_primary_replicas(results)
+    
+    results_with_replicas = annotate_replicas(services, results_only_ops)
     print("Communication cost: " + str(compute_communication_cost(results)))
     print("Normalized communication cost: " + str(compute_communication_cost(results) / max_com_cost))
-    # print("Post processing communucation cost: " + str(post_processing_communication_cost(opt_result)))
+    print("Post processing communication cost: " + str(post_processing_communication_cost(results_with_replicas) / max_com_cost))

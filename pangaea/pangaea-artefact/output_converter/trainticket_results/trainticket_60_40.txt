@@ -1,0 +1,490 @@
+['AssuranceType', 'Assurance', 'User', 'Station', 'TrainType', 'Route', 'PriceConfig', 'Trip', 'Travel', 'Order', 'Money', 'Config', 'ConsignPrice', 'ConsignRecord', 'Contacts', 'Delivery', 'FoodStore', 'TrainFood', 'FoodOrder', 'Payment', 'Balance', 'TravelResult', 'SecurityConfig', 'Office', 'Voucher']
+Preprocessing...
+Removed User.email
+Removed op. deleteRoute
+0 getAllAssuranceTypes
+1 getAllAssurances
+2 findAssuranceById
+3 findAssuranceByOrderId
+4 createAssurance
+5 deleteAssuranceById
+6 deleteAssuranceByOrderId
+7 modifyAssurance
+8 saveUser
+9 getAllUser
+10 findByUserId
+11 findByUsername
+12 deleteUserById
+13 updateUser
+14 queryForTravel
+15 queryForStationId
+16 cancelOrderbyUser
+17 calculateRefund
+18 createConfig
+19 updateConfig
+20 queryConfig
+21 deleteConfig
+22 queryAllConfigs
+23 getPriceByWeightAndRegion
+24 queryConsignPrice
+25 createAndModifyPrice
+26 getConsignPrice
+27 insertConsignRecord
+28 updateConsignRecord
+29 queryConsignByAccountId
+30 queryConsignByOrderId
+31 queryConsignByConsignee
+32 findContactsById
+33 findContactsByAccountId
+34 createContact
+35 deleteContact
+36 modifyContact
+37 getAllContacts
+38 processDelivery
+39 ticketExecute
+40 ticketCollect
+41 createFoodStore
+42 createTrainFood
+43 listFoodStores
+44 listTrainFood
+45 listFoodStoredByStationId
+46 listTrainFoodByTripIds
+47 createFoodOrdersInBatch
+48 createFoodOrder
+49 deleteFoodOrder
+50 findFoodOrderByOrderId
+51 findAllFoodOrders
+52 updateFoodOrder
+53 getAllFoods
+54 pay
+55 createPaymentAccount
+56 addMoney
+57 queryPaymentAccount
+58 queryPayments
+59 drawBack
+60 payDifference
+61 queryMoney
+62 initPayment
+63 getSoldTickets
+64 createOrder
+65 cancelOrder
+66 deleteOrder
+67 updateOrder
+68 modifyOrderStatus
+69 getOrderPrice
+70 payOrder
+71 initOrder
+72 checkOrderValidity
+73 preserve
+74 createNewPriceConfig
+75 findPriceConfigById
+76 findByRouteIdAndTrainType
+77 findAllPriceConfig
+78 deletePriceConfig
+79 updatePriceConfig
+80 rebook
+81 payDifferenceRebook
+82 searchCheapestRouteResult
+83 searchMinStopRouteResult
+84 searchQuickestRouteResult
+85 createAndModifyRoute
+87 getRouteById
+88 getRouteByStartAndTerminal
+89 distributeSeat
+90 getLeftTicketOfInterval
+91 findAllSecurityConfig
+92 addNewSecurityConfig
+93 modifySecurityConfig
+94 deleteSecurityConfig
+95 checkSecurityConfig
+96 createStation
+97 existStation
+98 updateStation
+99 deleteStation
+100 queryStations
+101 queryStationById
+102 getAllOffices
+103 getSpecificOffice
+104 addOffice
+105 deleteOffice
+106 updateOffice
+107 createTrain
+108 retrieveTrain
+109 queryTrains
+110 updateTrain
+111 deleteTrain
+112 getCheapestTravelResult
+113 getQuickestTravelResult
+114 getMinStopTravelResult
+115 createTrip
+116 getRouteByTripId
+117 getTrainTypeByTripId
+118 retrieveTrip
+119 updateTrip
+120 deleteTrip
+121 getTickets
+122 addVoucher
+123 queryVoucher
+86 getAllRoutes
+ROP 472
+REPL 76 - 76
+WOP 259
+M1
+Operations: 
+4 createAssurance
+5 deleteAssuranceById
+6 deleteAssuranceByOrderId
+2 findAssuranceById
+3 findAssuranceByOrderId
+0 getAllAssuranceTypes
+1 getAllAssurances
+7 modifyAssurance
+Entities: 
+100000 Assurance.id
+100001 Assurance.index
+100002 Assurance.name
+100003 Assurance.orderId
+100004 Assurance.price
+100005 AssuranceType.index
+100006 AssuranceType.name
+100007 AssuranceType.price
+M2
+Operations: 
+56 addMoney
+17 calculateRefund
+55 createPaymentAccount
+59 drawBack
+62 initPayment
+54 pay
+60 payDifference
+81 payDifferenceRebook
+61 queryMoney
+58 queryPayments
+Entities: 
+100051 Money.money
+100052 Money.type
+100053 Money.userId
+100077 Payment.id
+100078 Payment.orderId
+100079 Payment.price
+100080 Payment.userId
+M3
+Operations: 
+Entities: 
+M4
+Operations: 
+Entities: 
+M5
+Operations: 
+Entities: 
+100106 Travel.departureTime
+100107 Travel.endPlace
+100108 Travel.startingPlace
+100109 Travel.tripId
+M6
+Operations: 
+Entities: 
+M7
+Operations: 
+96 createStation
+99 deleteStation
+97 existStation
+15 queryForStationId
+101 queryStationById
+100 queryStations
+98 updateStation
+Entities: 
+100096 Station.id
+100097 Station.name
+100098 Station.stayTime
+M8
+Operations: 
+Entities: 
+M9
+Operations: 
+48 createFoodOrder
+47 createFoodOrdersInBatch
+49 deleteFoodOrder
+51 findAllFoodOrders
+50 findFoodOrderByOrderId
+38 processDelivery
+52 updateFoodOrder
+Entities: 
+100034 Delivery.foodName
+100035 Delivery.orderId
+100036 Delivery.stationName
+100037 Delivery.storeName
+100038 FoodOrder.foodName
+100039 FoodOrder.foodType
+100040 FoodOrder.id
+100041 FoodOrder.orderId
+100042 FoodOrder.stationName
+100043 FoodOrder.storeName
+M10
+Operations: 
+57 queryPaymentAccount
+Entities: 
+M11
+Operations: 
+104 addOffice
+105 deleteOffice
+102 getAllOffices
+103 getSpecificOffice
+106 updateOffice
+Entities: 
+100054 Office.address
+100055 Office.city
+100056 Office.officeName
+100057 Office.province
+100058 Office.region
+100059 Office.windowNum
+100060 Office.workTime
+M12
+Operations: 
+65 cancelOrder
+16 cancelOrderbyUser
+72 checkOrderValidity
+95 checkSecurityConfig
+85 createAndModifyRoute
+64 createOrder
+107 createTrain
+115 createTrip
+66 deleteOrder
+111 deleteTrain
+120 deleteTrip
+89 distributeSeat
+86 getAllRoutes
+112 getCheapestTravelResult
+90 getLeftTicketOfInterval
+114 getMinStopTravelResult
+69 getOrderPrice
+113 getQuickestTravelResult
+87 getRouteById
+88 getRouteByStartAndTerminal
+116 getRouteByTripId
+63 getSoldTickets
+121 getTickets
+117 getTrainTypeByTripId
+71 initOrder
+68 modifyOrderStatus
+70 payOrder
+73 preserve
+14 queryForTravel
+109 queryTrains
+80 rebook
+108 retrieveTrain
+118 retrieveTrip
+82 searchCheapestRouteResult
+83 searchMinStopRouteResult
+84 searchQuickestRouteResult
+40 ticketCollect
+39 ticketExecute
+67 updateOrder
+110 updateTrain
+119 updateTrip
+Entities: 
+100061 Order.accountId
+100062 Order.boughtDate
+100063 Order.coachNumber
+100064 Order.contactsDocumentNumber
+100065 Order.contactsName
+100066 Order.documentType
+100067 Order.from
+100068 Order.id
+100069 Order.price
+100070 Order.seatClass
+100071 Order.seatNumber
+100072 Order.status
+100073 Order.to
+100074 Order.trainNumber
+100075 Order.travelDate
+100076 Order.travelTime
+100086 Route.distances
+100087 Route.id
+100088 Route.startStationId
+100089 Route.startingStationId
+100090 Route.stations
+100091 Route.terminalStationId
+100102 TrainType.averageSpeed
+100103 TrainType.confortClass
+100104 TrainType.economyClass
+100105 TrainType.id
+100113 Trip.endTime
+100114 Trip.routeId
+100115 Trip.startingStationId
+100116 Trip.startingTime
+100117 Trip.stationsId
+100118 Trip.terminalStationId
+100119 Trip.trainTypeId
+100120 Trip.tripId
+M13
+Operations: 
+18 createConfig
+21 deleteConfig
+22 queryAllConfigs
+20 queryConfig
+19 updateConfig
+Entities: 
+100008 Config.description
+100009 Config.name
+100010 Config.value
+M14
+Operations: 
+92 addNewSecurityConfig
+94 deleteSecurityConfig
+91 findAllSecurityConfig
+93 modifySecurityConfig
+Entities: 
+100092 SecurityConfig.description
+100093 SecurityConfig.id
+100094 SecurityConfig.name
+100095 SecurityConfig.value
+M15
+Operations: 
+27 insertConsignRecord
+29 queryConsignByAccountId
+31 queryConsignByConsignee
+30 queryConsignByOrderId
+28 updateConsignRecord
+Entities: 
+100017 ConsignRecord.accountId
+100018 ConsignRecord.consignee
+100019 ConsignRecord.from
+100020 ConsignRecord.handleDate
+100021 ConsignRecord.id
+100022 ConsignRecord.orderId
+100023 ConsignRecord.phone
+100024 ConsignRecord.price
+100025 ConsignRecord.targetDate
+100026 ConsignRecord.to
+100027 ConsignRecord.weight
+M16
+Operations: 
+Entities: 
+M17
+Operations: 
+34 createContact
+35 deleteContact
+33 findContactsByAccountId
+32 findContactsById
+37 getAllContacts
+36 modifyContact
+Entities: 
+100028 Contacts.accountId
+100029 Contacts.documentName
+100030 Contacts.documentType
+100031 Contacts.id
+100032 Contacts.name
+100033 Contacts.phoneNumber
+M18
+Operations: 
+25 createAndModifyPrice
+26 getConsignPrice
+23 getPriceByWeightAndRegion
+24 queryConsignPrice
+Entities: 
+100011 ConsignPrice.beyondPrice
+100012 ConsignPrice.id
+100013 ConsignPrice.index
+100014 ConsignPrice.initialPrice
+100015 ConsignPrice.initialWeight
+100016 ConsignPrice.withinPrice
+M19
+Operations: 
+42 createTrainFood
+44 listTrainFood
+46 listTrainFoodByTripIds
+Entities: 
+100099 TrainFood.foodList
+100100 TrainFood.id
+100101 TrainFood.tripId
+M20
+Operations: 
+Entities: 
+M21
+Operations: 
+Entities: 
+M22
+Operations: 
+12 deleteUserById
+10 findByUserId
+11 findByUsername
+9 getAllUser
+8 saveUser
+13 updateUser
+Entities: 
+100121 User.id
+100122 User.password
+100123 User.roles
+100124 User.userId
+100125 User.userName
+M23
+Operations: 
+122 addVoucher
+123 queryVoucher
+Entities: 
+100126 Voucher.contactName
+100127 Voucher.destStation
+100128 Voucher.orderId
+100129 Voucher.price
+100130 Voucher.seatClass
+100131 Voucher.seatNumber
+100132 Voucher.startStation
+100133 Voucher.trainNumber
+100134 Voucher.travelDate
+100135 Voucher.travelTime
+100136 Voucher.voucherId
+M24
+Operations: 
+Entities: 
+M25
+Operations: 
+74 createNewPriceConfig
+78 deletePriceConfig
+77 findAllPriceConfig
+76 findByRouteIdAndTrainType
+75 findPriceConfigById
+79 updatePriceConfig
+Entities: 
+100081 PriceConfig.basicPriceRate
+100082 PriceConfig.firstClassPriceRate
+100083 PriceConfig.id
+100084 PriceConfig.routeId
+100085 PriceConfig.trainType
+M26
+Operations: 
+41 createFoodStore
+53 getAllFoods
+45 listFoodStoredByStationId
+43 listFoodStores
+Entities: 
+100044 FoodStore.businessTime
+100045 FoodStore.deliveryFee
+100046 FoodStore.foodList
+100047 FoodStore.id
+100048 FoodStore.stationId
+100049 FoodStore.storeName
+100050 FoodStore.telephone
+M27
+Operations: 
+Entities: 
+100110 TravelResult.percent
+100111 TravelResult.status
+100112 TravelResult.trainType
+================================
+Used microservices: 19
+Total coupling: 0.7696000000000001
+FINAL FORMAT: [[4, 5, 6, 2, 3, 0, 1, 7, '100000P', '100001P', '100002P', '100003P', '100004P', '100005P', '100006P', '100007P'], [56, 17, 55, 59, 62, 54, 60, 81, 61, 58, '100000N', '100003N', '100005N', '100006N', '100007N', '100051P', '100052P', '100053P', '100077P', '100078P', '100079P', '100080P'], [96, 99, 97, 15, 101, 100, 98, '100000N', '100001N', '100002N', '100003N', '100004N', '100106P', '100107P', '100108P', '100109P'], [48, 47, 49, 51, 50, 38, 52, '100000N', '100001N', '100002N', '100003N', '100004N', '100096P', '100097P', '100098P'], [57, '100000N', '100001N', '100002N', '100003N', '100004N', '100005N', '100006N', '100007N', '100034P', '100035P', '100036P', '100037P', '100038P', '100039P', '100040P', '100041P', '100042P', '100043P'], [104, 105, 102, 103, 106, '100000N'], [65, 16, 72, 95, 85, 64, 107, 115, 66, 111, 120, 89, 86, 112, 90, 114, 69, 113, 87, 88, 116, 63, 121, 117, 71, 68, 70, 73, 14, 109, 80, 108, 118, 82, 83, 84, 40, 39, 67, 110, 119, '100003N', '100054P', '100055P', '100056P', '100057P', '100058P', '100059P', '100060P'], [18, 21, 22, 20, 19, '100000N', '100003N', '100005N', '100006N', '100007N', '100061P', '100062P', '100063P', '100064P', '100065P', '100066P', '100067P', '100068P', '100069P', '100070P', '100071P', '100072P', '100073P', '100074P', '100075P', '100076P', '100086P', '100087P', '100088P', '100089P', '100090P', '100091P', '100102P', '100103P', '100104P', '100105P', '100113P', '100114P', '100115P', '100116P', '100117P', '100118P', '100119P', '100120P'], [92, 94, 91, 93, '100008P', '100009P', '100010P', '100122N', '100123N', '100124N', '100125N'], [27, 29, 31, 30, 28, '100092P', '100093P', '100094P', '100095P', '100122N', '100123N', '100124N', '100125N'], [34, 35, 33, 32, 37, 36, '100017P', '100018P', '100019P', '100020P', '100021P', '100022P', '100023P', '100024P', '100025P', '100026P', '100027P', '100122N', '100123N', '100124N', '100125N'], [25, 26, 23, 24, '100028P', '100029P', '100030P', '100031P', '100032P', '100033P', '100122N', '100123N', '100124N', '100125N'], [42, 44, 46, '100011P', '100012P', '100013P', '100014P', '100015P', '100016P', '100124N'], [12, 10, 11, 9, 8, 13, '100099P', '100100P', '100101P', '100122N', '100123N', '100124N', '100125N'], [122, 123, '100081N', '100082N', '100083N', '100084N', '100085N', '100086N', '100087N', '100089R', '100090N', '100091N', '100096N', '100097N', '100102N', '100103N', '100104N', '100105N', '100106R', '100107R', '100108R', '100109R', '100113N', '100114N', '100115N', '100116N', '100117N', '100118N', '100119N', '100120N', '100121P', '100122P', '100123P', '100124P', '100125P'], [74, 78, 77, 76, 75, 79, '100096N', '100097N', '100126P', '100127P', '100128P', '100129P', '100130P', '100131P', '100132P', '100133P', '100134P', '100135P', '100136P'], [41, 53, 45, 43, '100061N', '100072N', '100081P', '100082P', '100083P', '100084P', '100085P', '100121R', '100122N', '100125N']]
+ROP 0
+REPL 0 - 0
+WOP 0
+Communication cost: 0
+ROP 0
+REPL 0 - 0
+WOP 0
+Normalized communication cost: 0.0
+POST PROCESSING:
+WOP 8
+ROP 13
+REPL 0
+Post processing communication cost: 0.026022304832713755
