@@ -192,15 +192,17 @@ def parse_arch_yaml(yaml_filename):
         except yaml.YAMLError as exc:
             print(exc)
 
-
+### Check: ho messo indici espliciti invece di chiamare la funzione index
 def compute_communication_cost(microservices):
     w_op = 0
     location_dict = {}
     op_scores = {}
     for g in graph:
+        m_index = 0
         for m in microservices:
             if g in m:
-                location_dict.update({g: microservices.index(m)})
+                location_dict.update({g: m_index})
+            m_index = m_index + 1
     for a in primary_replicas_locations:
         if not static_status.get(a):
             m_index = 0
@@ -308,10 +310,13 @@ def post_processing_communication_cost(result):
         for m in result:
             attr_int = [int(x[:len(x)-1]) for x in m if isinstance(x, str)]
             ops = [x for x in m if isinstance(x, int)]
-            if a in attr_int and (str(a) + 'P') not in m:
+            ##### CHECK Ho modificato l'if sotto: credo che sia corretto cosi'
+            # if a in attr_int and (str(a) + 'P') not in m:
+            if (str(a) + 'P') not in m:
                 for o in ops:
                     if attributes_iton.get(a) in op_writes.get(o):
                         wop += nodes_dict.get(o).get_frequency()
+
     print("POST PROCESSING:")
     print("WOP " + str(wop))
     print("ROP " + str(rop))
@@ -390,19 +395,23 @@ def elect_primary_replicas(microservices):
     return
 
 def elect_s(attribute, microservices):
+    m_index = 0
     for m in microservices:
         if attribute in m:
-            primary_replicas_locations.update({attribute: microservices.index(m)})
+            primary_replicas_locations.update({attribute: m_index})
             return
+        m_index = m_index + 1
 
 def elect_hcw(attribute, microservices):
+    m_index = 0
     for m in microservices:
         if attribute in m:
             ops = [n for n in m if n < op_num and nodes_dict.get(n).get_consistency() == 'H']
             for o2 in ops:
                 if attributes_iton.get(attribute) in op_writes.get(o2) + op_reads.get(o2) and op_writes.get(o2):
-                    primary_replicas_locations.update({attribute: microservices.index(m)})
+                    primary_replicas_locations.update({attribute: m_index})
                     return
+        m_index = m_index + 1
     raise Exception("Attribute " + attributes_iton.get(attribute) + " was wrongly categorized as hc write.")
 
 
@@ -519,155 +528,6 @@ def compute_total_coupling(services):
             sim.append(0)
     return sum(sim)
 
-def write_dat_file(num_services):
-    read_dependencies = {}
-    write_dependencies = {}
-    access_dependencies = {}
-    for g in graph:
-        reads = [attributes_ntoi.get(a) for a in op_reads.get(g)]
-        writes = [attributes_ntoi.get(a) for a in op_writes.get(g)]
-        for a in attributes:
-            access_dependencies.update({(g, a - 100000): 1})
-            if a in reads:
-                read_dependencies.update({(g, a - 100000): 1})
-            else:
-                read_dependencies.update({(g, a - 100000): 0})
-            if a in writes:
-                write_dependencies.update({(g, a - 100000): 1})
-            else:
-                write_dependencies.update({(g, a - 100000): 0})
-            if a not in reads and a not in writes:
-                access_dependencies.update({(g, a - 100000): 0})
-
-    print("Producing .dat file with " +str(num_services) + " services...")
-    data = open('data.dat', 'w')
-    data.write("data;\n\n")
-    data.write("set MICROSERVICES := ")
-    for n in range(0, num_services):
-        data.write("M" + str(n) + " ")
-    data.write(";\n\n")
-    data.write("set OPERATIONS := ")
-    for n in range(0, op_num):
-        data.write("O" + str(n) + " ")
-    data.write(";\n\n")
-    data.write("set ENTITIES := ")
-    for n in range(0, len(attributes)):
-        data.write("E" + str(n) + " ")
-    data.write(";\n\n")
-    data.write("param frequencies:\n    ")
-    for n in range(0, op_num):
-        data.write("O" + str(n) + " ")
-    data.write(":=")
-    data.write("\nF   ")
-    for n in range(0, op_num):
-        spaces = " "
-        for l in range(0, len(str(n)) + 1 - len(str(nodes_dict.get(n).get_frequency()))):
-            spaces += " "
-        data.write(str(nodes_dict.get(n).get_frequency()) + spaces)
-    data.write(";\n\n")
-    data.write("param acc:\n    ")
-    for n in range(0, len(attributes)):
-        data.write("E" + str(n) + " ")
-    data.write(":=")
-    for n in range(0, op_num):
-        spaces = " "
-        for l in range(0, 2 - len(str(n))):
-            spaces += " "
-        data.write("\nO" + str(n) + spaces)
-        for a in range(0, len(attributes)):
-            spaces = " "
-            for l in range(0, len(str(a))):
-                spaces += " "
-            if access_dependencies.get((n, a)) == 1:
-                data.write(str(1) + spaces)
-            else:
-                data.write(str(0) + spaces)
-    data.write(";\n\n")
-    data.write("param accr:\n    ")
-    for n in range(0, len(attributes)):
-        data.write("E" + str(n) + " ")
-    data.write(":=")
-    for n in range(0, op_num):
-        spaces = " "
-        for l in range(0, 2 - len(str(n))):
-            spaces += " "
-        data.write("\nO" + str(n) + spaces)
-        for a in range(0, len(attributes)):
-            spaces = " "
-            for l in range(0, len(str(a))):
-                spaces += " "
-            if read_dependencies.get((n, a)) == 1:
-                data.write(str(1) + spaces)
-            else:
-                data.write(str(0) + spaces)
-    data.write(";\n\n")
-    data.write("param accrw:\n    ")
-    for n in range(0, len(attributes)):
-        data.write("E" + str(n) + " ")
-    data.write(":=")
-    for n in range(0, op_num):
-        spaces = " "
-        for l in range(0, 2 - len(str(n))):
-            spaces += " "
-        data.write("\nO" + str(n) + spaces)
-        for a in range(0, len(attributes)):
-            spaces = " "
-            for l in range(0, len(str(a))):
-                spaces += " "
-            if write_dependencies.get((n, a)) == 1:
-                data.write(str(1) + spaces)
-            else:
-                data.write(str(0) + spaces)
-    data.write(";\n\n")
-    data.write("param coloc:\n    ")
-    for n in range(0, op_num):
-        data.write("O" + str(n) + " ")
-    data.write(":=")
-    for n in range(0, op_num):
-        spaces = " "
-        for l in range(0, 2 - len(str(n))):
-            spaces += " "
-        data.write("\nO" + str(n) + spaces)
-        for a in range(0, op_num):
-            spaces = " "
-            for l in range(0, len(str(a))):
-                spaces += " "
-            if bound_ops.get((n, a)) == 1:
-                data.write(str(1) + spaces)
-            else:
-                data.write(str(0) + spaces)
-    data.write(";\n\n")
-    data.write("param tr:\n    ")
-    for o in range(0, op_num):
-        data.write("O" + str(o) + " ")
-    data.write(":=")
-    data.write("\nT   ")
-    for o in range(0, op_num):
-        spaces = " "
-        for l in range(0, len(str(o))):
-            spaces += " "
-        if nodes_dict.get(o).get_consistency() == 'H':
-            data.write(str(1) + spaces)
-        else:
-            data.write(str(0) + spaces)
-    data.write(";\n\n")
-    data.write("param similarity:\n    ")
-    for n in range(0, op_num):
-        data.write("O" + str(n) + " ")
-    data.write(":=")
-    for n in range(0, op_num):
-        spaces = " "
-        for l in range(0, 2 - len(str(n))):
-            spaces += " "
-        data.write("\nO" + str(n) + spaces)
-        for n2 in range(0, op_num):
-            spaces = " "
-            for l in range(0, len(str(n2))):
-                spaces += " "
-            data.write(str(compute_op_similarity(n, n2)) + spaces)
-    data.write(";")
-    data.close()
-
 def trim_operations(to_remove):
     op_num = len(graph)
     for t in to_remove:
@@ -750,7 +610,8 @@ def build_hcw_relationships():
         else:
             hc_write_status.update(({a: False}))
 
-
+### Check: Ho evitato l'uso di index perche' ritorna sempre la prima occorrenza
+### Ho sostituito con indice esplicito
 def annotate_replicas(services, only_ops):
     cached_a = {}
     uncached_a = {}
@@ -758,35 +619,48 @@ def annotate_replicas(services, only_ops):
     for a in attributes:
         c_a = []
         u_a = []
+        service_index = 0
         for s in services:
-            if a in s and primary_replicas_locations.get(a) != services.index(s):
+            if a in s and primary_replicas_locations.get(a) != service_index:
                 read_in_same = 0
                 write_in_others = 0
+
                 for o in s:
                     if o < 10000 and attributes_iton.get(a) in op_reads.get(o):
                         read_in_same += nodes_dict.get(o).get_frequency()
+
+                s2_index = 0
                 for s2 in services:
-                    for o in s2:
-                        if o < 10000 and attributes_iton.get(a) in op_writes.get(o):
-                            write_in_others += nodes_dict.get(o).get_frequency()
+                    if service_index != s2_index:
+                        for o in s2:
+                            if o < 10000 and attributes_iton.get(a) in op_writes.get(o):
+                                write_in_others += nodes_dict.get(o).get_frequency()
+                    s2_index = s2_index + 1
+                    
                 if read_in_same <= write_in_others:
                     tot_rop += read_in_same
-                    u_a.append(services.index(s))
+                    u_a.append(service_index)
                 else:
                     tot_rop += write_in_others
-                    c_a.append(services.index(s))
+                    c_a.append(service_index)
+                service_index = service_index + 1
         cached_a.update({a: c_a})
         uncached_a.update({a: u_a})
     final = []
+    only_ops_index = 0
     for s in only_ops:
         new_serv = [] + s
         for a in attributes:
-            if only_ops.index(s) in cached_a.get(a):
+            ### R significa che ho una replica: ci accedo in lettura ma non sono leader
+            if only_ops_index in cached_a.get(a):
                 new_serv.append(str(a) + 'R')
-            if only_ops.index(s) in uncached_a.get(a):
+            ### N significa che NON ho una replica, ma ci accedo
+            if only_ops_index in uncached_a.get(a):
                 new_serv.append(str(a) + 'N')
-            if only_ops.index(s) == primary_replicas_locations.get(a):
+            ### P significa che ho la replica primaria (sono leader)
+            if only_ops_index == primary_replicas_locations.get(a):
                 new_serv.append(str(a) + 'P')
+        only_ops_index = only_ops_index + 1
         final.append(new_serv)
     print("FINAL FORMAT: " + str(final))
     return final
@@ -813,13 +687,15 @@ if __name__ == '__main__':
                 else:
                     bound_ops.update({(o1, o2): 0})
 
+    l_index = 0
     for l in services:
         attrs = []
         for s in l:
             attrs += op_writes.get(s) + op_reads.get(s)
         attrs = list(set(attrs))
         for a in attrs:
-            services[services.index(l)].append(attributes_ntoi.get(a))
+            services[l_index].append(attributes_ntoi.get(a))
+        l_index = l_index + 1
 
     identify_static_attributes()
     identify_hc_readonly_attributes()
@@ -842,45 +718,38 @@ if __name__ == '__main__':
     # for a in attributes_iton.keys():
     #     print(str(a) + " " + attributes_iton.get(a)) 
 
-    # Specify number of services HERE
-    ### write_dat_file(27)
-    # Specify alpha parameter HERE
-    ### alpha = 0.5
-    ### opt_result = # Load from file
-
     results_file = open('microservices.json', 'r')
     results_json = json.load(results_file)
 
     results = []
     results_only_ops = []
     for service in results_json['microservices']:
-        print(service['label'])
+        # print(service['label'])
 
         # Cerca il valore nel dizionario e, quando lo trova, aggiunge la chiave tra le operazioni
         service_results = []
         service_only_ops = []
-        print("Operations: ")
+        # print("Operations: ")
         for op in service['operations']:
             for n in nodes_dict.keys():
                 if nodes_dict.get(n) is not None:
                     if nodes_dict.get(n).get_name() == op['label']:
                         service_results.append(n)
                         service_only_ops.append(n)
-                        print(str(n) + " " + nodes_dict.get(n).get_name())
+                        # print(str(n) + " " + nodes_dict.get(n).get_name())
 
         # Cerca il valore nel dizionario e, quando lo trova, aggiunge la chiave tra le operazioni
-        print("Entities: ")
+        # print("Entities: ")
         for entity in service['entities']:
             for a in attributes_iton.keys():
                 if attributes_iton.get(a).startswith(entity['label'] + '.'):
                     service_results.append(a)
-                    print(str(a) + " " + attributes_iton.get(a))
+                    # print(str(a) + " " + attributes_iton.get(a))
 
         # Aggiunge i risultati del microservizio a tutti i risultati
         if len(service_results) > 0:
             results.append(service_results)
-        if len(service_only_ops) > 0:
-            results_only_ops.append(service_only_ops)
+            results_only_ops.append(service_only_ops)            
     
     results_file.close()
     
@@ -893,10 +762,16 @@ if __name__ == '__main__':
 
     print("================================")
     print("Used microservices: " + str(len(results)))
-    print("Total coupling: " + str(compute_total_coupling(results)))
+
     elect_primary_replicas(results)
-    
-    results_with_replicas = annotate_replicas(services, results_only_ops)
-    print("Communication cost: " + str(compute_communication_cost(results)))
-    print("Normalized communication cost: " + str(compute_communication_cost(results) / max_com_cost))
-    print("Post processing communication cost: " + str(post_processing_communication_cost(results_with_replicas) / max_com_cost))
+    total_cohesion = compute_total_coupling(results)
+    print("Total cohesion: " + str(total_cohesion))
+
+    communication_cost = compute_communication_cost(results)
+    print("Communication cost: " + str(communication_cost))
+    print("Max communication cost: " + str(max_com_cost))
+    print("Normalized communication cost: " + str(communication_cost / max_com_cost))
+
+    results_with_replicas = annotate_replicas(results, results_only_ops)
+    post_processing_communication_cost = post_processing_communication_cost(results_with_replicas)
+    print("Normalized communication cost (post processing): " + str(post_processing_communication_cost / max_com_cost))
