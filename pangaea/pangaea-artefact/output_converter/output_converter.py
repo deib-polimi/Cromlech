@@ -310,9 +310,7 @@ def post_processing_communication_cost(result):
         for m in result:
             attr_int = [int(x[:len(x)-1]) for x in m if isinstance(x, str)]
             ops = [x for x in m if isinstance(x, int)]
-            ##### CHECK Ho modificato l'if sotto: credo che sia corretto cosi'
-            # if a in attr_int and (str(a) + 'P') not in m:
-            if (str(a) + 'P') not in m:
+            if a in attr_int and (str(a) + 'P') not in m:
                 for o in ops:
                     if attributes_iton.get(a) in op_writes.get(o):
                         wop += nodes_dict.get(o).get_frequency()
