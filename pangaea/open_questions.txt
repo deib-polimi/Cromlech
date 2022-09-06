@@ -2,7 +2,7 @@
 
 - Va bene lasciare forced entities sempre vuote? UPDATE: ok da mail
 
-- Va bene lasciare replication overhead sempre a 1?
+- Va bene lasciare replication overhead sempre a 1? UPDATE: ok da mail
 
 ### Output converter
 
@@ -11,10 +11,7 @@
 
 - Per convertire l'output di Pangaea nell'output di Cromlech utilizzo lo
   stesso approccio che c'era nel file 'preprocessing.py' originale di
-  Cromlech.  Se capisco bene, a partire da una soluzione (allocazioni di
-  operazioni e entità su microservizi) viene scelto dove mettere le repliche
-  primarie. Perché? La soluzione di Cromlech non contiene già questa
-  informazione?
+  Cromlech.
 
 ### General
 
