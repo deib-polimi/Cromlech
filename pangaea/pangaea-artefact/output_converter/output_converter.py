@@ -610,58 +610,39 @@ def build_hcw_relationships():
         else:
             hc_write_status.update(({a: False}))
 
-### Check: Ho evitato l'uso di index perche' ritorna sempre la prima occorrenza
-### Ho sostituito con indice esplicito
-def annotate_replicas(services, only_ops):
-    cached_a = {}
-    uncached_a = {}
-    tot_rop = 0
-    for a in attributes:
-        c_a = []
-        u_a = []
-        service_index = 0
-        for s in services:
-            if a in s and primary_replicas_locations.get(a) != service_index:
-                read_in_same = 0
-                write_in_others = 0
-
-                for o in s:
-                    if o < 10000 and attributes_iton.get(a) in op_reads.get(o):
-                        read_in_same += nodes_dict.get(o).get_frequency()
-
-                s2_index = 0
-                for s2 in services:
-                    if service_index != s2_index:
-                        for o in s2:
-                            if o < 10000 and attributes_iton.get(a) in op_writes.get(o):
-                                write_in_others += nodes_dict.get(o).get_frequency()
-                    s2_index = s2_index + 1
-                    
-                if read_in_same <= write_in_others:
-                    tot_rop += read_in_same
-                    u_a.append(service_index)
-                else:
-                    tot_rop += write_in_others
-                    c_a.append(service_index)
-                service_index = service_index + 1
-        cached_a.update({a: c_a})
-        uncached_a.update({a: u_a})
+            
+def annotate_attributes(services, only_ops):
     final = []
-    only_ops_index = 0
-    for s in only_ops:
-        new_serv = [] + s
+    
+    service_index = 0
+    for s in services:
+        ### Append operations
+        final_service = [] + only_ops[service_index]
+
+        ### Append attributes
         for a in attributes:
-            ### R significa che ho una replica: ci accedo in lettura ma non sono leader
-            if only_ops_index in cached_a.get(a):
-                new_serv.append(str(a) + 'R')
-            ### N significa che NON ho una replica, ma ci accedo
-            if only_ops_index in uncached_a.get(a):
-                new_serv.append(str(a) + 'N')
-            ### P significa che ho la replica primaria (sono leader)
-            if only_ops_index == primary_replicas_locations.get(a):
-                new_serv.append(str(a) + 'P')
-        only_ops_index = only_ops_index + 1
-        final.append(new_serv)
+            ### Se l'attributo e' sul servizio, decido se e' una replica primaria (P) o non primaria (R)
+            if a in s:
+                if primary_replicas_locations.get(a) == service_index:
+                    final_service.append(str(a) + 'P')
+                else:
+                    final_service.append(str(a) + 'R')
+
+            ### Se l'attributo non e' sul servizio, guardo se esiste un'operazione sul servizio che ci accede (in lettura o scrittura)
+            else:
+                ### Calcolo se esiste un'operazione in s che accede ad a
+                s_accesses_a = False
+                for o in s:
+                    if o < 10000 and (o in attr_read_by.get(a) or o in attr_written_by.get(a)):
+                        s_accesses_a = True
+                        break
+                ### Se esiste, allora aggiungo l'attributo (N)
+                if s_accesses_a:
+                    final_service.append(str(a) + 'N')
+
+        service_index = service_index + 1
+        final.append(final_service)
+                
     print("FINAL FORMAT: " + str(final))
     return final
 
@@ -708,16 +689,6 @@ if __name__ == '__main__':
     max_decoupling_bound = compute_total_coupling(services)
     max_com_cost = compute_communication_cost(services)
 
-    ### These are operations
-    # for n in nodes_dict.keys():
-    #     print(n)
-    #     if nodes_dict.get(n) is not None:
-    #         print(nodes_dict.get(n).get_name())
-
-    ### This are attributes
-    # for a in attributes_iton.keys():
-    #     print(str(a) + " " + attributes_iton.get(a)) 
-
     results_file = open('microservices.json', 'r')
     results_json = json.load(results_file)
 
@@ -753,25 +724,12 @@ if __name__ == '__main__':
     
     results_file.close()
     
-    # opt_result_only_nums = []
-    # for m in opt_result:
-    #     ops = [x for x in m if isinstance(x, int)]
-    #     attrs = [x for x in m if isinstance(x, str)]
-    #     attrs_num = [int(x[:len(x) - 1]) for x in attrs]
-    #     opt_result_only_nums.append(ops + attrs_num)
-
     print("================================")
     print("Used microservices: " + str(len(results)))
-
-    elect_primary_replicas(results)
     total_cohesion = compute_total_coupling(results)
     print("Total cohesion: " + str(total_cohesion))
-
-    communication_cost = compute_communication_cost(results)
-    print("Communication cost: " + str(communication_cost))
     print("Max communication cost: " + str(max_com_cost))
+    elect_primary_replicas(results)
+    annotated_results = annotate_attributes(results, results_only_ops)
+    communication_cost = post_processing_communication_cost(annotated_results)
     print("Normalized communication cost: " + str(communication_cost / max_com_cost))
-
-    results_with_replicas = annotate_replicas(results, results_only_ops)
-    post_processing_communication_cost = post_processing_communication_cost(results_with_replicas)
-    print("Normalized communication cost (post processing): " + str(post_processing_communication_cost / max_com_cost))

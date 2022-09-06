@@ -34,15 +34,15 @@ def optimizer(debug=False, writeCsv=True, communication_weight=0, coupling_weigh
 
     # weight coefficient for coupling
     if coupling_weight == 0:
-        model.coupling_weight = pyo.Param(within=pyo.PositiveIntegers, mutable=True)
+        model.coupling_weight = pyo.Param(within=pyo.Integers, mutable=True)
     else:
-        model.coupling_weight = pyo.Param(within=pyo.PositiveIntegers, initialize=coupling_weight, mutable=True)
+        model.coupling_weight = pyo.Param(within=pyo.Integers, initialize=coupling_weight, mutable=True)
 
     # weight coefficient for communication
     if communication_weight == 0:
-        model.communication_weight = pyo.Param(within=pyo.PositiveIntegers, mutable=True)
+        model.communication_weight = pyo.Param(within=pyo.Integers, mutable=True)
     else:
-        model.communication_weight = pyo.Param(within=pyo.PositiveIntegers, initialize=communication_weight, mutable=True)
+        model.communication_weight = pyo.Param(within=pyo.Integers, initialize=communication_weight, mutable=True)
 
     # weight coefficient for entities' replication
     model.replication_overhead = pyo.Param({'C'}, model.ENTITIES, within=pyo.Integers, initialize=1)
