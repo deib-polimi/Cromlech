@@ -342,6 +342,9 @@ def format_and_draw_final(microservices, html_filename):
                 if a in attrs_num:
                     net.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i) + '/' + str(attr_count.get(a)) )
                     net_single.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i) + '/' + str(attr_count.get(a)) )
+                    # hack: duplicate all edges, otherwise pyvis does not properly render the colors of nodes 
+                    net.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i) + '/' + str(attr_count.get(a)) )
+                    net_single.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i) + '/' + str(attr_count.get(a)) )
         net_single.show(html_filename + '_' + str(i) + ".html")
         i += 1
 
