@@ -1,0 +1,702 @@
+{
+    "communication_weight": 0.5,
+    "coupling_weight": 0.5,
+    "microservices": [
+        {
+            "id": "m0",
+            "label": "M0",
+            "entities": [
+                {
+                    "id": "e0",
+                    "label": "AssuranceType"
+                },
+                {
+                    "id": "e1",
+                    "label": "Assurance"
+                }
+            ],
+            "operations": [
+                {
+                    "id": "op0",
+                    "label": "getAllAssuranceTypes"
+                },
+                {
+                    "id": "op1",
+                    "label": "getAllAssurances"
+                },
+                {
+                    "id": "op2",
+                    "label": "findAssuranceById"
+                },
+                {
+                    "id": "op3",
+                    "label": "findAssuranceByOrderId"
+                },
+                {
+                    "id": "op4",
+                    "label": "createAssurance"
+                },
+                {
+                    "id": "op5",
+                    "label": "deleteAssuranceById"
+                },
+                {
+                    "id": "op6",
+                    "label": "deleteAssuranceByOrderId"
+                },
+                {
+                    "id": "op7",
+                    "label": "modifyAssurance"
+                }
+            ]
+        },
+        {
+            "id": "m1",
+            "label": "M1",
+            "entities": [
+                {
+                    "id": "e2",
+                    "label": "Payment"
+                }
+            ],
+            "operations": [
+                {
+                    "id": "op8",
+                    "label": "queryPaymentAccount"
+                },
+                {
+                    "id": "op9",
+                    "label": "queryPayments"
+                },
+                {
+                    "id": "op10",
+                    "label": "payDifference"
+                },
+                {
+                    "id": "op11",
+                    "label": "initPayment"
+                },
+                {
+                    "id": "op12",
+                    "label": "payDifferenceRebook"
+                }
+            ]
+        },
+        {
+            "id": "m2",
+            "label": "M2",
+            "entities": [
+                {
+                    "id": "e3",
+                    "label": "Route"
+                },
+                {
+                    "id": "e4",
+                    "label": "TravelResult"
+                },
+                {
+                    "id": "e5",
+                    "label": "TrainType"
+                },
+                {
+                    "id": "e6",
+                    "label": "Money"
+                },
+                {
+                    "id": "e7",
+                    "label": "Travel"
+                },
+                {
+                    "id": "e8",
+                    "label": "PriceConfig"
+                },
+                {
+                    "id": "e9",
+                    "label": "Order"
+                },
+                {
+                    "id": "e10",
+                    "label": "Trip"
+                }
+            ],
+            "operations": [
+                {
+                    "id": "op13",
+                    "label": "queryForTravel"
+                },
+                {
+                    "id": "op14",
+                    "label": "cancelOrderbyUser"
+                },
+                {
+                    "id": "op15",
+                    "label": "calculateRefund"
+                },
+                {
+                    "id": "op16",
+                    "label": "ticketExecute"
+                },
+                {
+                    "id": "op17",
+                    "label": "ticketCollect"
+                },
+                {
+                    "id": "op18",
+                    "label": "pay"
+                },
+                {
+                    "id": "op19",
+                    "label": "createPaymentAccount"
+                },
+                {
+                    "id": "op20",
+                    "label": "addMoney"
+                },
+                {
+                    "id": "op21",
+                    "label": "drawBack"
+                },
+                {
+                    "id": "op22",
+                    "label": "queryMoney"
+                },
+                {
+                    "id": "op23",
+                    "label": "getSoldTickets"
+                },
+                {
+                    "id": "op24",
+                    "label": "createOrder"
+                },
+                {
+                    "id": "op25",
+                    "label": "cancelOrder"
+                },
+                {
+                    "id": "op26",
+                    "label": "deleteOrder"
+                },
+                {
+                    "id": "op27",
+                    "label": "updateOrder"
+                },
+                {
+                    "id": "op28",
+                    "label": "modifyOrderStatus"
+                },
+                {
+                    "id": "op29",
+                    "label": "getOrderPrice"
+                },
+                {
+                    "id": "op30",
+                    "label": "payOrder"
+                },
+                {
+                    "id": "op31",
+                    "label": "initOrder"
+                },
+                {
+                    "id": "op32",
+                    "label": "checkOrderValidity"
+                },
+                {
+                    "id": "op33",
+                    "label": "preserve"
+                },
+                {
+                    "id": "op34",
+                    "label": "createNewPriceConfig"
+                },
+                {
+                    "id": "op35",
+                    "label": "findPriceConfigById"
+                },
+                {
+                    "id": "op36",
+                    "label": "findByRouteIdAndTrainType"
+                },
+                {
+                    "id": "op37",
+                    "label": "findAllPriceConfig"
+                },
+                {
+                    "id": "op38",
+                    "label": "deletePriceConfig"
+                },
+                {
+                    "id": "op39",
+                    "label": "updatePriceConfig"
+                },
+                {
+                    "id": "op40",
+                    "label": "rebook"
+                },
+                {
+                    "id": "op41",
+                    "label": "searchCheapestRouteResult"
+                },
+                {
+                    "id": "op42",
+                    "label": "searchMinStopRouteResult"
+                },
+                {
+                    "id": "op43",
+                    "label": "searchQuickestRouteResult"
+                },
+                {
+                    "id": "op44",
+                    "label": "createAndModifyRoute"
+                },
+                {
+                    "id": "op45",
+                    "label": "getRouteById"
+                },
+                {
+                    "id": "op46",
+                    "label": "getRouteByStartAndTerminal"
+                },
+                {
+                    "id": "op47",
+                    "label": "distributeSeat"
+                },
+                {
+                    "id": "op48",
+                    "label": "getLeftTicketOfInterval"
+                },
+                {
+                    "id": "op49",
+                    "label": "checkSecurityConfig"
+                },
+                {
+                    "id": "op50",
+                    "label": "createTrain"
+                },
+                {
+                    "id": "op51",
+                    "label": "retrieveTrain"
+                },
+                {
+                    "id": "op52",
+                    "label": "queryTrains"
+                },
+                {
+                    "id": "op53",
+                    "label": "updateTrain"
+                },
+                {
+                    "id": "op54",
+                    "label": "deleteTrain"
+                },
+                {
+                    "id": "op55",
+                    "label": "getCheapestTravelResult"
+                },
+                {
+                    "id": "op56",
+                    "label": "getQuickestTravelResult"
+                },
+                {
+                    "id": "op57",
+                    "label": "getMinStopTravelResult"
+                },
+                {
+                    "id": "op58",
+                    "label": "createTrip"
+                },
+                {
+                    "id": "op59",
+                    "label": "getRouteByTripId"
+                },
+                {
+                    "id": "op60",
+                    "label": "getTrainTypeByTripId"
+                },
+                {
+                    "id": "op61",
+                    "label": "retrieveTrip"
+                },
+                {
+                    "id": "op62",
+                    "label": "updateTrip"
+                },
+                {
+                    "id": "op63",
+                    "label": "deleteTrip"
+                },
+                {
+                    "id": "op64",
+                    "label": "getTickets"
+                },
+                {
+                    "id": "op65",
+                    "label": "getAllRoutes"
+                }
+            ]
+        },
+        {
+            "id": "m3",
+            "label": "M3",
+            "entities": [
+                {
+                    "id": "e11",
+                    "label": "User"
+                }
+            ],
+            "operations": [
+                {
+                    "id": "op66",
+                    "label": "saveUser"
+                },
+                {
+                    "id": "op67",
+                    "label": "getAllUser"
+                },
+                {
+                    "id": "op68",
+                    "label": "findByUserId"
+                },
+                {
+                    "id": "op69",
+                    "label": "findByUsername"
+                },
+                {
+                    "id": "op70",
+                    "label": "deleteUserById"
+                },
+                {
+                    "id": "op71",
+                    "label": "updateUser"
+                }
+            ]
+        },
+        {
+            "id": "m4",
+            "label": "M4",
+            "entities": [
+                {
+                    "id": "e12",
+                    "label": "Voucher"
+                }
+            ],
+            "operations": [
+                {
+                    "id": "op72",
+                    "label": "addVoucher"
+                },
+                {
+                    "id": "op73",
+                    "label": "queryVoucher"
+                }
+            ]
+        },
+        {
+            "id": "m5",
+            "label": "M5",
+            "entities": [
+                {
+                    "id": "e13",
+                    "label": "SecurityConfig"
+                },
+                {
+                    "id": "e14",
+                    "label": "Config"
+                }
+            ],
+            "operations": [
+                {
+                    "id": "op74",
+                    "label": "createConfig"
+                },
+                {
+                    "id": "op75",
+                    "label": "updateConfig"
+                },
+                {
+                    "id": "op76",
+                    "label": "queryConfig"
+                },
+                {
+                    "id": "op77",
+                    "label": "deleteConfig"
+                },
+                {
+                    "id": "op78",
+                    "label": "queryAllConfigs"
+                },
+                {
+                    "id": "op79",
+                    "label": "findAllSecurityConfig"
+                },
+                {
+                    "id": "op80",
+                    "label": "addNewSecurityConfig"
+                },
+                {
+                    "id": "op81",
+                    "label": "modifySecurityConfig"
+                },
+                {
+                    "id": "op82",
+                    "label": "deleteSecurityConfig"
+                }
+            ]
+        },
+        {
+            "id": "m6",
+            "label": "M6",
+            "entities": [
+                {
+                    "id": "e15",
+                    "label": "Contacts"
+                }
+            ],
+            "operations": [
+                {
+                    "id": "op83",
+                    "label": "findContactsById"
+                },
+                {
+                    "id": "op84",
+                    "label": "findContactsByAccountId"
+                },
+                {
+                    "id": "op85",
+                    "label": "createContact"
+                },
+                {
+                    "id": "op86",
+                    "label": "deleteContact"
+                },
+                {
+                    "id": "op87",
+                    "label": "modifyContact"
+                },
+                {
+                    "id": "op88",
+                    "label": "getAllContacts"
+                }
+            ]
+        },
+        {
+            "id": "m7",
+            "label": "M7",
+            "entities": [
+                {
+                    "id": "e16",
+                    "label": "TrainFood"
+                }
+            ],
+            "operations": [
+                {
+                    "id": "op89",
+                    "label": "createTrainFood"
+                },
+                {
+                    "id": "op90",
+                    "label": "listTrainFood"
+                },
+                {
+                    "id": "op91",
+                    "label": "listTrainFoodByTripIds"
+                }
+            ]
+        },
+        {
+            "id": "m8",
+            "label": "M8",
+            "entities": [
+                {
+                    "id": "e17",
+                    "label": "FoodStore"
+                }
+            ],
+            "operations": [
+                {
+                    "id": "op92",
+                    "label": "createFoodStore"
+                },
+                {
+                    "id": "op93",
+                    "label": "listFoodStores"
+                },
+                {
+                    "id": "op94",
+                    "label": "listFoodStoredByStationId"
+                },
+                {
+                    "id": "op95",
+                    "label": "getAllFoods"
+                }
+            ]
+        },
+        {
+            "id": "m9",
+            "label": "M9",
+            "entities": [
+                {
+                    "id": "e18",
+                    "label": "Delivery"
+                },
+                {
+                    "id": "e19",
+                    "label": "FoodOrder"
+                }
+            ],
+            "operations": [
+                {
+                    "id": "op96",
+                    "label": "processDelivery"
+                },
+                {
+                    "id": "op97",
+                    "label": "createFoodOrdersInBatch"
+                },
+                {
+                    "id": "op98",
+                    "label": "createFoodOrder"
+                },
+                {
+                    "id": "op99",
+                    "label": "deleteFoodOrder"
+                },
+                {
+                    "id": "op100",
+                    "label": "findFoodOrderByOrderId"
+                },
+                {
+                    "id": "op101",
+                    "label": "findAllFoodOrders"
+                },
+                {
+                    "id": "op102",
+                    "label": "updateFoodOrder"
+                }
+            ]
+        },
+        {
+            "id": "m10",
+            "label": "M10",
+            "entities": [
+                {
+                    "id": "e20",
+                    "label": "ConsignRecord"
+                }
+            ],
+            "operations": [
+                {
+                    "id": "op103",
+                    "label": "insertConsignRecord"
+                },
+                {
+                    "id": "op104",
+                    "label": "updateConsignRecord"
+                },
+                {
+                    "id": "op105",
+                    "label": "queryConsignByAccountId"
+                },
+                {
+                    "id": "op106",
+                    "label": "queryConsignByOrderId"
+                },
+                {
+                    "id": "op107",
+                    "label": "queryConsignByConsignee"
+                }
+            ]
+        },
+        {
+            "id": "m11",
+            "label": "M11",
+            "entities": [
+                {
+                    "id": "e21",
+                    "label": "Office"
+                },
+                {
+                    "id": "e22",
+                    "label": "Station"
+                }
+            ],
+            "operations": [
+                {
+                    "id": "op108",
+                    "label": "queryForStationId"
+                },
+                {
+                    "id": "op109",
+                    "label": "createStation"
+                },
+                {
+                    "id": "op110",
+                    "label": "existStation"
+                },
+                {
+                    "id": "op111",
+                    "label": "updateStation"
+                },
+                {
+                    "id": "op112",
+                    "label": "deleteStation"
+                },
+                {
+                    "id": "op113",
+                    "label": "queryStations"
+                },
+                {
+                    "id": "op114",
+                    "label": "queryStationById"
+                },
+                {
+                    "id": "op115",
+                    "label": "getAllOffices"
+                },
+                {
+                    "id": "op116",
+                    "label": "getSpecificOffice"
+                },
+                {
+                    "id": "op117",
+                    "label": "addOffice"
+                },
+                {
+                    "id": "op118",
+                    "label": "deleteOffice"
+                },
+                {
+                    "id": "op119",
+                    "label": "updateOffice"
+                }
+            ]
+        },
+        {
+            "id": "m12",
+            "label": "M12",
+            "entities": [
+                {
+                    "id": "e23",
+                    "label": "ConsignPrice"
+                }
+            ],
+            "operations": [
+                {
+                    "id": "op120",
+                    "label": "getPriceByWeightAndRegion"
+                },
+                {
+                    "id": "op121",
+                    "label": "queryConsignPrice"
+                },
+                {
+                    "id": "op122",
+                    "label": "createAndModifyPrice"
+                },
+                {
+                    "id": "op123",
+                    "label": "getConsignPrice"
+                }
+            ]
+        }
+    ]
+}

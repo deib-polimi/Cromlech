@@ -8,10 +8,10 @@ def check_if_same_service(o1, o2, arch):
             return True
     return False
 
-# Usage: python similarity.py file1 file2
-if __name__ == '__main__':
-    f1 = open(sys.argv[1], "r")
-    f2 = open(sys.argv[2], "r")
+
+def compute_similarity(sol1, sol2):
+    f1 = open(sol1, "r")
+    f2 = open(sol2, "r")
     
     f1_content = f1.read()
     f2_content = f2.read()
@@ -74,8 +74,7 @@ if __name__ == '__main__':
                     present_in_b_only += 1
                 else:
                     both_absent += 1
-    score = (both_present + both_absent - present_in_a_only - present_in_b_only)*2/total_couples
-    print("OPERATION SIMILARITY:" + str(score))
+    operation_similarity = (both_present + both_absent - present_in_a_only - present_in_b_only)*2/total_couples
 
     to_remove = []
     for n in a:
@@ -130,5 +129,9 @@ if __name__ == '__main__':
                     present_in_b_only += 1
                 else:
                     both_absent += 1
-    score = (both_present + both_absent - present_in_a_only - present_in_b_only)*2/total_couples
-    print("DATA SIMILARITY:" + str(score))
+    data_similarity = (both_present + both_absent - present_in_a_only - present_in_b_only)*2/total_couples
+    return operation_similarity, data_similarity
+
+if __name__ == '__main__':
+    operation_similarity, data_similarity = compute_similarity(sys.argv[1], sys.argv[2])
+    print("OP SIMILARITY:", operation_similarity,"DATA SIMILARITY:", data_similarity)

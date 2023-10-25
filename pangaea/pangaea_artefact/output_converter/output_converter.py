@@ -188,7 +188,6 @@ def parse_arch_yaml(yaml_filename):
                     if not association and f:
                         raise Exception("No operation named " + f + ' exists, it cannot be forced along ' + o['name'])
                     forced_operations.update({n: fops})
-            print([e.get_name() for e in entities])
         except yaml.YAMLError as exc:
             print(exc)
 
@@ -527,6 +526,7 @@ def compute_total_coupling(services):
     return sum(sim)
 
 def trim_operations(to_remove):
+    global op_num
     op_num = len(graph)
     for t in to_remove:
         print("Removed op. " + nodes_dict.get(t).get_name())
@@ -645,8 +645,8 @@ def annotate_attributes(services, only_ops):
     return final
 
 
-if __name__ == '__main__':
-    parse_arch_yaml('trainticket.yaml')
+def pre_processing():
+    global op_num, attributes
     print("Preprocessing...")
     to_remove = noise_removal()
     graph_copy = Graph()
@@ -686,8 +686,11 @@ if __name__ == '__main__':
     min_decoupling_bound = compute_total_coupling([[o for o in graph]])
     max_decoupling_bound = compute_total_coupling(services)
     max_com_cost = compute_communication_cost(services)
+    return min_decoupling_bound, max_decoupling_bound, max_com_cost
 
-    results_file = open('microservices.json', 'r')
+
+def load_input(file_name):
+    results_file = open(file_name, 'r')
     results_json = json.load(results_file)
 
     results = []
@@ -721,13 +724,25 @@ if __name__ == '__main__':
             results_only_ops.append(service_only_ops)            
     
     results_file.close()
-    
-    print("================================")
-    print("Used microservices: " + str(len(results)))
+    return results, results_only_ops
+
+
+def convert(cromlech_arch, pangea_output):
+    output = {}
+    parse_arch_yaml(cromlech_arch)
+    _, _, max_com_cost = pre_processing()
+    results, results_only_ops = load_input(pangea_output)
+    output["n_microservices"] = len(results)
+    output["max_communication_cost"] = max_com_cost
     total_cohesion = compute_total_coupling(results)
-    print("Total cohesion: " + str(total_cohesion))
-    print("Max communication cost: " + str(max_com_cost))
+    output["cohesion"] = total_cohesion
     elect_primary_replicas(results)
     annotated_results = annotate_attributes(results, results_only_ops)
     communication_cost = post_processing_communication_cost(annotated_results)
-    print("Normalized communication cost: " + str(communication_cost / max_com_cost))
+    output["normalized_communication_cost"] = communication_cost / max_com_cost
+    return output
+
+
+if __name__ == '__main__':
+    results = convert('trainticket.yaml', 'microservices.json')
+    print(json.dumps(results, indent=4))

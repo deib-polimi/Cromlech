@@ -117,11 +117,18 @@ def annotate_replicas(services, only_ops):
     print("FINAL FORMAT: " + str(final))
     return final
 
+def translate(ch_architecture, sc_services):
+    setup(ch_architecture)
+    op_codes = produce_opcode_services(sc_services)
+    validate(op_codes)
+    ops_and_attrs = produce_ops_and_attrs_services(op_codes)
+    complete_format = annotate_replicas(ops_and_attrs, op_codes)
+    return complete_format
+
 
 if __name__ == '__main__':
     yaml_file = sys.argv[1]
     
-    setup(yaml_file)
 
     sc = [
         ["createNewPriceConfig", "findPriceConfigById", "findByRouteIdAndTrainType", "findAllPriceConfig",
@@ -161,7 +168,6 @@ if __name__ == '__main__':
         ["processDelivery"]
     ]
 
-    op_codes = produce_opcode_services(sc)
-    validate(op_codes)
-    ops_and_attrs = produce_ops_and_attrs_services(op_codes)
-    complete_format = annotate_replicas(ops_and_attrs, op_codes)
+    output = translate(yaml_file, sc)
+    print("FINAL FORMAT: " + str(output))
+
