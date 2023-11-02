@@ -22,6 +22,6 @@ operations:
       - name
       - price
     - entity_name: Assurance
-      read_attributes:
+      write_attributes:
       - id
       - orderId

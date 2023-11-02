@@ -2,18 +2,16 @@ operations:
 - name: getAllAssuranceTypes
   consistency: L
   frequency: 1
-  forced_operations: []
   database_access:
   - entity_name: AssuranceType
     read_attributes:
     - index
     - name
     - price
+  forced_operations: []
 - name: getAllAssurances
   consistency: L
   frequency: 1
-  forced_operations:
-  - getAllAssuranceTypes
   database_access:
   - entity_name: AssuranceType
     read_attributes:
@@ -21,6 +19,8 @@ operations:
     - name
     - price
   - entity_name: Assurance
-    read_attributes:
+    write_attributes:
     - id
     - orderId
+  forced_operations:
+  - getAllAssuranceTypes

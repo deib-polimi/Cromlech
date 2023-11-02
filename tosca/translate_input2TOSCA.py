@@ -19,16 +19,9 @@ def translate_to_tosca(yaml_data):
         tosca_template += f"        consistency: {operation['consistency']}\n"
         tosca_template += f"        frequency: {operation['frequency']}\n"
 
-        # If there are forced_operations, add them as requirements
-        if list(filter(lambda x: x, operation['forced_operations'])):
-            tosca_template += "      requirements:\n"
-            for forced_op in operation['forced_operations']:
-                tosca_template += f"        - forced_operations:\n"
-                tosca_template += f"            node: {forced_op}\n"
-                tosca_template += "            relationship: it.polimi.cromlech.forced_operation_relationship\n"
-
+     
+            
         # Process database access
-        tosca_template += "      attributes:\n"
         tosca_template += "        database_access:\n"
         for access in operation['database_access']:
             entity_name = access['entity_name']
@@ -43,6 +36,15 @@ def translate_to_tosca(yaml_data):
                 tosca_template += "            write_attributes:\n"
                 for attr in write_attrs:
                     tosca_template += f"              - {attr}\n"
+        
+        # If there are forced_operations, add them as requirements
+        if list(filter(lambda x: x, operation['forced_operations'])):
+            tosca_template += "      requirements:\n"
+            for forced_op in operation['forced_operations']:
+                tosca_template += f"        - forced_operations:\n"
+                tosca_template += f"            node: {forced_op}\n"
+                tosca_template += "            relationship: it.polimi.cromlech.forced_operation_relationship\n"
+
 
     # Return the TOSCA template string
     return tosca_template

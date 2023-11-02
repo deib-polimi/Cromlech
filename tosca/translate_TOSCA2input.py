@@ -25,7 +25,7 @@ def translate_from_tosca(tosca_data):
 
             # Handle database access
             database_access = []
-            for access in node.get('attributes', {}).get('database_access', []):
+            for access in node.get('properties', {}).get('database_access', []):
                 db_access_dict = OrderedDict()
                 db_access_dict['entity_name'] = access['entity_name']
                 read_attr = access.get('read_attributes', [])
