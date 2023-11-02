@@ -727,19 +727,20 @@ def load_input(file_name):
     return results, results_only_ops
 
 
-def convert(cromlech_arch, pangea_output):
+def convert(cromlech_arch, pangea_output, alpha=0.5):
     output = {}
     parse_arch_yaml(cromlech_arch)
     _, _, max_com_cost = pre_processing()
     results, results_only_ops = load_input(pangea_output)
     output["n_microservices"] = len(results)
-    output["max_communication_cost"] = max_com_cost
     total_cohesion = compute_total_coupling(results)
     output["cohesion"] = total_cohesion
     elect_primary_replicas(results)
     annotated_results = annotate_attributes(results, results_only_ops)
     communication_cost = post_processing_communication_cost(annotated_results)
     output["normalized_communication_cost"] = communication_cost / max_com_cost
+    output["total_value"] = alpha*output["cohesion"] - (1-alpha)*output["normalized_communication_cost"]
+
     return output
 
 

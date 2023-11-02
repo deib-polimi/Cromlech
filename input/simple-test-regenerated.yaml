@@ -1,0 +1,26 @@
+operations:
+- name: getAllAssuranceTypes
+  consistency: L
+  frequency: 1
+  forced_operations: []
+  database_access:
+  - entity_name: AssuranceType
+    read_attributes:
+    - index
+    - name
+    - price
+- name: getAllAssurances
+  consistency: L
+  frequency: 1
+  forced_operations:
+  - getAllAssuranceTypes
+  database_access:
+  - entity_name: AssuranceType
+    read_attributes:
+    - index
+    - name
+    - price
+  - entity_name: Assurance
+    read_attributes:
+    - id
+    - orderId

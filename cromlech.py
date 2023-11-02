@@ -135,6 +135,7 @@ def parse_arch_yaml(yaml_filename):
                 graph.update({op_index: []})
                 op_reads.update({op_index: []})
                 op_writes.update({op_index: []})
+                print(o['name'], o['database_access'])
                 for e in o['database_access']:
                     new_ent = Entity(e['entity_name'], ent_index)
                     already_listed = False
@@ -182,6 +183,8 @@ def parse_arch_yaml(yaml_filename):
                 op_index += 1
             for o in data['operations']:
                 fops = []
+                if not o['forced_operations']:
+                    o['forced_operations'] = [None]
                 for f in o['forced_operations']:
                     association = False
                     for n in nodes_dict:
@@ -197,7 +200,7 @@ def parse_arch_yaml(yaml_filename):
             # print([e.get_name() for e in entities])
         except yaml.YAMLError as exc:
             print(exc)
-
+       
 
 # Draws the graph with names instead of ids
 def draw_graph_verbose(gr, html_filename):
@@ -1469,9 +1472,8 @@ if __name__ == '__main__':
     # Alpha (between 0 and 1)
     alpha = float(sys.argv[3])
     # Timeout (seconds)
-    timeout = int(sys.argv[4])
-    
-    parse_arch_yaml('input/' + input_file + '.yaml')
+    timeout = int(sys.argv[4]) 
+    parse_arch_yaml(input_file)
     to_remove = noise_removal()
     graph_copy = Graph()
     op_num = len(graph)

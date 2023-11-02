@@ -16,61 +16,57 @@
         },
         {
             "nanoentities": [
-                "Payment.id",
-                "Payment.price",
-                "Payment.userId",
-                "Payment.orderId"
+                "Money.money",
+                "Money.userId",
+                "Money.type"
             ],
             "id": "B",
             "name": "Service B"
         },
         {
             "nanoentities": [
+                "TravelResult.status",
                 "Order.documentType",
+                "PriceConfig.routeId",
                 "PriceConfig.firstClassPriceRate",
                 "Route.terminalStationId",
+                "Route.startingStationId",
                 "PriceConfig.trainType",
+                "Trip.endTime",
+                "Order.from",
                 "Order.contactsName",
                 "Travel.departureTime",
+                "Trip.startingTime",
                 "Trip.terminalStationId",
                 "Order.accountId",
                 "TrainType.averageSpeed",
+                "Order.seatNumber",
                 "Travel.startingPlace",
                 "TrainType.confortClass",
-                "Order.trainNumber",
-                "Money.money",
-                "PriceConfig.basicPriceRate",
-                "Order.travelTime",
-                "Trip.routeId",
-                "TravelResult.trainType",
-                "Route.id",
-                "Order.contactsDocumentNumber",
-                "Order.coachNumber",
-                "Order.id",
-                "Route.startStationId",
-                "Travel.tripId",
-                "Order.price",
-                "TravelResult.status",
-                "PriceConfig.routeId",
-                "Route.startingStationId",
-                "Trip.endTime",
-                "Order.from",
-                "Trip.startingTime",
-                "Money.userId",
-                "Order.seatNumber",
                 "Order.to",
+                "Order.trainNumber",
                 "Route.distances",
-                "Money.type",
                 "Order.seatClass",
                 "TrainType.id",
+                "PriceConfig.basicPriceRate",
+                "Order.travelTime",
                 "Route.stations",
+                "Trip.routeId",
+                "TravelResult.trainType",
                 "Order.boughtDate",
+                "Route.id",
+                "Order.contactsDocumentNumber",
                 "TrainType.economyClass",
+                "Order.coachNumber",
                 "Travel.endPlace",
+                "Order.id",
                 "Trip.stationsId",
                 "PriceConfig.id",
+                "Route.startStationId",
                 "Trip.tripId",
                 "Order.travelDate",
+                "Travel.tripId",
+                "Order.price",
                 "Trip.startingStationId",
                 "TravelResult.percent",
                 "Trip.trainTypeId",
@@ -81,14 +77,24 @@
         },
         {
             "nanoentities": [
+                "Payment.id",
+                "Payment.price",
+                "Payment.userId",
+                "Payment.orderId"
+            ],
+            "id": "D",
+            "name": "Service D"
+        },
+        {
+            "nanoentities": [
                 "User.userId",
                 "User.id",
                 "User.roles",
                 "User.password",
                 "User.userName"
             ],
-            "id": "D",
-            "name": "Service D"
+            "id": "E",
+            "name": "Service E"
         },
         {
             "nanoentities": [
@@ -104,8 +110,8 @@
                 "Voucher.seatClass",
                 "Voucher.voucherId"
             ],
-            "id": "E",
-            "name": "Service E"
+            "id": "F",
+            "name": "Service F"
         },
         {
             "nanoentities": [
@@ -117,8 +123,8 @@
                 "SecurityConfig.name",
                 "Config.description"
             ],
-            "id": "F",
-            "name": "Service F"
+            "id": "G",
+            "name": "Service G"
         },
         {
             "nanoentities": [
@@ -129,27 +135,14 @@
                 "Contacts.accountId",
                 "Contacts.name"
             ],
-            "id": "G",
-            "name": "Service G"
+            "id": "H",
+            "name": "Service H"
         },
         {
             "nanoentities": [
                 "TrainFood.tripId",
                 "TrainFood.id",
                 "TrainFood.foodList"
-            ],
-            "id": "H",
-            "name": "Service H"
-        },
-        {
-            "nanoentities": [
-                "FoodStore.stationId",
-                "FoodStore.businessTime",
-                "FoodStore.foodList",
-                "FoodStore.id",
-                "FoodStore.storeName",
-                "FoodStore.telephone",
-                "FoodStore.deliveryFee"
             ],
             "id": "I",
             "name": "Service I"
@@ -158,12 +151,8 @@
             "nanoentities": [
                 "FoodOrder.id",
                 "FoodOrder.foodName",
-                "Delivery.orderId",
-                "Delivery.storeName",
                 "FoodOrder.orderId",
                 "FoodOrder.storeName",
-                "Delivery.foodName",
-                "Delivery.stationName",
                 "FoodOrder.stationName",
                 "FoodOrder.foodType"
             ],
@@ -189,6 +178,19 @@
         },
         {
             "nanoentities": [
+                "FoodStore.stationId",
+                "FoodStore.businessTime",
+                "FoodStore.foodList",
+                "FoodStore.id",
+                "FoodStore.storeName",
+                "FoodStore.telephone",
+                "FoodStore.deliveryFee"
+            ],
+            "id": "L",
+            "name": "Service L"
+        },
+        {
+            "nanoentities": [
                 "Station.stayTime",
                 "Office.province",
                 "Office.city",
@@ -200,8 +202,18 @@
                 "Office.region",
                 "Office.workTime"
             ],
-            "id": "L",
-            "name": "Service L"
+            "id": "M",
+            "name": "Service M"
+        },
+        {
+            "nanoentities": [
+                "Delivery.orderId",
+                "Delivery.storeName",
+                "Delivery.foodName",
+                "Delivery.stationName"
+            ],
+            "id": "N",
+            "name": "Service N"
         },
         {
             "nanoentities": [
@@ -212,8 +224,8 @@
                 "ConsignPrice.beyondPrice",
                 "ConsignPrice.id"
             ],
-            "id": "M",
-            "name": "Service M"
+            "id": "O",
+            "name": "Service O"
         }
     ],
     "relations": [
@@ -221,27 +233,29 @@
             "serviceA": "Service B",
             "serviceB": "Service C",
             "sharedEntities": [
-                "Trip.routeId",
-                "Trip.endTime",
-                "Trip.startingTime",
-                "Trip.terminalStationId",
-                "Money.userId",
-                "Payment.id",
-                "Payment.price",
-                "Trip.stationsId",
-                "Payment.userId",
-                "Trip.tripId",
+                "Order.id",
+                "Order.price",
                 "Money.money",
-                "Trip.startingStationId",
+                "Order.accountId",
+                "Money.userId",
                 "Money.type",
-                "Payment.orderId",
-                "Trip.trainTypeId"
+                "Order.status"
             ],
             "direction": "BIDIRECTIONAL"
         },
         {
             "serviceA": "Service B",
             "serviceB": "Service D",
+            "sharedEntities": [
+                "Money.money",
+                "Money.userId",
+                "Money.type"
+            ],
+            "direction": "INCOMING"
+        },
+        {
+            "serviceA": "Service B",
+            "serviceB": "Service E",
             "sharedEntities": [
                 "User.id"
             ],
@@ -251,6 +265,25 @@
             "serviceA": "Service C",
             "serviceB": "Service D",
             "sharedEntities": [
+                "Payment.id",
+                "Payment.price",
+                "Payment.userId",
+                "Trip.stationsId",
+                "Trip.routeId",
+                "Trip.endTime",
+                "Trip.tripId",
+                "Trip.startingTime",
+                "Trip.startingStationId",
+                "Trip.terminalStationId",
+                "Payment.orderId",
+                "Trip.trainTypeId"
+            ],
+            "direction": "BIDIRECTIONAL"
+        },
+        {
+            "serviceA": "Service C",
+            "serviceB": "Service E",
+            "sharedEntities": [
                 "User.id",
                 "User.userName",
                 "User.password"
@@ -259,7 +292,7 @@
         },
         {
             "serviceA": "Service C",
-            "serviceB": "Service F",
+            "serviceB": "Service G",
             "sharedEntities": [
                 "Config.value",
                 "SecurityConfig.value",
@@ -271,7 +304,7 @@
         },
         {
             "serviceA": "Service C",
-            "serviceB": "Service G",
+            "serviceB": "Service H",
             "sharedEntities": [
                 "Contacts.id",
                 "Contacts.documentName",
@@ -284,7 +317,7 @@
         },
         {
             "serviceA": "Service C",
-            "serviceB": "Service I",
+            "serviceB": "Service L",
             "sharedEntities": [
                 "Route.terminalStationId",
                 "Route.startingStationId"
@@ -293,7 +326,7 @@
         },
         {
             "serviceA": "Service C",
-            "serviceB": "Service L",
+            "serviceB": "Service M",
             "sharedEntities": [
                 "Station.id",
                 "Station.name"
@@ -301,8 +334,16 @@
             "direction": "OUTGOING"
         },
         {
-            "serviceA": "Service H",
-            "serviceB": "Service I",
+            "serviceA": "Service D",
+            "serviceB": "Service E",
+            "sharedEntities": [
+                "User.id"
+            ],
+            "direction": "OUTGOING"
+        },
+        {
+            "serviceA": "Service I",
+            "serviceB": "Service L",
             "sharedEntities": [
                 "TrainFood.tripId",
                 "TrainFood.id",
@@ -311,8 +352,19 @@
             "direction": "INCOMING"
         },
         {
+            "serviceA": "Service J",
+            "serviceB": "Service N",
+            "sharedEntities": [
+                "Delivery.orderId",
+                "Delivery.storeName",
+                "Delivery.foodName",
+                "Delivery.stationName"
+            ],
+            "direction": "OUTGOING"
+        },
+        {
             "serviceA": "Service K",
-            "serviceB": "Service M",
+            "serviceB": "Service O",
             "sharedEntities": [
                 "ConsignPrice.withinPrice",
                 "ConsignPrice.initialPrice",
@@ -323,7 +375,6 @@
     ],
     "useCaseResponsibility": {
         "Service J": [
-            "processDelivery",
             "createFoodOrdersInBatch",
             "createFoodOrder",
             "deleteFoodOrder",
@@ -332,17 +383,11 @@
             "updateFoodOrder"
         ],
         "Service I": [
-            "createFoodStore",
-            "listFoodStores",
-            "listFoodStoredByStationId",
-            "getAllFoods"
-        ],
-        "Service H": [
             "createTrainFood",
             "listTrainFood",
             "listTrainFoodByTripIds"
         ],
-        "Service G": [
+        "Service H": [
             "findContactsById",
             "findContactsByAccountId",
             "createContact",
@@ -350,7 +395,7 @@
             "modifyContact",
             "getAllContacts"
         ],
-        "Service F": [
+        "Service G": [
             "createConfig",
             "updateConfig",
             "queryConfig",
@@ -361,11 +406,11 @@
             "modifySecurityConfig",
             "deleteSecurityConfig"
         ],
-        "Service E": [
+        "Service F": [
             "addVoucher",
             "queryVoucher"
         ],
-        "Service D": [
+        "Service E": [
             "saveUser",
             "getAllUser",
             "findByUserId",
@@ -373,17 +418,19 @@
             "deleteUserById",
             "updateUser"
         ],
+        "Service D": [
+            "queryPaymentAccount",
+            "queryPayments",
+            "payDifference",
+            "initPayment",
+            "payDifferenceRebook"
+        ],
         "Service C": [
             "queryForTravel",
             "cancelOrderbyUser",
-            "calculateRefund",
             "ticketExecute",
             "ticketCollect",
             "pay",
-            "createPaymentAccount",
-            "addMoney",
-            "drawBack",
-            "queryMoney",
             "getSoldTickets",
             "createOrder",
             "cancelOrder",
@@ -429,11 +476,11 @@
             "getAllRoutes"
         ],
         "Service B": [
-            "queryPaymentAccount",
-            "queryPayments",
-            "payDifference",
-            "initPayment",
-            "payDifferenceRebook"
+            "calculateRefund",
+            "createPaymentAccount",
+            "addMoney",
+            "drawBack",
+            "queryMoney"
         ],
         "Service A": [
             "getAllAssuranceTypes",
@@ -445,13 +492,16 @@
             "deleteAssuranceByOrderId",
             "modifyAssurance"
         ],
-        "Service M": [
+        "Service O": [
             "getPriceByWeightAndRegion",
             "queryConsignPrice",
             "createAndModifyPrice",
             "getConsignPrice"
         ],
-        "Service L": [
+        "Service N": [
+            "processDelivery"
+        ],
+        "Service M": [
             "queryForStationId",
             "createStation",
             "existStation",
@@ -464,6 +514,12 @@
             "addOffice",
             "deleteOffice",
             "updateOffice"
+        ],
+        "Service L": [
+            "createFoodStore",
+            "listFoodStores",
+            "listFoodStoredByStationId",
+            "getAllFoods"
         ],
         "Service K": [
             "insertConsignRecord",

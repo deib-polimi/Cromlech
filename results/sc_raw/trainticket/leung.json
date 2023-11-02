@@ -1,0 +1,420 @@
+{
+    "services": [
+        {
+            "nanoentities": [
+                "ConsignRecord.accountId",
+                "ConsignRecord.consignee",
+                "ConsignRecord.from",
+                "ConsignRecord.handleDate",
+                "ConsignRecord.id",
+                "ConsignRecord.orderId",
+                "ConsignRecord.phone",
+                "ConsignRecord.price",
+                "ConsignRecord.targetDate",
+                "ConsignRecord.to",
+                "ConsignRecord.weight",
+                "ConsignPrice.beyondPrice",
+                "ConsignPrice.id",
+                "ConsignPrice.index",
+                "ConsignPrice.initialPrice",
+                "ConsignPrice.initialWeight",
+                "ConsignPrice.withinPrice"
+            ],
+            "id": "A",
+            "name": "Service A"
+        },
+        {
+            "nanoentities": [
+                "Config.description",
+                "Config.name",
+                "Config.value",
+                "SecurityConfig.description",
+                "SecurityConfig.id",
+                "SecurityConfig.name",
+                "SecurityConfig.value"
+            ],
+            "id": "B",
+            "name": "Service B"
+        },
+        {
+            "nanoentities": [
+                "User.id",
+                "User.password",
+                "User.roles",
+                "User.userId",
+                "User.userName"
+            ],
+            "id": "C",
+            "name": "Service C"
+        },
+        {
+            "nanoentities": [
+                "FoodOrder.foodName",
+                "FoodOrder.foodType",
+                "FoodOrder.id",
+                "FoodOrder.orderId",
+                "FoodOrder.stationName",
+                "FoodOrder.storeName",
+                "Delivery.foodName",
+                "Delivery.orderId",
+                "Delivery.stationName",
+                "Delivery.storeName"
+            ],
+            "id": "D",
+            "name": "Service D"
+        },
+        {
+            "nanoentities": [
+                "Office.address",
+                "Office.city",
+                "Office.officeName",
+                "Office.province",
+                "Office.region",
+                "Office.windowNum",
+                "Office.workTime",
+                "Station.id",
+                "Station.stayTime"
+            ],
+            "id": "E",
+            "name": "Service E"
+        },
+        {
+            "nanoentities": [
+                "PriceConfig.basicPriceRate",
+                "PriceConfig.firstClassPriceRate",
+                "PriceConfig.id",
+                "PriceConfig.routeId",
+                "PriceConfig.trainType",
+                "Order.accountId",
+                "Order.boughtDate",
+                "Order.coachNumber",
+                "Order.contactsDocumentNumber",
+                "Order.contactsName",
+                "Order.documentType",
+                "Order.from",
+                "Order.id",
+                "Order.price",
+                "Order.seatClass",
+                "Order.seatNumber",
+                "Order.status",
+                "Order.to",
+                "Order.trainNumber",
+                "Order.travelDate",
+                "Order.travelTime",
+                "Trip.endTime",
+                "Trip.routeId",
+                "Trip.startingStationId",
+                "Trip.startingTime",
+                "Trip.stationsId",
+                "Trip.terminalStationId",
+                "Trip.trainTypeId",
+                "Trip.tripId",
+                "Voucher.contactName",
+                "Voucher.destStation",
+                "Voucher.orderId",
+                "Voucher.price",
+                "Voucher.seatClass",
+                "Voucher.seatNumber",
+                "Voucher.startStation",
+                "Voucher.trainNumber",
+                "Voucher.travelDate",
+                "Voucher.travelTime",
+                "Voucher.voucherId",
+                "Station.name",
+                "Travel.departureTime",
+                "Travel.endPlace",
+                "Travel.startingPlace",
+                "Travel.tripId",
+                "Contacts.accountId",
+                "Contacts.documentName",
+                "Contacts.documentType",
+                "Contacts.id",
+                "Contacts.name",
+                "Contacts.phoneNumber",
+                "TrainType.averageSpeed",
+                "TrainType.confortClass",
+                "TrainType.economyClass",
+                "TrainType.id",
+                "TravelResult.percent",
+                "TravelResult.status",
+                "TravelResult.trainType",
+                "Route.distances",
+                "Route.id",
+                "Route.startStationId",
+                "Route.startingStationId",
+                "Route.stations",
+                "Route.terminalStationId"
+            ],
+            "id": "F",
+            "name": "Service F"
+        },
+        {
+            "nanoentities": [
+                "TrainFood.foodList",
+                "TrainFood.id",
+                "TrainFood.tripId",
+                "FoodStore.businessTime",
+                "FoodStore.deliveryFee",
+                "FoodStore.foodList",
+                "FoodStore.id",
+                "FoodStore.stationId",
+                "FoodStore.storeName",
+                "FoodStore.telephone"
+            ],
+            "id": "G",
+            "name": "Service G"
+        },
+        {
+            "nanoentities": [
+                "Assurance.id",
+                "Assurance.index",
+                "Assurance.name",
+                "Assurance.orderId",
+                "Assurance.price",
+                "AssuranceType.index",
+                "AssuranceType.name",
+                "AssuranceType.price"
+            ],
+            "id": "H",
+            "name": "Service H"
+        },
+        {
+            "nanoentities": [
+                "Money.money",
+                "Money.type",
+                "Money.userId",
+                "Payment.id",
+                "Payment.orderId",
+                "Payment.price",
+                "Payment.userId"
+            ],
+            "id": "I",
+            "name": "Service I"
+        }
+    ],
+    "relations": [
+        {
+            "serviceA": "Service B",
+            "serviceB": "Service F",
+            "sharedEntities": [
+                "Config.value",
+                "SecurityConfig.value",
+                "Config.name",
+                "SecurityConfig.name",
+                "Config.description"
+            ],
+            "direction": "INCOMING"
+        },
+        {
+            "serviceA": "Service C",
+            "serviceB": "Service F",
+            "sharedEntities": [
+                "User.id",
+                "User.userName",
+                "User.password"
+            ],
+            "direction": "INCOMING"
+        },
+        {
+            "serviceA": "Service C",
+            "serviceB": "Service I",
+            "sharedEntities": [
+                "User.id"
+            ],
+            "direction": "INCOMING"
+        },
+        {
+            "serviceA": "Service E",
+            "serviceB": "Service F",
+            "sharedEntities": [
+                "Station.id",
+                "Station.name"
+            ],
+            "direction": "BIDIRECTIONAL"
+        },
+        {
+            "serviceA": "Service F",
+            "serviceB": "Service G",
+            "sharedEntities": [
+                "Route.terminalStationId",
+                "Route.startingStationId"
+            ],
+            "direction": "INCOMING"
+        },
+        {
+            "serviceA": "Service F",
+            "serviceB": "Service I",
+            "sharedEntities": [
+                "Order.travelTime",
+                "Order.documentType",
+                "Trip.routeId",
+                "Trip.endTime",
+                "Order.from",
+                "Order.contactsName",
+                "Trip.startingTime",
+                "Order.boughtDate",
+                "Trip.terminalStationId",
+                "Order.accountId",
+                "Order.contactsDocumentNumber",
+                "Order.coachNumber",
+                "Order.seatNumber",
+                "Order.id",
+                "Order.to",
+                "Trip.stationsId",
+                "Order.trainNumber",
+                "Trip.tripId",
+                "Order.travelDate",
+                "Order.price",
+                "Trip.startingStationId",
+                "Order.seatClass",
+                "Trip.trainTypeId",
+                "Order.status"
+            ],
+            "direction": "INCOMING"
+        }
+    ],
+    "useCaseResponsibility": {
+        "Service I": [
+            "calculateRefund",
+            "pay",
+            "createPaymentAccount",
+            "addMoney",
+            "queryPaymentAccount",
+            "queryPayments",
+            "drawBack",
+            "payDifference",
+            "queryMoney",
+            "initPayment",
+            "payDifferenceRebook"
+        ],
+        "Service H": [
+            "getAllAssuranceTypes",
+            "getAllAssurances",
+            "findAssuranceById",
+            "findAssuranceByOrderId",
+            "createAssurance",
+            "deleteAssuranceById",
+            "deleteAssuranceByOrderId",
+            "modifyAssurance"
+        ],
+        "Service G": [
+            "createFoodStore",
+            "createTrainFood",
+            "listFoodStores",
+            "listTrainFood",
+            "listFoodStoredByStationId",
+            "listTrainFoodByTripIds",
+            "getAllFoods"
+        ],
+        "Service F": [
+            "queryForTravel",
+            "cancelOrderbyUser",
+            "findContactsById",
+            "findContactsByAccountId",
+            "createContact",
+            "deleteContact",
+            "modifyContact",
+            "getAllContacts",
+            "ticketExecute",
+            "ticketCollect",
+            "getSoldTickets",
+            "createOrder",
+            "cancelOrder",
+            "deleteOrder",
+            "updateOrder",
+            "modifyOrderStatus",
+            "getOrderPrice",
+            "payOrder",
+            "initOrder",
+            "checkOrderValidity",
+            "preserve",
+            "createNewPriceConfig",
+            "findPriceConfigById",
+            "findByRouteIdAndTrainType",
+            "findAllPriceConfig",
+            "deletePriceConfig",
+            "updatePriceConfig",
+            "rebook",
+            "searchCheapestRouteResult",
+            "searchMinStopRouteResult",
+            "searchQuickestRouteResult",
+            "createAndModifyRoute",
+            "getRouteById",
+            "getRouteByStartAndTerminal",
+            "distributeSeat",
+            "getLeftTicketOfInterval",
+            "checkSecurityConfig",
+            "existStation",
+            "createTrain",
+            "retrieveTrain",
+            "queryTrains",
+            "updateTrain",
+            "deleteTrain",
+            "getCheapestTravelResult",
+            "getQuickestTravelResult",
+            "getMinStopTravelResult",
+            "createTrip",
+            "getRouteByTripId",
+            "getTrainTypeByTripId",
+            "retrieveTrip",
+            "updateTrip",
+            "deleteTrip",
+            "getTickets",
+            "addVoucher",
+            "queryVoucher",
+            "getAllRoutes"
+        ],
+        "Service E": [
+            "queryForStationId",
+            "createStation",
+            "updateStation",
+            "deleteStation",
+            "queryStations",
+            "queryStationById",
+            "getAllOffices",
+            "getSpecificOffice",
+            "addOffice",
+            "deleteOffice",
+            "updateOffice"
+        ],
+        "Service D": [
+            "processDelivery",
+            "createFoodOrdersInBatch",
+            "createFoodOrder",
+            "deleteFoodOrder",
+            "findFoodOrderByOrderId",
+            "findAllFoodOrders",
+            "updateFoodOrder"
+        ],
+        "Service C": [
+            "saveUser",
+            "getAllUser",
+            "findByUserId",
+            "findByUsername",
+            "deleteUserById",
+            "updateUser"
+        ],
+        "Service B": [
+            "createConfig",
+            "updateConfig",
+            "queryConfig",
+            "deleteConfig",
+            "queryAllConfigs",
+            "findAllSecurityConfig",
+            "addNewSecurityConfig",
+            "modifySecurityConfig",
+            "deleteSecurityConfig"
+        ],
+        "Service A": [
+            "getPriceByWeightAndRegion",
+            "queryConsignPrice",
+            "createAndModifyPrice",
+            "getConsignPrice",
+            "insertConsignRecord",
+            "updateConsignRecord",
+            "queryConsignByAccountId",
+            "queryConsignByOrderId",
+            "queryConsignByConsignee"
+        ]
+    }
+}

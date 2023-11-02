@@ -1,0 +1,50 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+metadata:
+  template_name: cromlech_service_model
+  template_version: 1.0.0
+
+description: >
+  TOSCA Service Template to model applications in Cromlech.
+
+data_types:
+  consistency_level:
+    derived_from: string
+    constraints:
+      - valid_values: [ "L", "M", "H" ] # Assuming L, M, H are the only valid consistency levels.
+
+relationship_types:
+  it.polimi.cromlech.forced_operation_relationship:
+    derived_from: tosca.relationships.DependsOn
+    valid_target_types: [ it.polimi.cromlech.operation ]
+
+node_types:
+ node_types:
+  it.polimi.cromlech.operation:
+    derived_from: tosca.nodes.Root
+    description: Defines a single operation within the Cromlech model.
+    properties:
+      name:
+        type: string
+        required: true
+      consistency:
+        type: consistency_level
+      frequency:
+        type: integer
+      database_access:
+        type: list
+        entry_schema:
+          type: map
+          entry_schema:
+            entity_name:
+              type: string
+            read_attributes:
+              type: attributes_list
+            write_attributes:
+              type: attributes_list
+    requirements:
+      - forced_operations:
+        type: it.polimi.cromlech.forced_operation_relationship
+        occurrence: [0, UNBOUNDED]
+
+

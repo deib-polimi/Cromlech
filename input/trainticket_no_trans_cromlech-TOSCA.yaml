@@ -1,0 +1,2237 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+topology_template:
+  node_templates:
+    getAllAssuranceTypes:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: AssuranceType
+            read_attributes:
+              - index
+              - name
+              - price
+    getAllAssurances:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: AssuranceType
+            read_attributes:
+              - index
+              - name
+              - price
+          - entity_name: Assurance
+            read_attributes:
+              - id
+              - orderId
+    findAssuranceById:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Assurance
+            read_attributes:
+              - id
+              - orderId
+              - index
+              - name
+              - price
+    findAssuranceByOrderId:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Assurance
+            read_attributes:
+              - id
+              - orderId
+              - index
+              - name
+              - price
+    createAssurance:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Assurance
+            write_attributes:
+              - id
+              - orderId
+              - index
+              - name
+              - price
+          - entity_name: AssuranceType
+            write_attributes:
+              - index
+              - name
+              - price
+    deleteAssuranceById:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Assurance
+            write_attributes:
+              - id
+    deleteAssuranceByOrderId:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Assurance
+            write_attributes:
+              - orderId
+    modifyAssurance:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Assurance
+            write_attributes:
+              - id
+              - orderId
+          - entity_name: AssuranceType
+            write_attributes:
+              - index
+              - name
+              - price
+    saveUser:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: User
+            write_attributes:
+              - userId
+              - userName
+              - password
+              - roles
+    getAllUser:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: User
+            read_attributes:
+              - userId
+              - userName
+              - password
+              - roles
+    findByUserId:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: User
+            read_attributes:
+              - userId
+              - userName
+              - password
+              - roles
+    findByUsername:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: User
+            read_attributes:
+              - userId
+              - userName
+              - password
+              - roles
+    deleteUserById:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: User
+            write_attributes:
+              - userId
+    updateUser:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: User
+            read_attributes:
+              - userId
+            write_attributes:
+              - userName
+              - password
+              - roles
+    queryForTravel:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Station
+            read_attributes:
+              - id
+              - name
+          - entity_name: TrainType
+            read_attributes:
+              - id
+              - economyClass
+              - confortClass
+              - averageSpeed
+          - entity_name: Route
+            read_attributes:
+              - id
+              - stations
+              - distances
+              - startingStationId
+              - terminalStationId
+          - entity_name: PriceConfig
+            read_attributes:
+              - id
+              - trainType
+              - routeId
+              - basicPriceRate
+              - firstClassPriceRate
+          - entity_name: Trip
+            read_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingStationId
+              - terminalStationId
+              - stationsId
+              - startingTime
+              - endTime
+          - entity_name: Travel
+            read_attributes:
+              - startingPlace
+              - tripId
+              - endPlace
+              - departureTime
+    queryForStationId:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Station
+            read_attributes:
+              - id
+              - name
+    cancelOrderbyUser:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            write_attributes:
+              - orderId
+              - status
+              - accountId
+          - entity_name: User
+            read_attributes:
+              - id
+              - userName
+              - password
+              - email
+    calculateRefund:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            read_attributes:
+              - id
+              - accountId
+              - status
+              - price
+          - entity_name: Money
+            write_attributes:
+              - userId
+              - money
+              - type
+    createConfig:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Config
+            write_attributes:
+              - name
+              - value
+              - description
+    updateConfig:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Config
+            read_attributes:
+              - name
+            write_attributes:
+              - value
+              - description
+    queryConfig:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Config
+            read_attributes:
+              - name
+              - value
+              - description
+    deleteConfig:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Config
+            write_attributes:
+              - name
+    queryAllConfigs:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Config
+            read_attributes:
+              - name
+              - value
+              - description
+    getPriceByWeightAndRegion:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: ConsignPrice
+            read_attributes:
+              - initialWeight
+              - withinPrice
+              - initialPrice
+              - beyondPrice
+    queryConsignPrice:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: ConsignPrice
+            read_attributes:
+              - id
+              - index
+              - initialWeight
+              - withinPrice
+              - initialPrice
+              - beyondPrice
+    createAndModifyPrice:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: ConsignPrice
+            write_attributes:
+              - id
+              - index
+              - initialWeight
+              - withinPrice
+              - initialPrice
+              - beyondPrice
+    getConsignPrice:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: ConsignPrice
+            read_attributes:
+              - id
+              - index
+              - initialWeight
+              - withinPrice
+              - initialPrice
+              - beyondPrice
+    insertConsignRecord:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: ConsignPrice
+            read_attributes:
+              - withinPrice
+              - initialPrice
+              - beyondPrice
+          - entity_name: ConsignRecord
+            write_attributes:
+              - id
+              - orderId
+              - accountId
+              - handleDate
+              - targetDate
+              - from
+              - to
+              - consignee
+              - phone
+              - weight
+              - price
+    updateConsignRecord:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: ConsignPrice
+            read_attributes:
+              - withinPrice
+              - initialPrice
+              - beyondPrice
+          - entity_name: ConsignRecord
+            read_attributes:
+              - id
+            write_attributes:
+              - orderId
+              - accountId
+              - handleDate
+              - targetDate
+              - from
+              - to
+              - consignee
+              - phone
+              - weight
+              - price
+    queryConsignByAccountId:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: ConsignRecord
+            read_attributes:
+              - id
+              - orderId
+              - accountId
+              - handleDate
+              - targetDate
+              - from
+              - to
+              - consignee
+              - phone
+              - weight
+              - price
+    queryConsignByOrderId:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: ConsignRecord
+            read_attributes:
+              - id
+              - orderId
+              - accountId
+              - handleDate
+              - targetDate
+              - from
+              - to
+              - consignee
+              - phone
+              - weight
+              - price
+    queryConsignByConsignee:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: ConsignRecord
+            read_attributes:
+              - id
+              - orderId
+              - accountId
+              - handleDate
+              - targetDate
+              - from
+              - to
+              - consignee
+              - phone
+              - weight
+              - price
+    findContactsById:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Contacts
+            read_attributes:
+              - id
+              - accountId
+              - name
+              - documentType
+              - documentName
+              - phoneNumber
+    findContactsByAccountId:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Contacts
+            read_attributes:
+              - id
+              - accountId
+              - name
+              - documentType
+              - documentName
+              - phoneNumber
+    createContact:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Contacts
+            write_attributes:
+              - id
+              - accountId
+              - name
+              - documentType
+              - documentName
+              - phoneNumber
+    deleteContact:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Contacts
+            write_attributes:
+              - id
+    modifyContact:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Contacts
+            write_attributes:
+              - id
+              - accountId
+              - name
+              - documentType
+              - documentName
+              - phoneNumber
+    getAllContacts:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Contacts
+            read_attributes:
+              - id
+              - accountId
+              - name
+              - documentType
+              - documentName
+              - phoneNumber
+    processDelivery:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Delivery
+            write_attributes:
+              - id
+              - orderId
+              - foodName
+              - storeName
+              - stationName
+    ticketExecute:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            write_attributes:
+              - status
+    ticketCollect:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            write_attributes:
+              - status
+    createFoodStore:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: FoodStore
+            write_attributes:
+              - id
+              - stationId
+              - storeName
+              - telephone
+              - businessTime
+              - deliveryFee
+              - foodList
+    createTrainFood:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: TrainFood
+            write_attributes:
+              - id
+              - tripId
+              - foodList
+    listFoodStores:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: FoodStore
+            read_attributes:
+              - id
+              - stationId
+              - storeName
+              - telephone
+              - businessTime
+              - deliveryFee
+              - foodList
+    listTrainFood:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: TrainFood
+            read_attributes:
+              - id
+              - tripId
+              - foodList
+    listFoodStoredByStationId:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: FoodStore
+            read_attributes:
+              - id
+              - stationId
+              - storeName
+              - telephone
+              - businessTime
+              - deliveryFee
+              - foodList
+    listTrainFoodByTripIds:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: TrainFood
+            read_attributes:
+              - id
+              - tripId
+              - foodList
+    createFoodOrdersInBatch:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: FoodOrder
+            write_attributes:
+              - id
+              - orderId
+              - foodType
+              - storeName
+              - stationName
+              - foodName
+          - entity_name: Delivery
+            write_attributes:
+              - orderId
+              - foodName
+              - storeName
+              - stationName
+    createFoodOrder:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: FoodOrder
+            write_attributes:
+              - id
+              - orderId
+              - foodType
+              - storeName
+              - stationName
+              - foodName
+          - entity_name: Delivery
+            write_attributes:
+              - orderId
+              - foodName
+              - storeName
+              - stationName
+    deleteFoodOrder:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: FoodOrder
+            write_attributes:
+              - id
+    findFoodOrderByOrderId:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: FoodOrder
+            read_attributes:
+              - id
+              - orderId
+              - foodType
+              - storeName
+              - stationName
+              - foodName
+    findAllFoodOrders:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: FoodOrder
+            read_attributes:
+              - id
+              - orderId
+              - foodType
+              - storeName
+              - stationName
+              - foodName
+    updateFoodOrder:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: FoodOrder
+            read_attributes:
+              - id
+            write_attributes:
+              - orderId
+              - foodType
+              - storeName
+              - stationName
+              - foodName
+    getAllFoods:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: TrainFood
+            read_attributes:
+              - id
+              - tripId
+              - foodList
+          - entity_name: Route
+            read_attributes:
+              - terminalStationId
+              - startingStationId
+          - entity_name: FoodStore
+            read_attributes:
+              - id
+              - stationId
+              - storeName
+              - telephone
+              - businessTime
+              - deliveryFee
+              - foodList
+    pay:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            read_attributes:
+              - id
+              - boughtDate
+              - travelDate
+              - travelTime
+              - accountId
+              - contactsName
+              - documentType
+              - contactsDocumentNumber
+              - trainNumber
+              - coachNumber
+              - seatClass
+              - seatNumber
+              - from
+              - to
+              - status
+              - price
+          - entity_name: Payment
+            read_attributes:
+              - id
+            write_attributes:
+              - orderId
+              - userId
+              - price
+          - entity_name: Money
+            write_attributes:
+              - userId
+              - money
+              - type
+    createPaymentAccount:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: User
+            read_attributes:
+              - id
+          - entity_name: Money
+            write_attributes:
+              - id
+              - userId
+              - money
+              - type
+    addMoney:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Money
+            write_attributes:
+              - userId
+              - money
+              - type
+    queryPaymentAccount:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: User
+            read_attributes:
+              - id
+          - entity_name: Money
+            read_attributes:
+              - userId
+              - money
+              - type
+          - entity_name: Payment
+            read_attributes:
+              - id
+              - orderId
+              - userId
+              - price
+          - entity_name: Balance
+            write_attributes:
+              - id
+              - userId
+              - balance
+    queryPayments:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Payment
+            read_attributes:
+              - id
+              - orderId
+              - userId
+              - price
+    drawBack:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Money
+            write_attributes:
+              - userId
+              - money
+              - type
+    payDifference:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Payment
+            write_attributes:
+              - userId
+              - price
+              - orderId
+          - entity_name: Money
+            read_attributes:
+              - userId
+              - money
+              - type
+    queryMoney:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Money
+            read_attributes:
+              - userId
+              - money
+              - type
+    initPayment:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Payment
+            write_attributes:
+              - id
+    getSoldTickets:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            write_attributes:
+              - id
+              - boughtDate
+              - travelDate
+              - travelTime
+              - accountId
+              - trainNumber
+              - coachNumber
+              - seatClass
+              - seatNumber
+              - from
+              - to
+              - status
+              - price
+    createOrder:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            write_attributes:
+              - id
+              - boughtDate
+              - travelDate
+              - travelTime
+              - accountId
+              - contactsName
+              - documentType
+              - contactsDocumentNumber
+              - trainNumber
+              - coachNumber
+              - seatClass
+              - seatNumber
+              - from
+              - to
+              - status
+              - price
+    cancelOrder:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            read_attributes:
+              - id
+            write_attributes:
+              - status
+    deleteOrder:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            write_attributes:
+              - id
+              - trainNumber
+    updateOrder:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            write_attributes:
+              - boughtDate
+              - travelDate
+              - travelTime
+              - accountId
+              - contactsName
+              - documentType
+              - contactsDocumentNumber
+              - trainNumber
+              - coachNumber
+              - seatClass
+              - seatNumber
+              - from
+              - to
+              - status
+              - price
+    modifyOrderStatus:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            read_attributes:
+              - id
+            write_attributes:
+              - status
+    getOrderPrice:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            read_attributes:
+              - id
+              - price
+    payOrder:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            read_attributes:
+              - id
+            write_attributes:
+              - status
+    initOrder:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            write_attributes:
+              - id
+    checkOrderValidity:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            read_attributes:
+              - status
+              - boughtDate
+              - travelDate
+    preserve:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Route
+            read_attributes:
+              - id
+              - stations
+              - distances
+              - startStationId
+              - terminalStationId
+          - entity_name: Order
+            write_attributes:
+              - id
+              - boughtDate
+              - travelDate
+              - travelTime
+              - accountId
+              - contactsName
+              - documentType
+              - contactsDocumentNumber
+              - trainNumber
+              - coachNumber
+              - seatClass
+              - seatNumber
+              - from
+              - to
+              - status
+              - price
+          - entity_name: Contacts
+            read_attributes:
+              - id
+              - accountId
+              - name
+              - documentType
+              - documentName
+              - phoneNumber
+          - entity_name: Station
+            read_attributes:
+              - id
+              - name
+          - entity_name: TrainType
+            read_attributes:
+              - id
+              - economyClass
+              - confortClass
+              - averageSpeed
+          - entity_name: PriceConfig
+            read_attributes:
+              - id
+              - trainType
+              - routeId
+              - basicPriceRate
+              - firstClassPriceRate
+          - entity_name: Trip
+            read_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingStationId
+              - terminalStationId
+              - stationsId
+              - startingTime
+              - endTime
+          - entity_name: Travel
+            read_attributes:
+              - startingPlace
+              - tripId
+              - endPlace
+              - departureTime
+          - entity_name: TravelResult
+            read_attributes:
+              - status
+              - percent
+              - trainType
+    createNewPriceConfig:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: PriceConfig
+            write_attributes:
+              - id
+              - trainType
+              - routeId
+              - basicPriceRate
+              - firstClassPriceRate
+    findPriceConfigById:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: PriceConfig
+            read_attributes:
+              - id
+              - trainType
+              - routeId
+              - basicPriceRate
+              - firstClassPriceRate
+    findByRouteIdAndTrainType:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: PriceConfig
+            read_attributes:
+              - id
+              - trainType
+              - routeId
+              - basicPriceRate
+              - firstClassPriceRate
+    findAllPriceConfig:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: PriceConfig
+            read_attributes:
+              - id
+              - trainType
+              - routeId
+              - basicPriceRate
+              - firstClassPriceRate
+    deletePriceConfig:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: PriceConfig
+            write_attributes:
+              - id
+    updatePriceConfig:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: PriceConfig
+            read_attributes:
+              - id
+            write_attributes:
+              - trainType
+              - routeId
+              - basicPriceRate
+              - firstClassPriceRate
+    rebook:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            read_attributes:
+              - id
+            write_attributes:
+              - boughtDate
+              - travelDate
+              - travelTime
+              - accountId
+              - contactsName
+              - documentType
+              - contactsDocumentNumber
+              - trainNumber
+              - coachNumber
+              - seatClass
+              - seatNumber
+              - from
+              - to
+              - status
+              - price
+          - entity_name: Trip
+            read_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingTime
+              - startingStationId
+              - stationsId
+              - terminalStationId
+              - endTime
+    payDifferenceRebook:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Trip
+            read_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingTime
+              - startingStationId
+              - stationsId
+              - terminalStationId
+              - endTime
+          - entity_name: Payment
+            write_attributes:
+              - userId
+              - price
+              - orderId
+          - entity_name: Money
+            read_attributes:
+              - userId
+              - money
+              - type
+    searchCheapestRouteResult:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Trip
+            read_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingTime
+              - startingStationId
+              - stationsId
+              - terminalStationId
+              - endTime
+          - entity_name: PriceConfig
+            read_attributes:
+              - id
+              - trainType
+              - routeId
+              - basicPriceRate
+              - firstClassPriceRate
+          - entity_name: Route
+            write_attributes:
+              - id
+              - stations
+              - distances
+              - startStationId
+              - terminalStationId
+    searchMinStopRouteResult:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Trip
+            read_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingTime
+              - startingStationId
+              - stationsId
+              - terminalStationId
+              - endTime
+          - entity_name: Route
+            write_attributes:
+              - id
+              - stations
+              - distances
+              - startStationId
+              - terminalStationId
+    searchQuickestRouteResult:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Trip
+            read_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingTime
+              - startingStationId
+              - stationsId
+              - terminalStationId
+              - endTime
+          - entity_name: Route
+            write_attributes:
+              - id
+              - stations
+              - distances
+              - startStationId
+              - terminalStationId
+    createAndModifyRoute:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Route
+            write_attributes:
+              - id
+              - stations
+              - distances
+              - startStationId
+              - terminalStationId
+    deleteRoute:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Route
+            write_attributes:
+              - routeId
+    getAllRoutes:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Route
+            read_attributes:
+              - id
+              - stations
+              - distances
+              - startStationId
+              - terminalStationId
+    getRouteById:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Route
+            read_attributes:
+              - id
+              - stations
+              - distances
+              - startStationId
+              - terminalStationId
+    getRouteByStartAndTerminal:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Route
+            read_attributes:
+              - id
+              - stations
+              - distances
+              - startStationId
+              - terminalStationId
+    distributeSeat:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Route
+            read_attributes:
+              - id
+              - stations
+              - distances
+              - startStationId
+              - terminalStationId
+          - entity_name: Order
+            write_attributes:
+              - id
+              - boughtDate
+              - travelDate
+              - travelTime
+              - accountId
+              - contactsName
+              - documentType
+              - contactsDocumentNumber
+              - trainNumber
+              - coachNumber
+              - seatClass
+              - seatNumber
+              - from
+              - to
+              - status
+              - price
+          - entity_name: TrainType
+            write_attributes:
+              - id
+              - economyClass
+              - confortClass
+              - averageSpeed
+    getLeftTicketOfInterval:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Route
+            read_attributes:
+              - id
+              - stations
+              - distances
+              - startStationId
+              - terminalStationId
+          - entity_name: Order
+            read_attributes:
+              - id
+              - boughtDate
+              - travelDate
+              - travelTime
+              - accountId
+              - contactsName
+              - documentType
+              - contactsDocumentNumber
+              - trainNumber
+              - coachNumber
+              - seatClass
+              - seatNumber
+              - from
+              - to
+              - status
+              - price
+          - entity_name: TrainType
+            read_attributes:
+              - id
+              - economyClass
+              - confortClass
+              - averageSpeed
+          - entity_name: Config
+            read_attributes:
+              - name
+              - value
+              - description
+    findAllSecurityConfig:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: SecurityConfig
+            read_attributes:
+              - id
+              - name
+              - value
+              - description
+    addNewSecurityConfig:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: SecurityConfig
+            write_attributes:
+              - id
+              - name
+              - value
+              - description
+    modifySecurityConfig:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: SecurityConfig
+            read_attributes:
+              - id
+            write_attributes:
+              - name
+              - value
+              - description
+    deleteSecurityConfig:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: SecurityConfig
+            write_attributes:
+              - id
+    checkSecurityConfig:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Order
+            read_attributes:
+              - status
+              - boughtDate
+              - travelDate
+          - entity_name: SecurityConfig
+            read_attributes:
+              - name
+              - value
+    createStation:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Station
+            write_attributes:
+              - id
+              - name
+              - stayTime
+    existStation:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Station
+            read_attributes:
+              - name
+    updateStation:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Station
+            read_attributes:
+              - id
+            write_attributes:
+              - name
+              - stayTime
+    deleteStation:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Station
+            write_attributes:
+              - id
+    queryStations:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Station
+            read_attributes:
+              - id
+              - name
+              - stayTime
+    queryStationById:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Station
+            read_attributes:
+              - id
+              - name
+              - stayTime
+    getAllOffices:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Office
+            read_attributes:
+              - officeName
+              - address
+              - workTime
+              - windowNum
+              - province
+              - city
+              - region
+    getSpecificOffice:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Office
+            read_attributes:
+              - officeName
+              - address
+              - workTime
+              - windowNum
+              - province
+              - city
+              - region
+    addOffice:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Office
+            write_attributes:
+              - officeName
+              - address
+              - workTime
+              - windowNum
+              - province
+              - city
+              - region
+    deleteOffice:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Office
+            write_attributes:
+              - officeName
+              - address
+    updateOffice:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Office
+            read_attributes:
+              - officeName
+              - address
+            write_attributes:
+              - workTime
+              - windowNum
+              - province
+              - city
+              - region
+    createTrain:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: TrainType
+            write_attributes:
+              - id
+              - economyClass
+              - confortClass
+              - averageSpeed
+    retrieveTrain:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: TrainType
+            read_attributes:
+              - id
+              - economyClass
+              - confortClass
+              - averageSpeed
+    queryTrains:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: TrainType
+            read_attributes:
+              - id
+              - economyClass
+              - confortClass
+              - averageSpeed
+    updateTrain:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: TrainType
+            read_attributes:
+              - id
+            write_attributes:
+              - economyClass
+              - confortClass
+              - averageSpeed
+    deleteTrain:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: TrainType
+            write_attributes:
+              - id
+    getCheapestTravelResult:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Trip
+            write_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingTime
+              - startingStationId
+              - stationsId
+              - terminalStationId
+              - endTime
+          - entity_name: PriceConfig
+            read_attributes:
+              - id
+              - trainType
+              - routeId
+              - basicPriceRate
+              - firstClassPriceRate
+          - entity_name: Route
+            write_attributes:
+              - id
+              - stations
+              - distances
+              - startStationId
+              - terminalStationId
+          - entity_name: Order
+            read_attributes:
+              - id
+              - boughtDate
+              - travelDate
+              - travelTime
+              - accountId
+              - contactsName
+              - documentType
+              - contactsDocumentNumber
+              - trainNumber
+              - coachNumber
+              - seatClass
+              - seatNumber
+              - from
+              - to
+              - status
+              - price
+          - entity_name: TrainType
+            read_attributes:
+              - id
+              - economyClass
+              - confortClass
+              - averageSpeed
+    getQuickestTravelResult:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Trip
+            write_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingTime
+              - startingStationId
+              - stationsId
+              - terminalStationId
+              - endTime
+          - entity_name: Route
+            write_attributes:
+              - id
+              - stations
+              - distances
+              - startStationId
+              - terminalStationId
+          - entity_name: Order
+            read_attributes:
+              - id
+              - boughtDate
+              - travelDate
+              - travelTime
+              - accountId
+              - contactsName
+              - documentType
+              - contactsDocumentNumber
+              - trainNumber
+              - coachNumber
+              - seatClass
+              - seatNumber
+              - from
+              - to
+              - status
+              - price
+          - entity_name: TrainType
+            read_attributes:
+              - id
+              - economyClass
+              - confortClass
+              - averageSpeed
+    getMinStopTravelResult:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Trip
+            write_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingTime
+              - startingStationId
+              - stationsId
+              - terminalStationId
+              - endTime
+          - entity_name: Route
+            write_attributes:
+              - id
+              - stations
+              - distances
+              - startStationId
+              - terminalStationId
+          - entity_name: Order
+            read_attributes:
+              - id
+              - boughtDate
+              - travelDate
+              - travelTime
+              - accountId
+              - contactsName
+              - documentType
+              - contactsDocumentNumber
+              - trainNumber
+              - coachNumber
+              - seatClass
+              - seatNumber
+              - from
+              - to
+              - status
+              - price
+          - entity_name: TrainType
+            read_attributes:
+              - id
+              - economyClass
+              - confortClass
+              - averageSpeed
+    createTrip:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Trip
+            write_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingTime
+              - startingStationId
+              - stationsId
+              - terminalStationId
+              - endTime
+    getRouteByTripId:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Trip
+            read_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingTime
+              - startingStationId
+              - stationsId
+              - terminalStationId
+              - endTime
+          - entity_name: Route
+            read_attributes:
+              - id
+              - stations
+              - distances
+              - startStationId
+              - terminalStationId
+    getTrainTypeByTripId:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Trip
+            read_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingTime
+              - startingStationId
+              - stationsId
+              - terminalStationId
+              - endTime
+          - entity_name: TrainType
+            read_attributes:
+              - id
+              - economyClass
+              - confortClass
+              - averageSpeed
+    retrieveTrip:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Trip
+            read_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingTime
+              - startingStationId
+              - stationsId
+              - terminalStationId
+              - endTime
+    updateTrip:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Trip
+            read_attributes:
+              - tripId
+            write_attributes:
+              - trainTypeId
+              - routeId
+              - startingTime
+              - startingStationId
+              - stationsId
+              - terminalStationId
+              - endTime
+    deleteTrip:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Trip
+            write_attributes:
+              - tripId
+    getTickets:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Station
+            read_attributes:
+              - id
+              - name
+          - entity_name: TrainType
+            read_attributes:
+              - id
+              - economyClass
+              - confortClass
+              - averageSpeed
+          - entity_name: Route
+            read_attributes:
+              - id
+              - stations
+              - distances
+              - startingStationId
+              - terminalStationId
+          - entity_name: PriceConfig
+            read_attributes:
+              - id
+              - trainType
+              - routeId
+              - basicPriceRate
+              - firstClassPriceRate
+          - entity_name: Trip
+            read_attributes:
+              - tripId
+              - trainTypeId
+              - routeId
+              - startingStationId
+              - terminalStationId
+              - stationsId
+              - startingTime
+              - endTime
+          - entity_name: Travel
+            read_attributes:
+              - startingPlace
+              - tripId
+              - endPlace
+              - departureTime
+          - entity_name: TravelResult
+            read_attributes:
+              - status
+              - percent
+              - trainType
+          - entity_name: Order
+            write_attributes:
+              - id
+              - boughtDate
+              - travelDate
+              - travelTime
+              - accountId
+              - contactsName
+              - documentType
+              - contactsDocumentNumber
+              - trainNumber
+              - coachNumber
+              - seatClass
+              - seatNumber
+              - from
+              - to
+              - status
+              - price
+    addVoucher:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Voucher
+            write_attributes:
+              - voucherId
+              - orderId
+              - travelDate
+              - travelTime
+              - contactName
+              - trainNumber
+              - seatClass
+              - seatNumber
+              - startStation
+              - destStation
+              - price
+    queryVoucher:
+      type: it.polimi.cromlech.operation
+      properties:
+        consistency: L
+        frequency: 1
+      attributes:
+        database_access:
+          - entity_name: Voucher
+            read_attributes:
+              - voucherId
+              - orderId
+              - travelDate
+              - travelTime
+              - contactName
+              - trainNumber
+              - seatClass
+              - seatNumber
+              - startStation
+              - destStation
+              - price
