@@ -1547,3 +1547,13 @@ def setup(input_file):
     min_decoupling_bound = compute_total_coupling([[o for o in graph]])
     max_decoupling_bound = compute_total_coupling(services)
     max_com_cost = compute_communication_cost(services)
+    return max_com_cost
+
+def evaluate(cromlech_arch, results, alpha=0.5):
+    output = {}
+    max_com_cost = setup(cromlech_arch)
+    output["cohesion"] = compute_total_coupling(results)
+    communication_cost = post_processing_communication_cost(results)
+    output["normalized_communication_cost"] = communication_cost / max_com_cost
+    output["total_value"] = alpha*output["cohesion"] - (1-alpha)*output["normalized_communication_cost"]
+    return output
