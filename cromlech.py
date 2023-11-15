@@ -348,10 +348,10 @@ def format_and_draw_final(microservices, html_filename):
                     # hack: duplicate all edges, otherwise pyvis does not properly render the colors of nodes 
                     net.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i) + '/' + str(attr_count.get(a)) )
                     net_single.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i) + '/' + str(attr_count.get(a)) )
-        net_single.show(html_filename + '_' + str(i) + ".html")
+        net_single.show(html_filename + '_' + str(i) + ".html", notebook=False)
         i += 1
 
-    net.show(html_filename)
+    net.show(html_filename, notebook=False)
 
 
 # Returns connected components of graph
@@ -1509,3 +1509,41 @@ if __name__ == '__main__':
     max_com_cost = compute_communication_cost(services)
     
     run_experiment(alpha, num_services)
+
+
+def setup(input_file):
+    global to_remove, graph_copy, op_num, attributes, bound_ops, services, buond_ops, services, attrs, min_decoupling_bound, max_decoupling_bound, max_com_cost
+    parse_arch_yaml(input_file)
+    to_remove = noise_removal()
+    graph_copy = Graph()
+    op_num = len(graph)
+    trim_operations(to_remove)
+    op_num = len(graph)
+    attributes = build_attr_relationships()
+    build_hcw_relationships()
+    clean_names()
+    services = force_operations()
+    bound_ops = {}
+    for s in services:
+        for o1 in s:
+            for o2 in graph:
+                if o2 in s:
+                    bound_ops.update({(o1, o2): 1})
+                else:
+                    bound_ops.update({(o1, o2): 0})
+
+    for l in services:
+        attrs = []
+        for s in l:
+            attrs += op_writes.get(s) + op_reads.get(s)
+        attrs = list(set(attrs))
+        for a in attrs:
+            services[services.index(l)].append(attributes_ntoi.get(a))
+
+    identify_static_attributes()
+    identify_hc_readonly_attributes()
+    elect_primary_replicas(services)
+
+    min_decoupling_bound = compute_total_coupling([[o for o in graph]])
+    max_decoupling_bound = compute_total_coupling(services)
+    max_com_cost = compute_communication_cost(services)
