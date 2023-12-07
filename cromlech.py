@@ -291,6 +291,7 @@ def format_and_draw_complete(microservices, html_filename):
 def format_and_draw_final(microservices, html_filename):
     net = Network(height='2500px', width='100%', bgcolor="#dddddd")
     i = 0
+    
     for m in microservices:
         net_single = Network(height='2500px', width='100%', bgcolor="#dddddd")
         ops = [x for x in m if isinstance(x, int)]
@@ -314,25 +315,25 @@ def format_and_draw_final(microservices, html_filename):
                                  color='mediumseagreen', mass=1.5, group=i)
                     net_single.add_node(nodes_dict.get(o).get_name(), size=8 + nodes_dict.get(o).get_frequency()*1.2,
                                         color='mediumseagreen', mass=1.5, group=i)
-        attr_count = {}
+        #attr_count = {}
         for a in attrs:
             attr_id = attributes_iton.get(int(a[:len(a) - 1]))
-            count = 0
-            for m2 in microservices:
-                attr_int = [int(x[:len(x)-1]) for x in m2 if isinstance(x, str)]
-                if attributes_ntoi.get(attr_id) in attr_int:
-                    count += 1
-            attr_count.update({int(a[:len(a) - 1]): count })
+            # count = 0
+            # for m2 in microservices:
+            #     attr_int = [int(x[:len(x)-1]) for x in m2 if isinstance(x, str)]
+            #     if attributes_ntoi.get(attr_id) in attr_int:
+            #         count += 1
+            # attr_count.update({int(a[:len(a) - 1]): count })
             repl_status = a[len(a) - 1]
             if repl_status == 'N':
-                net.add_node(attr_id + '@' + str(i) + '/'   + str(count), size=8, color='yellow', shape='square', mass=1.5, group=i)
-                net_single.add_node(attr_id + '@' + str(i)  + '/' + str(count), size=8, color='yellow', shape='square', mass=1.5, group=i)
+                net.add_node(attr_id + '@' + str(i), size=8, color='yellow', shape='square', mass=1.5, group=i)
+                net_single.add_node(attr_id + '@' + str(i), size=8, color='yellow', shape='square', mass=1.5, group=i)
             if repl_status == 'R':
-                net.add_node(attr_id + '@' + str(i) + '/'   + str(count) , size=8, color='orange', shape='square', mass=1.5, group=i)
-                net_single.add_node(attr_id + '@' + str(i)  + '/' + str(count), size=8, color='orange', shape='square', mass=1.5, group=i)
+                net.add_node(attr_id + '@' + str(i), size=8, color='orange', shape='square', mass=1.5, group=i)
+                net_single.add_node(attr_id + '@' + str(i), size=8, color='orange', shape='square', mass=1.5, group=i)
             if repl_status == 'P':
-                net.add_node(attr_id + '@' + str(i) + '/'   + str(count), size=8, color='red', shape='square', mass=1.5, group=i)
-                net_single.add_node(attr_id + '@' + str(i)  + '/' + str(count), size=8, color='red', shape='square', mass=1.5, group=i)
+                net.add_node(attr_id + '@' + str(i), size=8, color='red', shape='square', mass=1.5, group=i)
+                net_single.add_node(attr_id + '@' + str(i), size=8, color='red', shape='square', mass=1.5, group=i)
         for o in ops:
             accesses = op_reads.get(o) + op_writes.get(o)
             accesses_i = []
@@ -343,13 +344,32 @@ def format_and_draw_final(microservices, html_filename):
                 attrs_num.append(int(a[:len(a) - 1]))
             for a in accesses_i:
                 if a in attrs_num:
-                    net.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i) + '/' + str(attr_count.get(a)) )
-                    net_single.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i) + '/' + str(attr_count.get(a)) )
+                    net.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i))
+                    net_single.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i))
                     # hack: duplicate all edges, otherwise pyvis does not properly render the colors of nodes 
-                    net.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i) + '/' + str(attr_count.get(a)) )
-                    net_single.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i) + '/' + str(attr_count.get(a)) )
+                    net.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i))
+                    net_single.add_edge(nodes_dict.get(o).get_name(), attributes_iton.get(a) + '@' + str(i))
         net_single.show(html_filename + '_' + str(i) + ".html", notebook=False)
         i += 1
+    for k, v in attributes_iton.items():
+        print(k, v)
+    
+    leaders = {}
+
+    for i, m in enumerate(microservices):
+        for component in m:
+            if isinstance(component, str) and (component[-1]) == "P":
+                num_component = component[:-1]
+                k = attributes_iton[int(num_component)]
+                leaders[num_component] = k + '@' + str(i)
+
+    for i, m in enumerate(microservices):
+        for component in m:
+            if isinstance(component, str) and component[-1] != "P":
+                num_component = component[:-1]
+                k = attributes_iton[int(num_component)]
+                net.add_edge(leaders[num_component], k + '@' + str(i), width=5, dashes=[10, 20] if component[-1] == "R" else False, color="black")
+
 
     net.show(html_filename, notebook=False)
 
